@@ -1,0 +1,190 @@
+<html>
+
+<head>
+    <base href="." />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>神奇的心理數字預測器</title>
+    <style>
+        body {
+            /* 改成柔和的粉紫漸層背景 */
+            background: linear-gradient(45deg, #ffcdd2, #f8bbd0, #e1bee7);
+            color: #4a4a4a;
+            /* 改用深灰色文字,比較好閱讀 */
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.3);
+            /* 提高透明度使其更柔和 */
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(244, 143, 177, 0.3);
+            /* 改成粉色陰影 */
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 20px;
+            /* 改成更圓潤的形狀 */
+            border: 2px solid #f48fb1;
+            /* 添加粉色邊框 */
+            margin: 10px;
+            width: 100px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        button {
+            background: linear-gradient(45deg, #f48fb1, #f8bbd0);
+            /* 改成粉色漸層 */
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-size: 18px;
+            border-radius: 25px;
+            /* 更圓潤的按鈕 */
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(244, 143, 177, 0.3);
+            /* 添加粉色陰影 */
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(45deg, #f06292, #f48fb1);
+            /* hover 時顏色稍微加深 */
+        }
+
+        .analysis {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .brain-scan {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            filter: hue-rotate(340deg);
+            /* 將原本的顏色調整為粉色系 */
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .loading-text {
+            font-size: 20px;
+            margin: 10px 0;
+            color: #e91e63;
+            /* 改成粉紅色文字 */
+        }
+
+        .final-result {
+            font-size: 24px;
+            color: #d81b60;
+            /* 改成深粉色 */
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Yihsin的神奇的心理數字預測器</h1>
+        <p>請在心中想一個1-10的數字，然後輸入這個數字：</p>
+        <input type="number" id="userNumber" min="1" max="10">
+        <button onclick="startAnalysis()">開始分析</button>
+
+        <div class="analysis" id="analysisSection">
+            <svg class="brain-scan pulse" viewBox="0 0 100 100">
+                <path d="M50 5 C25 5 5 25 5 50 C5 75 25 95 50 95 C75 95 95 75 95 50 C95 25 75 5 50 5" fill="none"
+                    stroke="#ff6b6b" stroke-width="2">
+                    <animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="3s"
+                        repeatCount="indefinite" />
+                </path>
+                <circle cx="50" cy="50" r="20" fill="#ff6b6b" opacity="0.5">
+                    <animate attributeName="r" values="15;25;15" dur="2s" repeatCount="indefinite" />
+                </circle>
+            </svg>
+            <div class="loading-text" id="loadingText"></div>
+        </div>
+
+        <div class="final-result" id="finalResult"></div>
+    </div>
+
+    <script>
+        const messages = [
+            "正在掃描大腦波動...",
+            "分析思維模式中...",
+            "解讀神經元活動...",
+            "量子電腦通靈中...",
+            "建立心電感應連接...",
+            "王允安數學腦計算中..."
+        ];
+
+        let messageIndex = 0;
+        let analysisInterval;
+
+        function startAnalysis() {
+            const userNumber = document.getElementById('userNumber').value;
+
+            if (userNumber < 1 || userNumber > 10 || userNumber === '') {
+                alert('請輸入1-10之間的數字！');
+                return;
+            }
+
+            document.getElementById('analysisSection').style.display = 'block';
+            document.getElementById('finalResult').style.display = 'none';
+
+            messageIndex = 0;
+            updateLoadingMessage();
+
+            analysisInterval = setInterval(() => {
+                messageIndex++;
+                if (messageIndex >= messages.length) {
+                    clearInterval(analysisInterval);
+                    showResult(userNumber);
+                } else {
+                    updateLoadingMessage();
+                }
+            }, 1500);
+        }
+
+        function updateLoadingMessage() {
+            document.getElementById('loadingText').textContent = messages[messageIndex];
+        }
+
+        function showResult(number) {
+            setTimeout(() => {
+                document.getElementById('finalResult').textContent =
+                    ` 如果Yihsin沒算錯，你心中想的數字是 ${number}！`;
+                document.getElementById('finalResult').style.display = 'block';
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>
