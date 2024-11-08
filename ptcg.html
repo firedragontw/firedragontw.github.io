@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>撲克牌洗牌動畫</title>
+    <style>
+        body {
+            display: flex;
+            /* 使用彈性布局 */
+            flex-direction: column;
+            /* 垂直方向排列 */
+            align-items: center;
+            /* 居中對齊子元素（水平） */
+            justify-content: space-around;
+            /* 子元素在垂直方向上等間距 */
+            height: 100vh;
+            /* 高度佔滿整個視窗 */
+            background: linear-gradient(45deg, #ffcdd2, #f8bbd0, #e1bee7);
+            /* 漸層背景 */
+            color: #4a4a4a;
+            /* 深灰色文字 */
+            font-family: Arial, sans-serif;
+            /* 字體設置 */
+            margin: 0;
+            /* 去除默認外邊距 */
+            padding: 0;
+            /* 去除默認內邊距 */
+        }
+
+        /* 呼吸動畫效果 */
+        @keyframes breathingRainbow {
+            0% {
+                background-position: -200% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .hidden {
+            display: none;
+            /* 隱藏元素 */
+        }
+
+        .button-container {
+            margin-top: 50px;
+            /* 按鈕容器的上方外邊距 */
+        }
+
+        .cards-container {
+            display: flex;
+            /* 使用彈性布局 */
+            justify-content: center;
+            /* 水平居中對齊 */
+            align-items: center;
+            /* 垂直居中對齊 */
+            position: relative;
+            /* 相對定位 */
+            width: 450px;
+            /* 容器寬度 */
+            height: 200px;
+            /* 容器高度 */
+        }
+
+        .card {
+            width: 130px;
+            /* 卡片寬度 */
+            height: 250px;
+            /* 卡片高度 */
+            display: flex;
+            /* 使用彈性布局 */
+            justify-content: center;
+            /* 水平居中對齊 */
+            align-items: center;
+            /* 垂直居中對齊 */
+            border: 7px Solid pink;
+            /* 粉色邊框 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* 陰影效果 */
+            border-radius: 10px;
+            /* 邊角圓角 */
+            background-color: pink;
+            /* 背景顏色 */
+            position: absolute;
+            /* 絕對定位 */
+            overflow: hidden;
+            /* 溢出隱藏 */
+        }
+
+        .card img {
+            width: 100%;
+            /* 圖片寬度佔滿容器 */
+            height: 100%;
+            /* 圖片高度佔滿容器 */
+            object-fit: cover;
+            /* 圖片的填充方式 */
+        }
+
+        .card.highlighted {
+            transform: scale(1.6);
+            /* 放大效果 */
+            transition: transform 0.8s ease-in-out;
+            /* 調整過渡效果，使用 'ease-in-out' 讓動畫更流暢 */
+            z-index: 1;
+            /* 設置 z-index 使其在視覺上位於其他卡片前面 */
+        }
+
+        .result-container {
+            display: flex;
+            align-items: center;
+            /* 垂直居中 */
+            justify-content: center;
+            /* 水平居中 */
+            position: relative;
+            width: fit-content;
+            /* 適合內容的寬度 */
+            margin-top: 20px;
+            /* 與卡片容器之間的距離 */
+            max-width: 80%;
+            /* 限制最大寬度 */
+            transition: all 0.5s ease;
+            /* 添加過渡效果 */
+        }
+
+        .grade-container {
+            margin-left: 20px;
+            /* 與文字的間距 */
+            display: flex;
+            align-items: center;
+            /* 垂直居中 */
+        }
+
+        .grade {
+            font-size: 50px;
+            /* 初始字體大小 */
+            font-weight: bold;
+            transition: font-size 0.5s, color 0.5s;
+            /* 添加轉場效果 */
+        }
+
+        .grade.color-gray {
+            color: #aaaaaa;
+            /* 灰色 */
+        }
+
+        .grade.color-green {
+            color: #a7ffaa;
+            /* 綠色 */
+        }
+
+        .grade.color-blue {
+            color: #a6d7ff;
+            /* 藍色 */
+        }
+
+        .grade.color-yellow {
+            color: #fff6a9;
+            /* 黃色 */
+        }
+
+        .grade.color-red {
+            color: #ff837a;
+            /* 紅色 */
+        }
+
+
+        .grade.color-rainbow {
+            background: linear-gradient(60deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #8B00FF);
+            background-clip: text;
+            color: transparent;
+            animation: breathingRainbow 6s infinite linear;
+            /* 增加持續時間 */
+            background-size: 400% 100%;
+            /* 擴大背景尺寸 */
+        }
+
+        #shuffleBtn {
+            background: linear-gradient(45deg, #f48fb1, #f8bbd0);
+            /* 粉色漸層背景 */
+            border: none;
+            /* 無邊框 */
+            padding: 10px 20px;
+            /* 內邊距 */
+            color: white;
+            /* 文字顏色白色 */
+            font-size: 18px;
+            /* 字體大小 */
+            border-radius: 25px;
+            /* 更圓潤的按鈕 */
+            cursor: pointer;
+            /* 鼠標指針變為手型 */
+            transition: all 0.2s;
+            /* 過渡效果 */
+            box-shadow: 0 3px 10px rgba(244, 143, 177, 0.3);
+            /* 添加粉色陰影 */
+        }
+
+        #shuffleBtn:hover {
+            transform: scale(1.05);
+            /* 放大效果 */
+            background: linear-gradient(45deg, #f06292, #f48fb1);
+            /* hover 時顏色稍微加深 */
+        }
+
+        #shuffleBtn:disabled {
+            background-color: #ccc;
+            /* 禁用狀態背景顏色（灰色） */
+            cursor: not-allowed;
+            /* 鼠標指針變為不允許狀態 */
+        }
+
+        #resultText {
+            font-size: 18px;
+            /* 字體大小 */
+            color: #4a4a4a;
+            /* 字體顏色 */
+            padding: 10px;
+            font-weight: bolder;
+            max-width: 80%;
+            /* 限制最大寬度 */
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="button-container">
+        <button id="shuffleBtn" onclick="startShuffle()">開始通靈</button>
+    </div>
+    <div class="cards-container">
+        <div class="card" id="card1" style="left: 0;"><img src="pika.png" alt="Pikachu"></div>
+        <div class="card" id="card2" style="left: 175px;"><img src="fire.png" alt="Fire"></div>
+        <div class="card" id="card3" style="left: 350px;"><img src="meotwo.png" alt="Mewtwo"></div>
+    </div>
+    <div class="result-container hidden">
+        <p id="resultText" class="hidden"></p>
+        <div class="grade-container hidden">
+            <span id="gradeValue" class="grade color-gray hidden">0%</span>
+        </div>
+    </div>
+
+    </div>
+
+    <script>
+        let shuffleBtn = document.getElementById('shuffleBtn');
+        let cards = document.querySelectorAll('.card');
+        let cardsContainer = document.querySelector('.cards-container');
+        let resultText = document.getElementById('resultText'); // 獲取結果文本元素
+        function getRandomSpeed() {
+            return Math.random() * 0.01 + 0.1;  // 隨機速度在0.5到1秒之間
+        }
+
+        function getRandomRotations() {
+            return Math.floor(Math.random() * 3) + 20;  // 隨機旋轉次數在10到13之間
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        function startShuffle() {
+            shuffleBtn.disabled = true;
+            let rotations = 0;
+            resultText.classList.add('hidden');
+            const gradeContainer = document.querySelector('.grade-container');
+            gradeContainer.classList.add('hidden');
+            const gradeValue = document.getElementById('gradeValue');
+            gradeValue.classList.add('hidden');
+            const resultContainer = document.querySelector('.result-container');
+            resultContainer.classList.add('hidden');
+            const maxRotations = getRandomRotations();
+
+            // 移除所有卡片的高亮效果
+            cards.forEach(card => {
+                card.classList.remove('highlighted');
+            });
+
+            function shuffle() {
+                // 獲取隨機速度
+                let speeds = [getRandomSpeed(), getRandomSpeed(), getRandomSpeed()];
+
+                cards.forEach((card, index) => {
+                    card.style.transition = `left ${speeds[index]}s, top ${speeds[index]}s`;
+                });
+
+                // 交換位置
+                let card1Left = cards[0].style.left;
+                let card1Top = cards[0].style.top;
+                cards[0].style.left = cards[1].style.left;
+                cards[0].style.top = cards[1].style.top;
+                cards[1].style.left = cards[2].style.left;
+                cards[1].style.top = cards[2].style.top;
+                cards[2].style.left = card1Left;
+                cards[2].style.top = card1Top;
+
+                rotations++;
+                if (rotations < maxRotations) {
+                    setTimeout(shuffle, 50);
+                } else {
+                    setTimeout(showResult, 50);
+                }
+            }
+
+            shuffle();
+        }
+        function showResult() {
+            // 找到中間的卡片
+            let containerRect = cardsContainer.getBoundingClientRect();
+            let containerCenter = containerRect.left + containerRect.width / 2;
+
+            let middleCard = Array.from(cards).reduce((closest, card) => {
+                let cardRect = card.getBoundingClientRect();
+                let cardCenter = cardRect.left + cardRect.width / 2;
+                let distanceToCenter = Math.abs(cardCenter - containerCenter);
+
+                if (!closest || distanceToCenter < closest.distance) {
+                    return { card: card, distance: distanceToCenter };
+                }
+                return closest;
+            }, null);
+
+            if (middleCard) {
+                middleCard.card.classList.add('highlighted');
+            }
+
+            shuffleBtn.disabled = false;
+
+            // 生成隨機文本
+            const b = getRandomInt(1, 15);
+            const c = ['左', '右'][getRandomInt(0, 1)];
+            const e = ['左', '右'][getRandomInt(0, 1)];
+            const d = ['正', '反'][getRandomInt(0, 1)];
+            const f = ((d === '正') ? 5 : 1);
+            const g = getRandomInt(20, 80);
+            const resultTextContent = `往${c}數第${b}包，${d}面抽，往${e}滑開，第${f}張會是有料卡`;
+
+            resultText.innerText = resultTextContent;
+            resultText.classList.remove('hidden'); // 顯示結果文本
+            // 顯示 grade-container
+            const gradeContainer = document.querySelector('.grade-container');
+            gradeContainer.classList.remove('hidden');
+            // 設置 gradeValue 的值和樣式
+            const gradeValue = document.getElementById('gradeValue');
+            gradeValue.innerText = `料率${g}%`;
+
+            // 根據 g 的值來設置顏色和字體大小
+            gradeValue.className = 'grade'; // 重置樣式
+            if (g < 30) {
+                gradeValue.classList.add('color-gray');
+            } else if (g < 40) {
+                gradeValue.classList.add('color-green');
+            } else if (g < 50) {
+                gradeValue.classList.add('color-blue');
+            } else if (g < 60) {
+                gradeValue.classList.add('color-yellow');
+            } else if (g < 70) {
+                gradeValue.classList.add('color-red');
+            } else {
+                gradeValue.classList.add('color-rainbow');
+            }
+
+            // 根據 g 的值來設置字體大小
+            let fontSize;
+            if (g < 40) {
+                fontSize = 50 + (g - 20); // 字體隨 g 增大而增大
+            } else if (g < 70) {
+                fontSize = 60 + (g - 40);
+            } else {
+                fontSize = 80 + (g - 70);
+            }
+            gradeValue.style.fontSize = `${fontSize}px`;
+        }
+    </script>
+</body>
+
+</html>
