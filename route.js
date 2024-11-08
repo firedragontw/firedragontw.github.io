@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             });
     }
-<<<<<<< HEAD
 
     // 檢查是否匹配 ptcg 模式
     else if (path[0] === 'ptcg') {
@@ -51,6 +50,4 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             });
     }
-=======
->>>>>>> 1302a71c7a6cb10db323d49a4107b148c57e1004
 });
