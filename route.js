@@ -7,9 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 定義路由對應表
     const routes = {
-        'fire.dragon.lifestyle': {
-            'yihsin': '/yihsin.html'
-        },
+        
+        'yihsin': '/yihsin.html'
         'ptcg': '/ptcg.html',
         'egc': '/egc.html'
     };
