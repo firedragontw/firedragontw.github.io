@@ -3,62 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>主頁面</title>
+    <title>Welcome</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
         }
-        .nav-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .nav-link:hover {
-            background-color: #45a049;
-        }
-    </style>
-</head>
-<body>
-    <h1>歡迎來到主頁面</h1>
-    <p>點擊下面的連結前往 Yihsin 的頁面：</p>
-    <a href="yihsin" class="nav-link">前往 Yihsin 的頁面</a>
-</body>
-</html>
 
-<!-- yihsin.html -->
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yihsin的頁面</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            line-height: 1.6;
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
         }
-        .back-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #008CBA;
-            color: white;
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 10px;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover {
+            transform: scale(1.03) translateY(-5px);
+            box-shadow: 0 0 30px rgba(41, 98, 255, 0.4),
+                        0 0 60px rgba(0, 247, 255, 0.3),
+                        inset 0 0 15px rgba(41, 98, 255, 0.3);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .nav-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .nav-link {
             text-decoration: none;
-            border-radius: 5px;
+            padding: 1rem;
+            border-radius: 10px;
+            background: #f5f5f5;
+            color: #333;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
         }
-        .back-link:hover {
-            background-color: #007399;
+
+        .nav-link:hover {
+            background: linear-gradient(90deg, #2962ff, #00f7ff);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(41, 98, 255, 0.4);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 1.5rem;
+        }
+
+        #content {
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
         }
     </style>
 </head>
 <body>
-    <h1>歡迎來到 Yihsin 的頁面</h1>
-    <p>這是 Yihsin 的個人頁面內容。</p>
-    <a href="index.html" class="back-link">返回主頁</a>
+    <div class="container">
+        <div class="card">
+            <h1>不歡迎閣下來到朕的網站</h1>
+            <nav class="nav-links">
+                <a href="/fire.dragon.lifestyle/yihsin" class="nav-link">弱智猜數字神器</a>
+                <a href="/ptcg" class="nav-link">寶可夢卡牌通靈</a>
+                <a href="/egc" class="nav-link">每日精力計算器</a>
+            </nav>
+        </div>
+        <div id="content"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const pathname = window.location.pathname;
+            const path = pathname.replace(/^\//, '').split('/');
+            
+            const routes = {
+                'fire.dragon.lifestyle': {
+                    'yihsin': '/yihsin.html'
+                },
+                'ptcg': '/ptcg.html',
+                'egc': '/egc.html'
+            };
+            
+            let htmlFile = null;
+            if (path[0] === 'fire.dragon.lifestyle' && path[1] === 'yihsin') {
+                htmlFile = routes['fire.dragon.lifestyle']['yihsin'];
+            } else if (routes[path[0]]) {
+                htmlFile = routes[path[0]];
+            }
+            
+            if (htmlFile) {
+                fetch(htmlFile)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('找不到頁面');
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        document.getElementById('content').innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('載入頁面時發生錯誤:', error);
+                        document.getElementById('content').innerHTML = `
+                            <div class="card">
+                                <h1>404 - 找不到頁面</h1>
+                                <p>抱歉，請求的頁面不存在。</p>
+                            </div>
+                        `;
+                    });
+            }
+        });
+    </script>
 </body>
 </html>
