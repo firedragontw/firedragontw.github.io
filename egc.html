@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日精力計算器</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 10px;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover {
+            transform: scale(1.03) translateY(-5px);
+            box-shadow: 0 0 30px rgba(41, 98, 255, 0.4),
+                        0 0 60px rgba(0, 247, 255, 0.3),
+                        inset 0 0 15px rgba(41, 98, 255, 0.3);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 16px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #333;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        select:hover, select:focus {
+            border-color: #2962ff;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(41, 98, 255, 0.3);
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #e8f0fe;
+            transform: translateY(-2px);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .sleep-energy {
+            font-size: 1em;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .result {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #2962ff;
+        }
+
+        .energy-bar {
+            background: #f0f0f0;
+            height: 40px;
+            border-radius: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .energy-bar:hover {
+            box-shadow: inset 0 2px 15px rgba(41, 98, 255, 0.2),
+                        0 0 30px rgba(0, 247, 255, 0.4);
+            transform: scale(1.02);
+        }
+
+        .energy-fill {
+            background: linear-gradient(90deg, #2962ff, #00f7ff);
+            height: 100%;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .energy-bar:hover .energy-fill {
+            background: linear-gradient(90deg, #2962ff, #00f7ff, #2962ff);
+            background-size: 200% auto;
+            animation: gradientShift 3s linear infinite;
+            filter: brightness(1.2);
+        }
+
+        .energy-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: shine 1.5s infinite;
+        }
+
+        .value-display {
+            color: #2962ff;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .value-display:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 10px rgba(41, 98, 255, 0.5),
+                        0 0 20px rgba(0, 247, 255, 0.5);
+        }
+
+        .breakdown {
+            font-size: 1em;
+            color: #666;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: none;
+        }
+
+        button {
+            outline: none;
+            cursor: pointer;
+            border: none;
+            padding: 1rem 2rem;
+            margin: 1rem 0;
+            font-family: inherit;
+            font-size: 1.1rem;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 0.05rem;
+            font-weight: 700;
+            border-radius: 500px;
+            overflow: hidden;
+            background: #2962ff;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #2962ff, #00f7ff);
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(41, 98, 255, 0.4);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        h3 {
+            color: #444;
+            margin-bottom: 1rem;
+            font-size: 1.5em;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            h3 {
+                font-size: 1.2em;
+            }
+
+            .value-display {
+                font-size: 1.5rem;
+            }
+
+            .result {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HTML 內容保持不變 -->
+        <div class="card">
+            <h2>每日精力計算器</h2>
+            <div class="energy-bar">
+                <div id="energyFill" class="energy-fill" style="width: 0%"></div>
+            </div>
+            <div class="value-display" id="valueDisplay">0%</div>
+            <div class="result">
+                目前精力值：<span id="currentEnergy">0</span>/50
+            </div>
+            <div class="result">
+                可用於學習的精力值：<span id="learningEnergy">0</span>
+            </div>
+            <button onclick="toggleBreakdown()">顯示/隱藏計算明細</button>
+            <div class="breakdown" id="energyBreakdownContainer">
+                精力計算明細：<br>
+                <div id="energyBreakdown"></div>
+            </div>
+        </div>
+
+        <div class="card section">
+            <h3>增加精力</h3>
+            <div class="input-group">
+                <div class="input-item">
+                    <label for="sleepHours">睡眠時間（小時）：</label>
+                    <select id="sleepHours">
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                    <span class="sleep-energy">當前睡眠精力值：<span id="sleepEnergyValue">35</span></span>
+                </div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="coffee" value="10">
+                        <label for="coffee">喝咖啡 (+10)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="redtea" value="5">
+                        <label for="redtea">喝紅茶 (+5)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="breakfast" value="5">
+                        <label for="breakfast">早餐 (+5)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="exercise" value="5">
+                        <label for="exercise">運動 (+5)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card section">
+            <h3>消耗精力</h3>
+            <div class="input-group">
+                <div class="input-item">
+                    <label for="classes">上課堂數：</label>
+                    <select id="classes">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                    <span class="sleep-energy">每堂課消耗4點精力</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript 代碼保持不變
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const sleepHoursInput = document.getElementById('sleepHours');
+        const classesInput = document.getElementById('classes');
+        const energyFill = document.getElementById('energyFill');
+        const currentEnergySpan = document.getElementById('currentEnergy');
+        const learningEnergySpan = document.getElementById('learningEnergy');
+        const sleepEnergySpan = document.getElementById('sleepEnergyValue');
+        const energyBreakdownDiv = document.getElementById('energyBreakdown');
+        const energyBreakdownContainer = document.getElementById('energyBreakdownContainer');
+        const valueDisplay = document.getElementById('valueDisplay');
+
+        function calculateSleepEnergy(hours) {
+            if (hours >= 8) return 35;
+            if (hours >= 7) return 30;
+            if (hours >= 6) return 25;
+            if (hours >= 5) return 20;
+            return Math.max(0, Math.round(hours * 3));
+        }
+
+        function calculateEnergy() {
+            let energyBreakdown = [];
+
+            const sleepHours = parseFloat(sleepHoursInput.value) || 0;
+            const sleepEnergy = calculateSleepEnergy(sleepHours);
+            sleepEnergySpan.textContent = sleepEnergy;
+            energyBreakdown.push(`睡眠 ${sleepHours} 小時: +${sleepEnergy}`);
+
+            let additionalEnergy = 0;
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const value = parseInt(checkbox.value);
+                    additionalEnergy += value;
+                    energyBreakdown.push(`${checkbox.nextElementSibling.textContent.split('(')[0]}: +${value}`);
+                }
+            });
+
+            let totalPositiveEnergy = Math.min(sleepEnergy + additionalEnergy, 50);
+
+            const classes = parseInt(classesInput.value) || 0;
+            const classEnergy = classes * -4;
+            if (classes > 0) {
+                energyBreakdown.push(`上課 ${classes} 堂: ${classEnergy}`);
+            }
+
+            const finalEnergy = Math.max(totalPositiveEnergy + classEnergy, 0);
+
+            const percentage = (finalEnergy * 100 / 50);
+            energyFill.style.width = `${percentage}%`;
+            currentEnergySpan.textContent = finalEnergy;
+            learningEnergySpan.textContent = finalEnergy;
+            valueDisplay.textContent = `${Math.round(percentage)}%`;
+
+            energyBreakdownDiv.innerHTML = energyBreakdown.join('<br>') + 
+                                         '<br>─────────────' +
+                                         `<br>總精力值: ${finalEnergy}`;
+        }
+
+        function toggleBreakdown() {
+            if (energyBreakdownContainer.style.display === 'none' || energyBreakdownContainer.style.display === '') {
+                energyBreakdownContainer.style.display = 'block';
+            } else {
+                energyBreakdownContainer.style.display = 'none';
+            }
+        }
+
+        sleepHoursInput.addEventListener('change', calculateEnergy);
+        classesInput.addEventListener('change', calculateEnergy);
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', calculateEnergy);
+        });
+
+        calculateEnergy();
+    </script>
+</body>
+</html>
