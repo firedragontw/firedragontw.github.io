@@ -8,9 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 定義路由對應表
     const routes = {
         
-        'yihsin': '/yihsin.html'
+        'yihsin': '/yihsin.html',
         'ptcg': '/ptcg.html',
-        'egc': '/egc.html'
+        'egc': '/egc.html',
+        'learningcard': '/learningcard.html',
     };
     
     // 確定要載入的 HTML 檔案
