@@ -107,6 +107,7 @@
                 <a href="/ptcg" class="nav-link">寶可夢卡牌通靈</a>
                 <a href="/egc" class="nav-link">每日精力計算器</a>
                 <a href="/learningcard" class="nav-link">學習卡輔助神器</a>
+                <a href="/learningai" class="nav-link">AI學習卡</a>
             </nav>
         </div>
         <div id="content"></div>
@@ -117,13 +118,6 @@
             const pathname = window.location.pathname;
             const path = pathname.replace(/^\//, '').split('/');
             
-            const routes = {
-
-                'yihsin': '/yihsin.html'
-                'ptcg': '/ptcg.html',
-                'egc': '/egc.html'
-                'learningcard': '/learningcard.html',
-            };
             
             let htmlFile = null;
             if (path[0] === 'fire.dragon.lifestyle' && path[1] === 'yihsin') {
