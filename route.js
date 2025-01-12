@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'ptcg': '/ptcg.html',
         'egc': '/egc.html',
         'learningcard': '/learningcard.html',
-        'ai-card': '/learningai.html',       
+        'ai-card': '/ai-card.html',       
     };
     
     // 確定要載入的 HTML 檔案
