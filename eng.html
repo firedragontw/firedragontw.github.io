@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文單字打字練習</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .word-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .word-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .word-chinese {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .word-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .word-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .word-input.correct {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+        
+        .word-input.incorrect {
+            border-color: #dc3545;
+            background: #fff8f8;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-height: 25px;
+        }
+        
+        .feedback.correct {
+            color: #28a745;
+        }
+        
+        .feedback.incorrect {
+            color: #dc3545;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .completion-message {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .completion-message h2 {
+            margin-bottom: 10px;
+        }
+        
+        .word-display {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">英文單字打字練習</h1>
+            <p class="subtitle">練習英文單字拼寫，提升打字準確度</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="currentWord">1</div>
+                <div class="stat-label">目前單字</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalWords">25</div>
+                <div class="stat-label">總共單字</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="correctCount">0</div>
+                <div class="stat-label">答對數</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="accuracy">0%</div>
+                <div class="stat-label">正確率</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="shuffleWords()">重新隨機排序</button>
+            <button class="btn" onclick="resetPractice()">重新開始</button>
+        </div>
+        
+        <div class="completion-message" id="completionMessage">
+            <h2>🎉 恭喜完成！</h2>
+            <p>你已經完成了所有單字的練習！</p>
+        </div>
+        
+        <div class="word-card" id="wordCard">
+            <div class="word-chinese" id="wordChinese"></div>
+            <input type="text" class="word-input" id="wordInput" autocomplete="off">
+            <div class="feedback" id="feedback"></div>
+            <div class="word-display" id="wordDisplay"></div>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            { english: 'overflow', chinese: '溢出；氾濫' },
+            { english: 'narrow', chinese: '狹窄的；窄小的' },
+            { english: 'extent', chinese: '程度；限度' },
+            { english: 'decline', chinese: '減少；衰退；婉拒' },
+            { english: 'dramatically', chinese: '突然地；顯著地' },
+            { english: 'dramatic', chinese: '突然的；顯著的；戲劇的' },
+            { english: 'flock', chinese: '蜂擁；聚集；一大群' },
+            { english: 'expansion', chinese: '擴大；增加' },
+            { english: 'expand', chinese: '增加；擴大' },
+            { english: 'invasion', chinese: '湧入；武裝入侵；侵略' },
+            { english: 'invade', chinese: '武裝入侵；侵略；侵犯' },
+            { english: 'complaint', chinese: '抱怨；投訴' },
+            { english: 'complain', chinese: '抱怨；投訴' },
+            { english: 'thoughtless', chinese: '粗心的；欠考慮的' },
+            { english: 'thoughtful', chinese: '體貼的；關心的' },
+            { english: 'tenant', chinese: '房客' },
+            { english: 'landlord', chinese: '房東；地主' },
+            { english: 'landlady', chinese: '女房東；女地主' },
+            { english: 'partial', chinese: '偏愛的；不完全的；偏袒的' },
+            { english: 'rent', chinese: '出租；租金' },
+            { english: 'rental', chinese: '出租；租賃' },
+            { english: 'option', chinese: '選擇；選擇權' },
+            { english: 'optional', chinese: '可選擇的' },
+            { english: 'measure', chinese: '措施；方法；測量' },
+            { english: 'measurable', chinese: '可測量的' },
+            { english: 'measurement', chinese: '測量' },
+            { english: 'license', chinese: '許可；授權；許可證' },
+            { english: 'thorough', chinese: '全面的；徹底的' },
+            { english: 'thoroughly', chinese: '徹底地' },
+            { english: 'concentrate', chinese: '集中；專注' },
+            { english: 'concentration', chinese: '專注' },
+            { english: 'strive', chinese: '努力；奮鬥' },
+            { english: 'negative', chinese: '壞的；有害的；負面的' }
+        ];
+        
+        let currentWordIndex = 0;
+        let correctAnswers = 0;
+        let totalAttempts = 0;
+        let shuffledWords = [...words];
+        
+        // DOM elements
+        const wordChinese = document.getElementById('wordChinese');
+        const wordInput = document.getElementById('wordInput');
+        const feedback = document.getElementById('feedback');
+        const wordDisplay = document.getElementById('wordDisplay');
+        const progressFill = document.getElementById('progressFill');
+        const currentWordEl = document.getElementById('currentWord');
+        const totalWordsEl = document.getElementById('totalWords');
+        const correctCountEl = document.getElementById('correctCount');
+        const accuracyEl = document.getElementById('accuracy');
+        const completionMessage = document.getElementById('completionMessage');
+        const wordCard = document.getElementById('wordCard');
+        
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        function displayCurrentWord() {
+            if (currentWordIndex >= shuffledWords.length) {
+                showCompletion();
+                return;
+            }
+            
+            const currentWord = shuffledWords[currentWordIndex];
+            wordChinese.textContent = currentWord.chinese;
+            const wordLength = currentWord.english.length;
+            const hintText = wordLength > 2 
+                ? `${currentWord.english[0]}${'_'.repeat(wordLength - 2)}${currentWord.english[wordLength - 1]}`
+                : currentWord.english;
+            wordInput.placeholder = hintText;
+            wordInput.value = '';
+            wordInput.className = 'word-input';
+            feedback.textContent = '';
+            wordDisplay.textContent = '';
+            
+            updateStats();
+            updateProgress();
+            
+            wordInput.focus();
+        }
+        
+        function checkAnswer() {
+            const userInput = wordInput.value.trim().toLowerCase();
+            const correctAnswer = shuffledWords[currentWordIndex].english.toLowerCase();
+            
+            totalAttempts++;
+            
+            if (userInput === correctAnswer) {
+                wordInput.className = 'word-input correct';
+                feedback.textContent = '✓ 正確！';
+                feedback.className = 'feedback correct';
+                correctAnswers++;
+                
+                setTimeout(() => {
+                    currentWordIndex++;
+                    displayCurrentWord();
+                }, 1000);
+            } else {
+                wordInput.className = 'word-input incorrect';
+                feedback.textContent = `✗ 錯誤！正確答案是：${shuffledWords[currentWordIndex].english}`;
+                feedback.className = 'feedback incorrect';
+                wordDisplay.textContent = `正確拼寫：${shuffledWords[currentWordIndex].english}`;
+                
+                setTimeout(() => {
+                    wordInput.className = 'word-input';
+                    feedback.textContent = '';
+                    wordDisplay.textContent = '';
+                    wordInput.value = '';
+                    wordInput.placeholder = shuffledWords[currentWordIndex].english[0] + '_'.repeat(shuffledWords[currentWordIndex].english.length - 2) + shuffledWords[currentWordIndex].english[shuffledWords[currentWordIndex].english.length - 1];
+                    wordInput.focus();
+                }, 2000);
+            }
+            
+            updateStats();
+        }
+        
+        function updateStats() {
+            currentWordEl.textContent = Math.min(currentWordIndex + 1, shuffledWords.length);
+            totalWordsEl.textContent = shuffledWords.length;
+            correctCountEl.textContent = correctAnswers;
+            
+            const accuracy = totalAttempts > 0 ? Math.round((correctAnswers / totalAttempts) * 100) : 0;
+            accuracyEl.textContent = accuracy + '%';
+        }
+        
+        function updateProgress() {
+            const progress = (currentWordIndex / shuffledWords.length) * 100;
+            progressFill.style.width = progress + '%';
+        }
+        
+        function showCompletion() {
+            wordCard.style.display = 'none';
+            completionMessage.style.display = 'block';
+            progressFill.style.width = '100%';
+        }
+        
+        function shuffleWords() {
+            shuffledWords = shuffleArray(words);
+            resetPractice();
+        }
+        
+        function resetPractice() {
+            currentWordIndex = 0;
+            correctAnswers = 0;
+            totalAttempts = 0;
+            wordCard.style.display = 'block';
+            completionMessage.style.display = 'none';
+            displayCurrentWord();
+        }
+        
+        // Event listeners
+        wordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+        
+        wordInput.addEventListener('input', function() {
+            if (this.className.includes('incorrect') || this.className.includes('correct')) {
+                this.className = 'word-input';
+                feedback.textContent = '';
+                wordDisplay.textContent = '';
+            }
+        });
+        
+        // Initialize
+        shuffleWords();
+    </script>
+</body>
+</html>
