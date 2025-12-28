@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tangent Visualizer & Solver</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.desmos.com/api/v1.9/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 左側控制面板 -->
+        <div class="control-panel">
+            <div class="panel-content">
+                <h1 class="panel-title">點外切線機算機 Yihsin's math notes</h1>
+                <p class="panel-subtitle">找出所有通過外點的切線</p>
+                
+                <div class="input-section">
+                    <label class="input-label">函數 f(x)</label>
+                    <input 
+                        type="text" 
+                        id="functionInput" 
+                        class="input-field" 
+                        placeholder="x^2 + x"
+                        value="x^2 + x"
+                    >
+                    <p class="input-hint">支援多項式：x^2, x^3, x^4, x^5</p>
+                </div>
+
+                <div class="input-section">
+                    <label class="input-label">圖外一點 P(x, y)</label>
+                    <div class="coordinate-inputs">
+                        <div class="coord-group">
+                            <span class="coord-label">x</span>
+                            <input 
+                                type="number" 
+                                id="pointX" 
+                                class="input-field small" 
+                                placeholder="1"
+                                value="1"
+                                step="0.1"
+                            >
+                        </div>
+                        <div class="coord-group">
+                            <span class="coord-label">y</span>
+                            <input 
+                                type="number" 
+                                id="pointY" 
+                                class="input-field small" 
+                                placeholder="1"
+                                value="1"
+                                step="0.1"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <button id="calculateBtn" class="calculate-btn">
+                    <span class="btn-text">Calculate</span>
+                </button>
+
+                <button id="showStepsBtn" class="steps-btn" style="display: none;">
+                    <span class="btn-text">Show Steps 🪄</span>
+                </button>
+
+                <div id="resultsSection" class="results-section" style="display: none;">
+                    <h3 class="results-title">切線方程式</h3>
+                    <div id="resultsList" class="results-list"></div>
+                </div>
+
+                <div id="errorSection" class="error-section" style="display: none;">
+                    <p id="errorMessage" class="error-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右側圖形區 -->
+        <div class="graph-panel">
+            <div id="calculator" class="calculator-container"></div>
+            
+            <!-- 教學遮罩層 -->
+            <div id="tutorialOverlay" class="tutorial-overlay">
+                <div class="tutorial-card">
+                    <button id="closeTutorial" class="close-btn">✕</button>
+                    
+                    <div class="tutorial-header">
+                        <h2 id="tutorialTitle" class="tutorial-title">Step 1</h2>
+                        <p id="tutorialSubtitle" class="tutorial-subtitle">切線點斜式</p>
+                    </div>
+                    
+                    <div class="tutorial-content">
+                        <div id="mathDisplay" class="math-display"></div>
+                        <p id="explanationText" class="explanation-text"></p>
+                    </div>
+                    
+                    <div class="tutorial-nav">
+                        <button id="prevStep" class="nav-btn">← 上一步</button>
+                        <div id="progressDots" class="progress-dots"></div>
+                        <button id="nextStep" class="nav-btn">下一步 →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

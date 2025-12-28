@@ -1,0 +1,476 @@
+/* ===== 全域樣式與字體 ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    overflow: hidden;
+    height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== 主容器 ===== */
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* ===== 左側控制面板（玻璃擬態設計）===== */
+.control-panel {
+    width: 380px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.panel-content {
+    padding: 48px 32px;
+}
+
+/* ===== 標題區 ===== */
+.panel-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.panel-subtitle {
+    font-size: 15px;
+    color: #86868b;
+    margin-bottom: 40px;
+    font-weight: 400;
+}
+
+/* ===== 輸入區塊 ===== */
+.input-section {
+    margin-bottom: 32px;
+}
+
+.input-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 12px;
+    letter-spacing: -0.2px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 1.5px solid #d2d2d7;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+    color: #1d1d1f;
+}
+
+.input-field:hover {
+    border-color: #a1a1a6;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.input-field:focus {
+    border-color: #007aff;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+}
+
+.input-field::placeholder {
+    color: #86868b;
+}
+
+.input-hint {
+    font-size: 12px;
+    color: #86868b;
+    margin-top: 8px;
+}
+
+/* ===== 座標輸入 ===== */
+.coordinate-inputs {
+    display: flex;
+    gap: 16px;
+}
+
+.coord-group {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.coord-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1d1d1f;
+    font-style: italic;
+}
+
+.input-field.small {
+    width: 100%;
+}
+
+/* ===== 計算按鈕 ===== */
+.calculate-btn {
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(180deg, #007aff 0%, #0051d5 100%);
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
+    margin-bottom: 16px;
+    letter-spacing: -0.2px;
+}
+
+.calculate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 122, 255, 0.4);
+    background: linear-gradient(180deg, #0077ed 0%, #004ec4 100%);
+}
+
+.calculate-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+}
+
+/* ===== Show Steps 按鈕 ===== */
+.steps-btn {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #007aff;
+    background: rgba(0, 122, 255, 0.1);
+    border: 1.5px solid rgba(0, 122, 255, 0.3);
+    border-radius: 980px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 16px;
+    letter-spacing: -0.2px;
+}
+
+.steps-btn:hover {
+    background: rgba(0, 122, 255, 0.15);
+    border-color: rgba(0, 122, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-text {
+    display: inline-block;
+}
+
+/* ===== 結果區塊 ===== */
+.results-section {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.results-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.result-item {
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    border: 1px solid #e5e5ea;
+    font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+    font-size: 15px;
+    color: #1d1d1f;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.result-item:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #007aff;
+    transform: translateX(4px);
+}
+
+.result-number {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background: #007aff;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+/* ===== 錯誤訊息 ===== */
+.error-section {
+    background: rgba(255, 59, 48, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    border: 1px solid rgba(255, 59, 48, 0.3);
+}
+
+.error-message {
+    font-size: 14px;
+    color: #ff3b30;
+    font-weight: 500;
+}
+
+/* ===== 右側圖形區 ===== */
+.graph-panel {
+    flex: 1;
+    position: relative;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.calculator-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* ===== 教學遮罩層 ===== */
+.tutorial-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+.tutorial-overlay.active {
+    display: block;
+}
+
+.tutorial-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 -8px 32px rgba(31, 38, 135, 0.2);
+    padding: 32px 40px;
+    position: relative;
+    min-height: 280px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    color: #86868b;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #1d1d1f;
+}
+
+.tutorial-header {
+    margin-bottom: 24px;
+}
+
+.tutorial-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin-bottom: 4px;
+}
+
+.tutorial-subtitle {
+    font-size: 14px;
+    color: #86868b;
+    font-weight: 500;
+}
+
+.tutorial-content {
+    margin-bottom: 32px;
+    min-height: 120px;
+}
+
+.math-display {
+    font-family: 'Times New Roman', serif;
+    font-size: 22px;
+    color: #1d1d1f;
+    padding: 20px;
+    background: rgba(0, 122, 255, 0.05);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    text-align: center;
+    line-height: 1.8;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.explanation-text {
+    font-size: 15px;
+    color: #515154;
+    line-height: 1.6;
+}
+
+.tutorial-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.nav-btn {
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #007aff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.nav-btn:hover {
+    background: rgba(0, 122, 255, 0.1);
+}
+
+.nav-btn:disabled {
+    color: #d2d2d7;
+    cursor: not-allowed;
+}
+
+.nav-btn:disabled:hover {
+    background: transparent;
+}
+
+.progress-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d2d2d7;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: #007aff;
+    transform: scale(1.3);
+}
+
+/* ===== 捲軸樣式 ===== */
+.control-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.control-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.control-panel::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.control-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* ===== 動畫效果 ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.results-section, .error-section {
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-item {
+    animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.result-item:nth-child(1) { animation-delay: 0.05s; }
+.result-item:nth-child(2) { animation-delay: 0.1s; }
+.result-item:nth-child(3) { animation-delay: 0.15s; }
+.result-item:nth-child(4) { animation-delay: 0.2s; }
+.result-item:nth-child(5) { animation-delay: 0.25s; }
+
+/* ===== 響應式設計 ===== */
+@media (max-width: 1024px) {
+    .control-panel {
+        width: 320px;
+    }
+    
+    .panel-content {
+        padding: 32px 24px;
+    }
+    
+    .tutorial-card {
+        padding: 24px 28px;
+    }
+}

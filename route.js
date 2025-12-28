@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'learningcard': '/learningcard.html',
         'ai-card': '/ai-card.html',      
         'eng': '/eng.html',
-        'bus': '/bus.html',     
+        'bus': '/bus.html', 
+        'enyu': '/enyu.html',
     };
     
     // 確定要載入的 HTML 檔案
