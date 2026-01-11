@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'eng': '/eng.html',
         'bus': '/bus.html', 
         'enyu': '/enyu.html',
-        'gsat': '/gsatouo.html',
+        'gsatouo': '/gsatouo.html',
     };
     
     // 確定要載入的 HTML 檔案
