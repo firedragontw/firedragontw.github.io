@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>有效數字練習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4FB;
+    --dot:#E4E0F2;
+    --surface:#FFFFFF;
+    --ink:#26214A;
+    --muted:#6E6A8A;
+    --line:#E6E2F3;
+    --accent:#6C5CE7;
+    --accent-soft:#ECE8FF;
+    --rose:#F5C6DD;
+    --rose-ink:#8A2F5C;
+    --ok:#22A47A;
+    --ok-soft:#DFF5EC;
+    --bad:#E4574F;
+    --bad-soft:#FDE4E2;
+    --readout-bg:#2A2450;
+    --readout-ink:#F3EFFF;
+    --readout-dim:#9C93D6;
+    --radius-lg:22px;
+    --radius:14px;
+    --radius-sm:10px;
+    --font-ui:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    --font-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+    --ease:cubic-bezier(.2,.8,.2,1);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{
+    min-height:100vh;
+    background-color:var(--bg);
+    background-image:radial-gradient(var(--dot) 1.3px, transparent 1.3px);
+    background-size:22px 22px;
+    color:var(--ink);
+    font-family:var(--font-ui);
+    -webkit-font-smoothing:antialiased;
+    padding:28px 16px 48px;
+  }
+  .app{max-width:640px;margin:0 auto;}
+
+  /* header */
+  .top{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;
+  }
+  .top h1{
+    margin:0;font-size:26px;font-weight:900;letter-spacing:.01em;line-height:1.1;
+  }
+  .top h1 small{
+    display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:6px;letter-spacing:0;
+  }
+  .streak{
+    display:flex;align-items:center;gap:8px;
+    background:var(--surface);border:1px solid var(--line);border-radius:999px;
+    padding:8px 14px;font-weight:700;font-size:14px;color:var(--muted);
+    box-shadow:0 1px 0 rgba(38,33,74,.04);
+  }
+  .streak .n{
+    font-family:var(--font-mono);font-size:18px;color:var(--ink);min-width:1.2em;text-align:center;
+    display:inline-block;
+  }
+  .streak .n.bump{animation:bump .35s var(--ease);}
+  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+
+  /* overall progress */
+  .progress{
+    height:8px;border-radius:999px;background:#E9E5F5;overflow:hidden;margin-bottom:18px;
+    position:relative;
+  }
+  .progress > i{
+    display:block;height:100%;width:0%;border-radius:999px;
+    background:linear-gradient(90deg,var(--accent),#A78BFA);
+    transition:width .6s var(--ease);
+  }
+  .progress-meta{
+    display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:-12px 2px 16px;
+  }
+
+  /* category pills */
+  .cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+  .cat{
+    appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);
+    border-radius:999px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;
+    transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .15s var(--ease);
+  }
+  .cat:hover{border-color:#CFC8EE;}
+  .cat:active{transform:scale(.97);}
+  .cat[aria-pressed="true"]{
+    background:var(--accent);border-color:var(--accent);color:#fff;
+  }
+  .cat .tag{
+    font-size:11px;font-weight:600;margin-left:6px;opacity:.75;
+  }
+  .cat:focus-visible,.btn:focus-visible,.input:focus-visible,.link:focus-visible{
+    outline:3px solid #C7BEFF;outline-offset:2px;
+  }
+
+  /* card */
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);
+    padding:22px 22px 20px;
+    box-shadow:0 10px 30px -18px rgba(38,33,74,.25);
+    transition:box-shadow .35s var(--ease);
+    position:relative;
+  }
+  .card.is-ok{box-shadow:0 0 0 4px rgba(34,164,122,.18),0 10px 30px -18px rgba(38,33,74,.25);}
+  .card.is-bad{box-shadow:0 0 0 4px rgba(228,87,79,.16),0 10px 30px -18px rgba(38,33,74,.25);}
+  .card.shake{animation:shake .38s var(--ease);}
+  @keyframes shake{
+    10%{transform:translateX(-6px)}30%{transform:translateX(5px)}
+    50%{transform:translateX(-4px)}70%{transform:translateX(3px)}90%{transform:translateX(-1px)}
+  }
+
+  .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .badge{
+    display:inline-block;background:var(--accent-soft);color:var(--accent);
+    border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:800;
+  }
+  .qcount{font-size:12.5px;color:var(--muted);font-weight:600;}
+
+  /* readout: the hero */
+  .readout{
+    background:var(--readout-bg);color:var(--readout-ink);
+    border-radius:var(--radius);padding:22px 20px 20px;
+    font-family:var(--font-mono);font-weight:600;
+    font-size:clamp(22px,5.2vw,32px);line-height:1.25;letter-spacing:.02em;
+    box-shadow:inset 0 2px 10px rgba(0,0,0,.35),inset 0 -1px 0 rgba(255,255,255,.06);
+    overflow-wrap:anywhere;position:relative;min-height:84px;
+  }
+  .readout sup{font-size:.6em;vertical-align:.55em;margin-left:2px;}
+  .readout .ch{display:inline-block;will-change:transform,opacity;}
+  .readout .ch.in{animation:roll .42s var(--ease) both;}
+  @keyframes roll{
+    from{opacity:0;transform:translateY(.55em)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  .readout .dim{color:var(--readout-dim);font-weight:500;}
+  .readout::after{
+    content:"";position:absolute;left:14px;right:14px;bottom:10px;height:2px;border-radius:2px;
+    background:var(--ok);transform:scaleX(0);transform-origin:left;
+    transition:transform .5s var(--ease);
+  }
+  .readout.ok::after{transform:scaleX(1);}
+  .readout.bad::after{background:var(--bad);transform:scaleX(1);}
+
+  .prompt{
+    margin:14px 2px 12px;font-size:16px;font-weight:700;line-height:1.5;
+  }
+  .prompt .sub{display:block;font-size:12.5px;font-weight:500;color:var(--muted);margin-top:4px;}
+
+  .row{display:flex;gap:10px;}
+  .input{
+    flex:1;min-width:0;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+    padding:12px 14px;font:inherit;font-family:var(--font-mono);font-size:17px;color:var(--ink);
+    background:#FBFAFF;transition:border-color .2s var(--ease),box-shadow .2s var(--ease);
+  }
+  .input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(108,92,231,.12);outline:none;}
+  .input:disabled{background:#F3F1FA;color:var(--muted);}
+  .btn{
+    appearance:none;border:none;border-radius:var(--radius-sm);padding:12px 20px;
+    font:inherit;font-size:15px;font-weight:800;cursor:pointer;
+    background:var(--accent);color:#fff;
+    transition:transform .12s var(--ease),filter .2s var(--ease),opacity .2s;
+    white-space:nowrap;
+  }
+  .btn:hover{filter:brightness(1.06);}
+  .btn:active{transform:scale(.97);}
+  .btn:disabled{opacity:.45;cursor:not-allowed;filter:none;transform:none;}
+  .btn.ghost{background:var(--accent-soft);color:var(--accent);}
+
+  /* feedback */
+  .fb-wrap{
+    display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease);
+  }
+  .fb-wrap.open{grid-template-rows:1fr;}
+  .fb-wrap > div{overflow:hidden;}
+  .fb{
+    margin-top:14px;border-radius:var(--radius);padding:14px 16px 16px;
+    opacity:0;transform:translateY(6px);
+    transition:opacity .35s var(--ease) .1s,transform .35s var(--ease) .1s;
+    font-size:14.5px;line-height:1.7;
+  }
+  .fb-wrap.open .fb{opacity:1;transform:none;}
+  .fb.ok{background:var(--ok-soft);color:#155F47;}
+  .fb.bad{background:var(--bad-soft);color:#8E2A25;}
+  .fb-title{
+    display:flex;align-items:center;gap:10px;font-size:16px;font-weight:900;margin-bottom:6px;
+  }
+  .mark{
+    width:26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;flex:none;
+    color:#fff;background:var(--ok);
+  }
+  .fb.bad .mark{background:var(--bad);}
+  .mark svg{width:16px;height:16px;}
+  .mark svg path{
+    stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:30;stroke-dashoffset:30;
+  }
+  .fb-wrap.open .mark svg path{animation:draw .45s var(--ease) .25s forwards;}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .fb .ans{
+    font-family:var(--font-mono);font-weight:600;background:rgba(255,255,255,.65);
+    padding:1px 8px;border-radius:6px;
+  }
+  .fb .body{font-weight:500;}
+
+  .actions{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:12px;}
+  .kbd-hint{font-size:12px;color:var(--muted);}
+  .kbd-hint kbd{
+    font-family:var(--font-mono);font-size:11px;background:#F1EEFA;border:1px solid var(--line);
+    border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:var(--ink);
+  }
+
+  /* stats */
+  .stats{
+    margin-top:18px;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius-lg);padding:16px 20px 14px;
+  }
+  .stats-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .stats-head h2{margin:0;font-size:14px;font-weight:800;color:var(--muted);}
+  .link{
+    appearance:none;border:none;background:none;font:inherit;font-size:12.5px;font-weight:700;
+    color:var(--accent);cursor:pointer;padding:4px 6px;border-radius:6px;
+  }
+  .link:hover{background:var(--accent-soft);}
+  .stat{
+    display:grid;grid-template-columns:78px 1fr 64px;align-items:center;gap:12px;
+    padding:7px 0;font-size:13.5px;
+  }
+  .stat + .stat{border-top:1px dashed var(--line);}
+  .stat .label{font-weight:700;}
+  .stat .bar{height:7px;border-radius:999px;background:#EEEBF7;overflow:hidden;}
+  .stat .bar i{display:block;height:100%;width:0%;background:var(--accent);border-radius:999px;transition:width .5s var(--ease);}
+  .stat .num{font-family:var(--font-mono);font-size:13px;color:var(--muted);text-align:right;}
+  .stat.dim{opacity:.45;}
+
+  .foot{
+    text-align:center;font-size:12px;color:var(--muted);margin-top:22px;line-height:1.7;
+  }
+
+  @media (max-width:480px){
+    body{padding:18px 12px 40px;}
+    .top h1{font-size:22px;}
+    .card{padding:18px 16px 16px;}
+    .stat{grid-template-columns:70px 1fr 56px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <h1>有效數字練習<small>判斷位數、四捨五入、加減乘除的取位規則</small></h1>
+    <div class="streak" title="連續答對">連對 <span class="n" id="streak">0</span></div>
+  </header>
+
+  <div class="progress"><i id="progressBar"></i></div>
+  <div class="progress-meta"><span id="progressLeft">還沒開始作答</span><span id="progressRight"></span></div>
+
+  <div class="cats" id="cats" role="group" aria-label="題型">
+    <button class="cat" data-cat="sigfig" aria-pressed="true">判斷位數</button>
+    <button class="cat" data-cat="round" aria-pressed="true">四捨五入</button>
+    <button class="cat" data-cat="addsub" aria-pressed="true">加減運算</button>
+    <button class="cat" data-cat="muldiv" aria-pressed="true">乘除運算</button>
+    <button class="cat" data-cat="mixed" aria-pressed="false">混合運算<span class="tag">佔 50%</span></button>
+  </div>
+
+  <section class="card" id="card">
+    <div class="card-head">
+      <span class="badge" id="badge">判斷位數</span>
+      <span class="qcount" id="qcount">第 1 題</span>
+    </div>
+
+    <div class="readout" id="readout" aria-live="polite"></div>
+
+    <p class="prompt" id="prompt"></p>
+
+    <div class="row">
+      <input class="input" id="answer" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="輸入答案">
+      <button class="btn" id="submit">送出</button>
+    </div>
+
+    <div class="fb-wrap" id="fbWrap">
+      <div>
+        <div class="fb" id="fb">
+          <div class="fb-title">
+            <span class="mark" id="mark"></span>
+            <span id="fbTitle"></span>
+          </div>
+          <div class="body" id="fbBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <span class="kbd-hint"><kbd>Enter</kbd> 送出，再按一次到下一題</span>
+      <button class="btn ghost" id="next" hidden>下一題</button>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stats-head">
+      <h2>各題型正確率</h2>
+      <button class="link" id="reset">重設統計</button>
+    </div>
+    <div id="statList"></div>
+  </section>
+
+  <p class="foot">加減乘除題目會先幫你把結果算好，你只需要判斷該取到哪一位。<br>精確數字（用數的）請輸入「無限」。</p>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- 工具 ---------- */
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function randDigit(excludeZero){
+    let d; do{ d = randInt(0,9); } while(excludeZero && d===0); return d;
+  }
+  function makeDigits(n){
+    let s = String(randDigit(true));
+    for(let i=1;i<n;i++) s += String(randDigit(false));
+    return s;
+  }
+  function roundToSigFigsStr(num, sig){
+    if(num === 0) return '0';
+    const sign = num < 0 ? '-' : '';
+    num = Math.abs(num);
+    const exp = Math.floor(Math.log10(num) + 1e-12);
+    const decimalPlaces = sig - 1 - exp;
+    if(decimalPlaces >= 0) return sign + num.toFixed(decimalPlaces);
+    const factor = Math.pow(10, -decimalPlaces);
+    return sign + (Math.round(num/factor) * factor).toString();
+  }
+  function countSigFigsFromDecimalString(str){
+    const s = str.replace('-','');
+    if(s.includes('.')){
+      const i = s.search(/[1-9]/);
+      if(i === -1) return 1;
+      return s.slice(i).replace('.','').length;
+    }
+    return (s.replace(/0+$/,'') || '0').length;
+  }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  /* ---------- 題目產生器 ---------- */
+  /* 每題回傳 { category, readout(HTML), prompt, sub, answer, explanation } */
+
+  function genSigFig(){
+    const type = randInt(1,6);
+    let readout, answer, explanation;
+    if(type===1){
+      const n = randInt(3,5); let s='';
+      for(let i=0;i<n;i++) s += String(randDigit(true));
+      readout = s; answer = String(n);
+      explanation = `${s} 都是非零整數，全部都算，所以是 ${n} 位有效數字。`;
+    } else if(type===2){
+      const lz = randInt(1,3), sigLen = randInt(2,4), sig = makeDigits(sigLen);
+      readout = '0.' + '0'.repeat(lz) + sig; answer = String(sigLen);
+      const hasCaptive = /0/.test(sig.slice(1));
+      explanation = `${readout} 前面 ${lz} 個 0 是前導零不算${hasCaptive?'，中間出現的 0 是中間零要算':''}，真正算的是「${sig}」這 ${sigLen} 位，所以是 ${sigLen} 位有效數字。`;
+    } else if(type===3){
+      const sigLen = randInt(2,4), tz = randInt(1,3), sig = makeDigits(sigLen);
+      readout = sig + '0'.repeat(tz); answer = String(sigLen);
+      explanation = `${readout} 沒有小數點，尾隨的 ${tz} 個 0 不算，只有前面「${sig}」算，所以是 ${sigLen} 位有效數字。`;
+    } else if(type===4){
+      const sigLen = randInt(2,4), tz = randInt(1,2), sig = makeDigits(sigLen);
+      readout = sig + '0'.repeat(tz) + '.'; answer = String(sigLen + tz);
+      explanation = `${readout} 結尾有小數點，代表尾隨的 ${tz} 個 0 是特別標示出來的，要算進去，所以是 ${sigLen + tz} 位有效數字。`;
+    } else if(type===5){
+      const sigLen = randInt(2,4), tz = randInt(1,2);
+      const first = String(randDigit(true)); let mid='';
+      for(let i=1;i<sigLen;i++) mid += String(randDigit(false));
+      readout = first + '.' + mid + '0'.repeat(tz); answer = String(sigLen + tz);
+      explanation = `${readout} 小數點後尾隨的 ${tz} 個 0 要算，所以是 ${sigLen + tz} 位有效數字。`;
+    } else {
+      const sigLen = randInt(2,4), expo = randInt(-5,5);
+      const first = String(randDigit(true)); let mid='';
+      for(let i=1;i<sigLen;i++) mid += String(randDigit(false));
+      const mantissa = first + '.' + mid;
+      readout = `${mantissa} × 10<sup>${expo}</sup>`; answer = String(sigLen);
+      explanation = `科學記號只看前面的數字部分「${mantissa}」，總共 ${sigLen} 位，所以是 ${sigLen} 位有效數字，跟後面 10 的次方無關。`;
+    }
+    return { category:'sigfig', readout, prompt:'這個數字有幾位有效數字？', sub:'輸入一個整數', answer, explanation };
+  }
+  function genExact(){
+    const n = randInt(2,500);
+    const units = ['顆蘋果','個分子','次實驗','輛車','個學生','張椅子','隻小狗','本書'];
+    const u = units[randInt(0,units.length-1)];
+    return {
+      category:'sigfig', readout:`${n} <span class="dim">${u}</span>`,
+      prompt:'這個數字有幾位有效數字？', sub:'如果是精確數字，請輸入「無限」',
+      answer:'EXACT',
+      explanation:'這是用數的，不是用儀器量出來的，屬於精確數字，視為無限多位有效數字。'
+    };
+  }
+  function genSigFigQuestion(){ return Math.random() < 0.15 ? genExact() : genSigFig(); }
+
+  function genOperand(minSig, maxSig){
+    const sig = randInt(minSig, maxSig);
+    const digits = makeDigits(sig);
+    const style = randInt(1,3);
+    let str;
+    if(style===1){
+      let d = digits;
+      if(d[d.length-1]==='0') d = d.slice(0,-1) + String(randDigit(true));
+      str = d;
+    } else if(style===2){
+      str = digits[0] + '.' + digits.slice(1);
+    } else {
+      str = '0.' + digits;
+    }
+    const decimalPlaces = str.includes('.') ? str.split('.')[1].length : 0;
+    return { str, value: parseFloat(str), sig, decimalPlaces };
+  }
+
+  function genRounding(){
+    const op = genOperand(4,6);
+    const targetSig = randInt(1, op.sig - 1);
+    const answer = roundToSigFigsStr(op.value, targetSig);
+    return {
+      category:'round', readout: op.str,
+      prompt:`四捨五入到 ${targetSig} 位有效數字`, sub:'直接輸入四捨五入後的數字',
+      answer,
+      explanation:`${op.str} 原本有 ${op.sig} 位有效數字，取 ${targetSig} 位的時候，只看要去掉位置後面的第一個數字來決定進位或捨去，正確答案是 ${answer}。`
+    };
+  }
+
+  function genAddSub(){
+    const n = randInt(2,3);
+    const operands = []; for(let i=0;i<n;i++) operands.push(genOperand(2,4));
+    const signs = [1]; for(let i=1;i<n;i++) signs.push(Math.random()<0.7 ? 1 : -1);
+    let exact = 0; for(let i=0;i<n;i++) exact += signs[i]*operands[i].value;
+    if(exact < 0){ for(let i=0;i<n;i++) signs[i]=1; exact = operands.reduce((s,o)=>s+o.value,0); }
+    const minDP = Math.min(...operands.map(o=>o.decimalPlaces));
+    const answer = exact.toFixed(minDP);
+    const raw = exact.toFixed(minDP + 3);
+    const expr = operands.map((o,i)=> i===0 ? o.str : (signs[i]>0 ? ' + ' : ' − ') + o.str).join('');
+    const limiting = operands.reduce((a,b)=> a.decimalPlaces <= b.decimalPlaces ? a : b);
+    return {
+      category:'addsub',
+      readout:`${expr} <span class="dim">=</span> ${raw}`,
+      prompt:'寫出正確位數的答案', sub:'結果已經算好了，只需要決定取到哪一位',
+      answer,
+      explanation:`加減看小數位數，「${limiting.str}」只到小數點後第 ${limiting.decimalPlaces} 位，是限制項，所以答案要取到小數點後 ${minDP} 位，正確答案是 ${answer}。`
+    };
+  }
+
+  function genMulDiv(){
+    const a = genOperand(2,4), b = genOperand(2,4);
+    const op = Math.random() < 0.5 ? '×' : '÷';
+    const exact = op==='×' ? a.value*b.value : a.value/b.value;
+    const limitingSig = Math.min(a.sig, b.sig);
+    const answer = roundToSigFigsStr(exact, limitingSig);
+    const raw = roundToSigFigsStr(exact, limitingSig + 3);
+    const limiting = a.sig <= b.sig ? a : b;
+    return {
+      category:'muldiv',
+      readout:`${a.str} ${op} ${b.str} <span class="dim">=</span> ${raw}`,
+      prompt:'寫出正確位數的答案', sub:'結果已經算好了，只需要決定取到哪一位',
+      answer,
+      explanation:`乘除看總有效位數，「${limiting.str}」只有 ${limiting.sig} 位，是限制項，所以答案要取 ${limitingSig} 位有效數字，正確答案是 ${answer}。`
+    };
+  }
+
+  function genMixedChain(){
+    const n = randInt(3,4);
+    const operands = []; for(let i=0;i<n;i++) operands.push(genOperand(2,4));
+    const ops = []; for(let i=1;i<n;i++) ops.push(Math.random() < 0.5 ? '×' : '÷');
+    let exact = operands[0].value;
+    for(let i=1;i<n;i++) exact = ops[i-1]==='×' ? exact*operands[i].value : exact/operands[i].value;
+    const limitingSig = Math.min(...operands.map(o=>o.sig));
+    const answer = roundToSigFigsStr(exact, limitingSig);
+    const raw = roundToSigFigsStr(exact, limitingSig + 3);
+    const limiting = operands.reduce((a,b)=> a.sig <= b.sig ? a : b);
+    let expr = operands[0].str; for(let i=1;i<n;i++) expr += ` ${ops[i-1]} ${operands[i].str}`;
+    return {
+      category:'mixed',
+      readout:`${expr} <span class="dim">=</span> ${raw}`,
+      prompt:'寫出正確位數的答案', sub:'整條都是乘除',
+      answer,
+      explanation:`整條式子都是乘除，看總有效位數，「${limiting.str}」只有 ${limiting.sig} 位，是限制項，所以答案要取 ${limitingSig} 位有效數字，正確答案是 ${answer}。`
+    };
+  }
+  function genMixedSumThenMulDiv(){
+    const n = randInt(2,3);
+    const sumOps = []; for(let i=0;i<n;i++) sumOps.push(genOperand(2,4));
+    const sumExact = sumOps.reduce((s,o)=>s+o.value,0);
+    const minDP = Math.min(...sumOps.map(o=>o.decimalPlaces));
+    const sumStr = sumExact.toFixed(minDP);
+    const sumSig = countSigFigsFromDecimalString(sumStr);
+    const limitingAdd = sumOps.reduce((a,b)=> a.decimalPlaces <= b.decimalPlaces ? a : b);
+    const other = genOperand(2,4);
+    const op2 = Math.random() < 0.5 ? '×' : '÷';
+    const exact = op2==='×' ? sumExact*other.value : sumExact/other.value;
+    const limitingSig = Math.min(sumSig, other.sig);
+    const answer = roundToSigFigsStr(exact, limitingSig);
+    const raw = roundToSigFigsStr(exact, limitingSig + 3);
+    const expr = `(${sumOps.map(o=>o.str).join(' + ')}) ${op2} ${other.str}`;
+    return {
+      category:'mixed',
+      readout:`${expr} <span class="dim">=</span> ${raw}`,
+      prompt:'寫出正確位數的答案', sub:'先看括號內加減的限制，再看跟外面數字乘除的限制',
+      answer,
+      explanation:`先看括號內的加法，「${limitingAdd.str}」小數只到第 ${limitingAdd.decimalPlaces} 位是限制項，所以括號內先變成 ${sumStr}，換算成有效位數是 ${sumSig} 位。接著跟「${other.str}」（${other.sig} 位）做乘除，取兩者中比較少的 ${limitingSig} 位，正確答案是 ${answer}。`
+    };
+  }
+  function genMixed(){ return Math.random() < 0.5 ? genMixedChain() : genMixedSumThenMulDiv(); }
+
+  const generators = { sigfig: genSigFigQuestion, round: genRounding, addsub: genAddSub, muldiv: genMulDiv, mixed: genMixed };
+  const catNames  = { sigfig:'判斷位數', round:'四捨五入', addsub:'加減運算', muldiv:'乘除運算', mixed:'混合運算' };
+  const catOrder  = ['sigfig','round','addsub','muldiv','mixed'];
+
+  /* ---------- 狀態 ---------- */
+  const stats = {}; catOrder.forEach(k => stats[k] = {correct:0,total:0});
+  let current = null, answered = false, streak = 0, qIndex = 0;
+
+  /* ---------- DOM ---------- */
+  const $ = id => document.getElementById(id);
+  const card = $('card'), readoutEl = $('readout'), promptEl = $('prompt'), badge = $('badge'), qcount = $('qcount');
+  const input = $('answer'), submitBtn = $('submit'), nextBtn = $('next');
+  const fbWrap = $('fbWrap'), fb = $('fb'), fbTitle = $('fbTitle'), fbBody = $('fbBody'), mark = $('mark');
+  const statList = $('statList'), progressBar = $('progressBar'), progressLeft = $('progressLeft'), progressRight = $('progressRight');
+  const streakEl = $('streak'), cats = $('cats');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 類別 ---------- */
+  function enabledCats(){
+    return Array.from(cats.querySelectorAll('.cat'))
+      .filter(b => b.getAttribute('aria-pressed') === 'true')
+      .map(b => b.dataset.cat);
+  }
+  function pickCategory(enabled){
+    if(enabled.includes('mixed')){
+      const others = enabled.filter(c => c !== 'mixed');
+      if(!others.length) return 'mixed';
+      return Math.random() < 0.5 ? 'mixed' : others[randInt(0, others.length-1)];
+    }
+    return enabled[randInt(0, enabled.length-1)];
+  }
+
+  /* ---------- 顯示 ---------- */
+  function renderReadout(html){
+    readoutEl.classList.remove('ok','bad');
+    if(reduceMotion){ readoutEl.innerHTML = html; return; }
+    const tmp = document.createElement('div'); tmp.innerHTML = html;
+    let idx = 0;
+    const build = node => {
+      if(node.nodeType === 3){
+        const f = document.createDocumentFragment();
+        for(const ch of node.textContent){
+          if(ch === ' '){ f.appendChild(document.createTextNode(' ')); continue; }
+          const s = document.createElement('span');
+          s.className = 'ch in'; s.textContent = ch;
+          s.style.animationDelay = (Math.min(idx, 24) * 28) + 'ms';
+          f.appendChild(s); idx++;
+        }
+        return f;
+      }
+      const el = node.cloneNode(false);
+      Array.from(node.childNodes).forEach(c => el.appendChild(build(c)));
+      return el;
+    };
+    const frag = document.createDocumentFragment();
+    Array.from(tmp.childNodes).forEach(c => frag.appendChild(build(c)));
+    readoutEl.innerHTML = ''; readoutEl.appendChild(frag);
+  }
+
+  function renderStats(){
+    let html = '', tc = 0, tt = 0;
+    for(const k of catOrder){
+      const s = stats[k]; tc += s.correct; tt += s.total;
+      const pct = s.total ? Math.round(100*s.correct/s.total) : 0;
+      html += `<div class="stat ${s.total?'':'dim'}">
+        <span class="label">${catNames[k]}</span>
+        <span class="bar"><i style="width:${pct}%"></i></span>
+        <span class="num">${s.correct}/${s.total}</span>
+      </div>`;
+    }
+    statList.innerHTML = html;
+    const overall = tt ? Math.round(100*tc/tt) : 0;
+    progressBar.style.width = overall + '%';
+    progressLeft.textContent = tt ? `總正確率 ${overall}%` : '還沒開始作答';
+    progressRight.textContent = tt ? `${tc} / ${tt} 題` : '';
+  }
+
+  function newQuestion(){
+    const enabled = enabledCats();
+    answered = false;
+    card.classList.remove('is-ok','is-bad','shake');
+    fbWrap.classList.remove('open');
+    nextBtn.hidden = true;
+    if(!enabled.length){
+      readoutEl.innerHTML = '<span class="dim">請至少選一種題型</span>';
+      badge.textContent = '尚未選擇'; promptEl.textContent = '';
+      input.disabled = true; submitBtn.disabled = true; current = null;
+      return;
+    }
+    qIndex++;
+    current = generators[pickCategory(enabled)]();
+    badge.textContent = catNames[current.category];
+    qcount.textContent = `第 ${qIndex} 題`;
+    renderReadout(current.readout);
+    promptEl.innerHTML = esc(current.prompt) + (current.sub ? `<span class="sub">${esc(current.sub)}</span>` : '');
+    input.value = ''; input.disabled = false; submitBtn.disabled = false;
+    input.focus();
+  }
+
+  function normalizeNumericInput(str){
+    let s = str.trim().replace(/^\+/,'').replace(/−/g,'-');
+    if(s.startsWith('.')) s = '0' + s;
+    if(s.startsWith('-.')) s = '-0' + s.slice(1);
+    return s;
+  }
+
+  function checkAnswer(){
+    if(!current || answered) return;
+    const raw = input.value;
+    if(!raw.trim()){ input.focus(); return; }
+    let ok;
+    if(current.answer === 'EXACT') ok = /^(無限|無限多|infinite|inf|unlimited)$/i.test(raw.trim());
+    else if(current.category === 'sigfig') ok = raw.trim() === current.answer;
+    else ok = normalizeNumericInput(raw) === current.answer;
+
+    answered = true;
+    const s = stats[current.category]; s.total++; if(ok) s.correct++;
+    renderStats();
+
+    if(ok){ streak++; streakEl.classList.remove('bump'); void streakEl.offsetWidth; streakEl.classList.add('bump'); }
+    else streak = 0;
+    streakEl.textContent = streak;
+
+    const shown = current.answer === 'EXACT' ? '無限' : current.answer;
+    card.classList.toggle('is-ok', ok); card.classList.toggle('is-bad', !ok);
+    readoutEl.classList.toggle('ok', ok); readoutEl.classList.toggle('bad', !ok);
+    if(!ok && !reduceMotion){ card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); }
+
+    fb.className = 'fb ' + (ok ? 'ok' : 'bad');
+    mark.innerHTML = ok
+      ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>'
+      : '<svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg>';
+    fbTitle.innerHTML = ok ? '答對了' : `答錯了，正確答案是 <span class="ans">${esc(shown)}</span>`;
+    fbBody.textContent = current.explanation;
+    fbWrap.classList.add('open');
+
+    input.disabled = true; submitBtn.disabled = true;
+    nextBtn.hidden = false; nextBtn.focus();
+  }
+
+  /* ---------- 事件 ---------- */
+  submitBtn.addEventListener('click', checkAnswer);
+  nextBtn.addEventListener('click', newQuestion);
+  input.addEventListener('keydown', e => { if(e.key === 'Enter') checkAnswer(); });
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && answered && !nextBtn.hidden){ e.preventDefault(); newQuestion(); }
+  });
+  cats.addEventListener('click', e => {
+    const b = e.target.closest('.cat'); if(!b) return;
+    b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    newQuestion();
+  });
+  $('reset').addEventListener('click', () => {
+    catOrder.forEach(k => { stats[k].correct = 0; stats[k].total = 0; });
+    streak = 0; streakEl.textContent = '0'; qIndex = 0;
+    renderStats(); newQuestion();
+  });
+
+  renderStats();
+  newQuestion();
+})();
+</script>
+</body>
+</html>
