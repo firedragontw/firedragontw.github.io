@@ -526,7 +526,7 @@
 
   /* ---------- 狀態 ---------- */
   const stats = {}; catOrder.forEach(k => stats[k] = {correct:0,total:0});
-  let current = null, answered = false, streak = 0, qIndex = 0;
+  let current = null, answered = false, needsCorrection = false, streak = 0, qIndex = 0;
 
   /* ---------- DOM ---------- */
   const $ = id => document.getElementById(id);
@@ -599,7 +599,8 @@
 
   function newQuestion(){
     const enabled = enabledCats();
-    answered = false;
+    answered = false; needsCorrection = false;
+    submitBtn.textContent = '送出'; input.placeholder = '輸入答案';
     card.classList.remove('is-ok','is-bad','shake');
     fbWrap.classList.remove('open');
     nextBtn.hidden = true;
@@ -626,15 +627,35 @@
     return s;
   }
 
+  function isMatch(raw){
+    if(current.answer === 'EXACT') return /^(無限|無限多|infinite|inf|unlimited)$/i.test(raw.trim());
+    if(current.category === 'sigfig') return raw.trim() === current.answer;
+    return normalizeNumericInput(raw) === current.answer;
+  }
+
   function checkAnswer(){
-    if(!current || answered) return;
+    if(!current) return;
     const raw = input.value;
     if(!raw.trim()){ input.focus(); return; }
-    let ok;
-    if(current.answer === 'EXACT') ok = /^(無限|無限多|infinite|inf|unlimited)$/i.test(raw.trim());
-    else if(current.category === 'sigfig') ok = raw.trim() === current.answer;
-    else ok = normalizeNumericInput(raw) === current.answer;
 
+    /* 訂正階段：答錯後要照正確答案再打一次 */
+    if(needsCorrection){
+      if(isMatch(raw)){
+        needsCorrection = false;
+        card.classList.remove('is-bad'); card.classList.add('is-ok');
+        readoutEl.classList.remove('bad'); readoutEl.classList.add('ok');
+        fbTitle.innerHTML = '訂正完成，記住這個格式';
+        input.disabled = true; submitBtn.disabled = true; submitBtn.textContent = '送出';
+        nextBtn.hidden = false; nextBtn.focus();
+      } else {
+        if(!reduceMotion){ card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); }
+        input.select();
+      }
+      return;
+    }
+
+    if(answered) return;
+    const ok = isMatch(raw);
     answered = true;
     const s = stats[current.category]; s.total++; if(ok) s.correct++;
     renderStats();
@@ -656,16 +677,24 @@
     fbBody.textContent = current.explanation;
     fbWrap.classList.add('open');
 
-    input.disabled = true; submitBtn.disabled = true;
-    nextBtn.hidden = false; nextBtn.focus();
+    if(ok){
+      input.disabled = true; submitBtn.disabled = true;
+      nextBtn.hidden = false; nextBtn.focus();
+    } else {
+      needsCorrection = true;
+      input.value = ''; input.placeholder = '照正確答案再打一次才能繼續';
+      submitBtn.textContent = '訂正';
+      input.focus();
+    }
   }
 
   /* ---------- 事件 ---------- */
   submitBtn.addEventListener('click', checkAnswer);
   nextBtn.addEventListener('click', newQuestion);
-  input.addEventListener('keydown', e => { if(e.key === 'Enter') checkAnswer(); });
+  input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); checkAnswer(); } });
   document.addEventListener('keydown', e => {
-    if(e.key === 'Enter' && answered && !nextBtn.hidden){ e.preventDefault(); newQuestion(); }
+    if(e.target === input || e.target === nextBtn || e.target === submitBtn) return;
+    if(e.key === 'Enter' && answered && !needsCorrection && !nextBtn.hidden){ e.preventDefault(); newQuestion(); }
   });
   cats.addEventListener('click', e => {
     const b = e.target.closest('.cat'); if(!b) return;
