@@ -409,14 +409,14 @@ const NODES = [
       <p>前提是兩個極限都要先各自存在，才能拆開來算。</p>` },
     { h: '夾擠定理', html: R`
       <div class="thm"><b>定理</b>　若在 $a$ 附近（$x\neq a$）恆有 $g(x)\le f(x)\le h(x)$，且 $\lim_{x\to a}g(x)=\lim_{x\to a}h(x)=L$，則 $\lim_{x\to a}f(x)=L$。</div>` },
-    { h: '板書例：$x\sin\frac1x$', html: R`
+    { h: R`板書例：$x\sin\frac1x$`, html: R`
       <p>$\displaystyle\lim_{x\to0}\sin\frac1x$ 不存在，但 $\displaystyle\lim_{x\to0}x\sin\frac1x=0$：</p>
       <div class="disp">$0\le\left|x\sin\tfrac1x-0\right|\le|x|$，且 $\displaystyle\lim_{x\to0}0=0=\lim_{x\to0}|x|$</div>
       <p>所以 $\displaystyle\lim_{x\to0}\left|x\sin\tfrac1x-0\right|=0$，由等價敘述得 $\displaystyle\lim_{x\to0}x\sin\tfrac1x=0$。</p>
       <p class="note">這裡不能用乘法法則 $\lim(fg)=\lim f\cdot\lim g$，因為 $\lim\sin\frac1x$ 根本不存在，只能用夾擠。</p>` }
   ],
   practice: {
-    title: '用夾擠定理證 $\lim_{x\to0}x\sin\frac1x=0$',
+    title: R`用夾擠定理證 $\lim_{x\to0}x\sin\frac1x=0$`,
     lines: [
       R`對所有 $x\ne0$，$\left|\sin\frac1x\right|$ [[$\le$]] $1$，所以 $0\le\left|x\sin\frac1x-0\right|\le$ [[$|x|$|把 |x| 乘進去]]。`,
       R`而 $\displaystyle\lim_{x\to0}0=0=\lim_{x\to0}$ [[$|x|$]]。`,
@@ -498,7 +498,7 @@ const NODES = [
       <p class="note">約分只是「看出極限存在」的常見手法，判斷的根本依據永遠是極限存不存在。</p>` }
   ],
   practice: {
-    title: '分類 $f(x)=\dfrac{x^2-x-2}{x-2}$ 在 $x=2$ 的不連續點',
+    title: R`分類 $f(x)=\dfrac{x^2-x-2}{x-2}$ 在 $x=2$ 的不連續點`,
     lines: [
       R`$f(x)=\dfrac{x^2-x-2}{x-2}$ 在 $x=2$ 時 [[$f(2)$ 沒有定義]]，所以 $f$ 在 $2$ [[不連續]]。`,
       R`分子因式分解：$x^2-x-2=$ [[$(x-2)(x+1)$]]，約分後 $\displaystyle\lim_{x\to2}\frac{x^2-x-2}{x-2}=\lim_{x\to2}$ [[$(x+1)$]] $=$ [[3]]。`,
@@ -579,12 +579,12 @@ const NODES = [
       <p>「存在」（$\exists$）只保證至少有一個，不保證唯一，也不告訴你 $c$ 是多少。</p>` },
     { h: '最常用的形式：兩端異號', html: R`
       <p>取 $k=0$：若 $f$ 在 $[a,b]$ 連續且 $f(a)\cdot f(b)<0$，則方程式 $f(x)=0$ 在 $(a,b)$ 內至少有一個根。板書寫「與勘根定理等價」。</p>` },
-    { h: '板書例：證 $\sqrt2$ 介於 1.4 與 1.5', html: R`
+    { h: R`板書例：證 $\sqrt2$ 介於 1.4 與 1.5`, html: R`
       <p>令 $f(x)=x^2$，連續。$f(1.4)=1.96$，$f(1.5)=2.25$，而 $1.96<2<2.25$。由 IVT 存在 $c\in(1.4,1.5)$ 使 $c^2=2$，$c>0$ 故 $c=\sqrt2$。</p>
       <p class="note">連續是前提。$f(x)=\dfrac1x$ 在 $[-1,1]$ 有 $f(-1)<0<f(1)$，卻沒有零點，因為它在 $0$ 不連續。</p>` }
   ],
   practice: {
-    title: '證明 $\sqrt2$ 介於 1.4 與 1.5 之間',
+    title: R`證明 $\sqrt2$ 介於 1.4 與 1.5 之間`,
     lines: [
       R`令 $f(x)=$ [[$x^2$]]，$f$ 是多項式，故在 $[1.4,1.5]$ 上 [[連續|IVT 的前提]]。`,
       R`$f(1.4)=$ [[1.96]]，$f(1.5)=$ [[2.25]]，且 $1.96<$ [[2|目標值 k]] $<2.25$。`,
@@ -709,14 +709,14 @@ const NODES = [
       $\dfrac{d}{dx}\sec x=\sec x\tan x$　　$\dfrac{d}{dx}\csc x=-\csc x\cot x$
       </div>
       <p>「co-」開頭的三個都帶負號。$\tan,\sec,\csc,\cot$ 全部可由 $\sin,\cos$ 加商法則推出，例如板書 $\dfrac{d}{dx}\sec x=\dfrac{d}{dx}\dfrac1{\cos x}=\dfrac{\sin x}{\cos^2x}=\sec x\tan x$。</p>` },
-    { h: '$\sin x$ 的證明（板書）', html: R`
+    { h: R`$\sin x$ 的證明（板書）`, html: R`
       <div class="disp">$\displaystyle\frac{d}{dx}\sin x=\lim_{h\to0}\frac{\sin(x+h)-\sin x}{h}=\lim_{h\to0}\frac{\sin x\cos h+\cos x\sin h-\sin x}{h}$</div>
       <div class="disp">$\displaystyle=\lim_{h\to0}\left(\sin x\cdot\frac{\cos h-1}{h}+\cos x\cdot\frac{\sin h}{h}\right)=\sin x\cdot0+\cos x\cdot1=\cos x$</div>
       <p>用到兩個基本極限：$\displaystyle\lim_{h\to0}\frac{\sin h}{h}=1$、$\displaystyle\lim_{h\to0}\frac{\cos h-1}{h}=0$。這兩個是從極限那邊借來的工具。</p>
       <p>板書相關極限：$\displaystyle\lim_{x\to0}\frac{\sin7x}{4x}=\frac74$，$\displaystyle\lim_{x\to0}x\cot x=\lim_{x\to0}\cos x\cdot\frac{1}{\sin x/x}=1$。</p>` }
   ],
   practice: {
-    title: '證明 $\dfrac{d}{dx}\sin x=\cos x$',
+    title: R`證明 $\dfrac{d}{dx}\sin x=\cos x$`,
     lines: [
       R`$\dfrac{d}{dx}\sin x=\displaystyle\lim_{h\to0}\dfrac{\,?\,-\sin x}{h}$，分子第一項是 [[$\sin(x+h)$]]。`,
       R`和角公式：$\sin(x+h)=\sin x\cos h+$ [[$\cos x\sin h$]]。`,
@@ -743,7 +743,7 @@ const NODES = [
       <p>一般底數：$a^x=e^{x\ln a}$，微分後多一個常數 $\ln a$。$a=e$ 時 $\ln e=1$，回到 $(e^x)'=e^x$。</p>` }
   ],
   practice: {
-    title: '推導 $\dfrac{d}{dx}e^x=e^x$',
+    title: R`推導 $\dfrac{d}{dx}e^x=e^x$`,
     lines: [
       R`$\dfrac{d}{dx}e^x=\displaystyle\lim_{h\to0}\dfrac{e^{x+h}-e^x}{h}=\lim_{h\to0}e^x\cdot\dfrac{\,?\,}{h}$，提出 $e^x$ 後問號處是 [[$e^h-1$]]。`,
       R`因為 $\displaystyle\lim_{h\to0}\frac{e^h-1}{h}=$ [[1]]，所以 $\dfrac{d}{dx}e^x=$ [[$e^x$]]。`,
@@ -761,17 +761,17 @@ const NODES = [
   sections: [
     { h: '定理', html: R`
       <div class="thm"><b>定理</b>　$\dfrac{d}{dx}x^n=nx^{n-1}$，$n\in\mathbb Z$。（$\dfrac{d}{dx}c=0$）</div>` },
-    { h: '$n\in\mathbb N$：二項式定理（板書）', html: R`
+    { h: R`$n\in\mathbb N$：二項式定理（板書）`, html: R`
       <div class="disp">$\displaystyle\frac{d}{dx}x^n=\lim_{h\to0}\frac{(x+h)^n-x^n}{h}=\lim_{h\to0}\frac{x^n+\binom n1x^{n-1}h+\binom n2x^{n-2}h^2+\cdots+h^n-x^n}{h}$</div>
       <div class="disp">$\displaystyle=\lim_{h\to0}\Big(nx^{n-1}+\binom n2x^{n-2}h+\cdots+h^{n-1}\Big)=nx^{n-1}$</div>
       <p>消去 $x^n$ 後每一項都至少有一個 $h$，約掉分母的 $h$ 之後，除了第一項，其餘都還帶 $h$，取極限全部歸零。</p>` },
-    { h: '$n\in\mathbb Z^-$：商法則（板書）', html: R`
+    { h: R`$n\in\mathbb Z^-$：商法則（板書）`, html: R`
       <p>令 $k=-n\in\mathbb N$，則 $x^n=\dfrac1{x^k}$：</p>
       <div class="disp">$\displaystyle\frac{d}{dx}\frac1{x^k}=\frac{0\cdot x^k-1\cdot kx^{k-1}}{x^{2k}}=(-k)x^{k-1-2k}=(-k)x^{-k-1}=nx^{n-1}$</div>
       <p class="note">二項式定理只對非負整數次方成立，所以負整數要另外用商法則證。分數或實數次方之後會用別的方法（對數）。</p>` }
   ],
   practice: {
-    title: '證明 $\dfrac{d}{dx}x^n=nx^{n-1}$',
+    title: R`證明 $\dfrac{d}{dx}x^n=nx^{n-1}$`,
     lines: [
       R`$\dfrac{d}{dx}x^n=\displaystyle\lim_{h\to0}\dfrac{\,?\,-x^n}{h}$，問號處是 [[$(x+h)^n$]]。`,
       R`二項式展開：$(x+h)^n=x^n+$ [[$\binom n1x^{n-1}h$]] $+\binom n2x^{n-2}h^2+\cdots+h^n$`,
