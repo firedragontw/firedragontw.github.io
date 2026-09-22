@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>微積分知識地圖：極限、連續、微分</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
+  svg: { fontCache: 'local' },
+  startup: {
+    typeset: false,
+    ready() { MathJax.startup.defaultReady(); MathJax.startup.promise.then(() => { if (window.__mjReady) window.__mjReady(); }); }
+  }
+};
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+
+  --board: #2f5b52;
+  --board-deep: #24473f;
+  --grid: rgba(255,255,255,0.07);
+  --chalk: #f1efe4;
+  --chalk-dim: rgba(241,239,228,0.55);
+  --chalk-yellow: #f3d46a;
+  --chalk-pink: #f0a3ae;
+  --chalk-white: #f4f2ea;
+
+  --paper: #fbfaf5;
+  --paper-2: #f2f0e8;
+  --ink: #1f2b28;
+  --ink-2: #4c5a56;
+  --ink-3: #8a9591;
+  --rule: #d9d5c8;
+  --accent: #2f5b52;
+  --accent-soft: #e4ede9;
+  --ok: #2e7d5b;
+  --ok-soft: #dff0e6;
+  --bad: #b8434e;
+  --bad-soft: #f7e1e3;
+
+  --card-paper: #fffdf7;
+  --card-shadow: 0 2px 0 rgba(0,0,0,0.35);
+
+  --sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1b2321;
+    --paper-2: #232d2a;
+    --ink: #e9ece8;
+    --ink-2: #b7c0bc;
+    --ink-3: #7f8a86;
+    --rule: #34403c;
+    --accent: #8fc7b4;
+    --accent-soft: #24332e;
+    --ok: #7fd1a8;
+    --ok-soft: #1f3b30;
+    --bad: #f08a94;
+    --bad-soft: #3d2326;
+    --card-paper: #2a3431;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1b2321;
+  --paper-2: #232d2a;
+  --ink: #e9ece8;
+  --ink-2: #b7c0bc;
+  --ink-3: #7f8a86;
+  --rule: #34403c;
+  --accent: #8fc7b4;
+  --accent-soft: #24332e;
+  --ok: #7fd1a8;
+  --ok-soft: #1f3b30;
+  --bad: #f08a94;
+  --bad-soft: #3d2326;
+  --card-paper: #2a3431;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); height: 100%; }
+body {
+  margin: 0; height: 100%;
+  background: var(--board);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  touch-action: none;
+}
+*, *::before, *::after { box-sizing: inherit; }
+button { font-family: inherit; font-size: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--chalk-yellow); outline-offset: 2px; }
+mjx-container { line-height: 0; }
+mjx-container svg { vertical-align: -0.2em; }
+
+/* ───────── 黑板 ───────── */
+#board {
+  position: relative; width: 100%; height: 100%;
+  overflow: auto;
+  background-color: var(--board);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 40px 40px;
+  cursor: grab;
+  touch-action: pan-x pan-y;
+}
+#board.panning { cursor: grabbing; }
+#canvas { position: relative; width: 1560px; height: 940px; }
+#edges { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#edges .edge { fill: none; stroke: var(--chalk-dim); stroke-width: 2; stroke-linecap: round; }
+#edges .edge.dep { stroke: var(--chalk); stroke-width: 2.2; }
+#edges .edge.equiv { stroke: var(--chalk-yellow); stroke-dasharray: 9 7; stroke-width: 2.4; }
+#edges .edge.borrow { stroke: var(--chalk-pink); stroke-dasharray: 2 6; stroke-width: 2.6; }
+#edges .edge.analogy { stroke: rgba(241,239,228,0.32); stroke-dasharray: 1 7; stroke-width: 3; }
+#edges .edge-label { font: 500 12px var(--sans); fill: var(--board-deep); }
+#edges .edge-label-bg { fill: var(--chalk-pink); rx: 10; opacity: 0.95; }
+#edges .edge-label.eq { fill: var(--board-deep); }
+#edges .edge-label-bg.eq { fill: var(--chalk-yellow); }
+#edges.drawn .edge { stroke-dasharray: none; }
+#edges .edge.dep.draw { stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: chalk 1.1s ease-out forwards; }
+@keyframes chalk { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { #edges .edge.dep.draw { animation: none; stroke-dashoffset: 0; } }
+
+.node {
+  position: absolute; width: 232px; min-height: 92px;
+  background: var(--card-paper); color: #1f2b28;
+  border-radius: 3px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.38), 0 8px 18px rgba(0,0,0,0.18);
+  padding: 12px 14px 12px 16px;
+  cursor: grab; user-select: none; -webkit-user-select: none;
+  touch-action: none;
+}
+.node::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+  border-radius: 3px 0 0 3px; background: var(--tag);
+}
+.node::after {
+  content: ""; position: absolute; top: -7px; left: 50%; width: 34px; height: 12px; margin-left: -17px;
+  background: rgba(255,255,255,0.55); transform: rotate(-3deg); border-radius: 1px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+}
+.node.dragging { cursor: grabbing; box-shadow: 0 10px 0 rgba(0,0,0,0.25), 0 24px 30px rgba(0,0,0,0.3); transform: scale(1.02); z-index: 5; }
+.node .n-title { font-family: var(--serif); font-weight: 700; font-size: 17px; line-height: 1.3; margin: 0 0 4px; }
+.node .n-sum { font-size: 14px; color: #4c5a56; line-height: 1.4; }
+.node .n-sum mjx-container svg { max-width: 100%; }
+.node[data-group="limit"] { --tag: var(--chalk-white); }
+.node[data-group="conti"] { --tag: var(--chalk-yellow); }
+.node[data-group="diff"] { --tag: var(--chalk-pink); }
+.node[data-group="limit"]::before { background: #cfd6d1; }
+
+#board-title {
+  position: fixed; left: 28px; top: calc(22px + env(safe-area-inset-top, 0px)); z-index: 3;
+  color: var(--chalk); pointer-events: none;
+}
+#board-title h1 { font-family: var(--serif); font-weight: 600; font-size: 24px; margin: 0; letter-spacing: 0.02em; }
+#board-title p { margin: 4px 0 0; font-size: 13px; color: var(--chalk-dim); }
+#board-title p b { color: var(--chalk-yellow); font-weight: 500; }
+
+#legend {
+  position: fixed; left: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 3;
+  background: rgba(36,71,63,0.92); color: var(--chalk);
+  border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.5;
+  backdrop-filter: blur(4px);
+}
+#legend .lg { display: flex; align-items: center; gap: 10px; }
+#legend .lg + .lg { margin-top: 5px; }
+#legend svg { width: 54px; height: 12px; flex: none; }
+#legend .lg small { color: var(--chalk-dim); }
+
+#toolbar {
+  position: fixed; right: 20px; top: calc(20px + env(safe-area-inset-top, 0px)); z-index: 3;
+  display: flex; gap: 8px;
+}
+#toolbar button {
+  background: rgba(36,71,63,0.92); color: var(--chalk); border: 1px solid rgba(241,239,228,0.25);
+  border-radius: 8px; padding: 8px 14px; font-size: 14px;
+}
+#toolbar button:hover { background: var(--board-deep); }
+
+/* ───────── 講義（節點內容） ───────── */
+#sheet {
+  position: fixed; inset: 0; z-index: 20;
+  display: none; align-items: flex-end; justify-content: center;
+  background: rgba(20,38,34,0.55);
+}
+#sheet.open { display: flex; }
+#sheet .paper {
+  width: 100%; max-width: 900px; height: 94%;
+  background: var(--paper); color: var(--ink);
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 -12px 40px rgba(0,0,0,0.35);
+  display: flex; flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+#sheet.open .paper { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { #sheet .paper { transition: none; } }
+.paper-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 22px 12px; border-bottom: 1px solid var(--rule);
+}
+.paper-head .tag { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; vertical-align: -1px; background: var(--tag); border: 1px solid rgba(0,0,0,0.15); }
+.paper-head h2 { font-family: var(--serif); font-size: 22px; margin: 0; }
+.paper-head button { background: none; border: 1px solid var(--rule); color: var(--ink-2); border-radius: 999px; padding: 6px 14px; font-size: 14px; }
+.paper-head button:hover { border-color: var(--ink-2); }
+.paper-body { overflow-y: auto; padding: 8px 22px 40px; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+.paper-body > .col { max-width: 720px; margin: 0 auto; }
+.sec { padding: 20px 0 6px; }
+.sec + .sec { border-top: 1px solid var(--rule); }
+.sec h3 { font-family: var(--serif); font-size: 18px; margin: 0 0 10px; }
+.sec p { margin: 8px 0; }
+.sec ul { margin: 8px 0; padding-left: 20px; }
+.sec li { margin: 4px 0; }
+.sec .thm { background: var(--paper-2); border-left: 3px solid var(--accent); padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 10px 0; }
+.sec .thm b { color: var(--accent); }
+.sec .note { font-size: 14px; color: var(--ink-2); background: var(--accent-soft); border-radius: 6px; padding: 8px 12px; margin: 10px 0; }
+.sec .disp { text-align: center; margin: 10px 0; overflow-x: auto; }
+.sec .rel { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.sec .rel button {
+  background: var(--paper-2); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 12px; font-size: 14px; color: var(--ink);
+}
+.sec .rel button span { color: var(--ink-3); font-size: 12px; margin-right: 6px; }
+.sec .rel button:hover { border-color: var(--accent); }
+
+/* ───────── 練習 ───────── */
+.practice { padding-bottom: 8px; }
+.practice .p-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.practice .p-head p { color: var(--ink-2); font-size: 14px; margin: 0 0 12px; }
+.practice .p-progress { font-size: 13px; color: var(--ink-3); }
+.pline { margin: 10px 0; line-height: 2.3; }
+.blank {
+  display: inline-block; vertical-align: baseline;
+  min-width: 64px; height: 1.85em; line-height: 1.75em;
+  padding: 0 10px; margin: 0 3px;
+  border: 1.5px dashed var(--ink-3); border-radius: 6px;
+  background: var(--paper-2);
+  text-align: center; color: var(--ink-3);
+  cursor: pointer; transition: border-color .15s, background .15s, transform .15s;
+}
+.blank.next { border-color: var(--accent); background: var(--accent-soft); }
+.blank.over { border-style: solid; border-color: var(--accent); background: var(--accent-soft); transform: scale(1.04); }
+.blank.filled {
+  border: 1.5px solid var(--ok); background: var(--ok-soft); color: var(--ink);
+  cursor: default; animation: pop .28s cubic-bezier(.2,1.4,.4,1);
+}
+.blank.wrong { animation: shake .4s; border-color: var(--bad); background: var(--bad-soft); }
+@keyframes pop { 0% { transform: scale(.85); } 100% { transform: scale(1); } }
+@keyframes shake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+.hint { font-size: 13px; color: var(--bad); margin: -4px 0 8px; min-height: 1.4em; }
+.tray {
+  position: sticky; bottom: 0; margin-top: 14px;
+  background: var(--paper); border-top: 1px solid var(--rule);
+  padding: 12px 0 8px;
+}
+.tray .t-label { font-size: 13px; color: var(--ink-3); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.tray .t-label button { background: none; border: none; color: var(--accent); font-size: 13px; padding: 0; text-decoration: underline; }
+.pool { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; }
+.card {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 6px 13px; min-height: 38px;
+  background: var(--card-paper); color: var(--ink);
+  border: 1px solid var(--rule); border-radius: 7px;
+  box-shadow: 0 1.5px 0 rgba(0,0,0,0.18);
+  cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none;
+  transition: transform .15s, opacity .2s, box-shadow .15s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 3px 0 rgba(0,0,0,0.18); }
+.card.lifted { opacity: 0.25; }
+.card.gone { opacity: 0; transform: scale(.6); pointer-events: none; }
+.card.wrong { animation: shake .4s; border-color: var(--bad); background: var(--bad-soft); }
+.ghost {
+  position: fixed; z-index: 100; pointer-events: none;
+  transform: translate(-50%, -50%) rotate(-2deg) scale(1.06);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+  transition: none;
+}
+.ghost.fly { transition: left .32s cubic-bezier(.2,.9,.3,1), top .32s cubic-bezier(.2,.9,.3,1), transform .32s; }
+.done {
+  display: none; margin-top: 14px; padding: 14px 16px;
+  background: var(--ok-soft); border: 1px solid var(--ok); border-radius: 10px;
+  align-items: center; gap: 14px;
+}
+.done.show { display: flex; animation: pop .4s cubic-bezier(.2,1.4,.4,1); }
+.done svg { width: 34px; height: 34px; flex: none; }
+.done svg path { stroke: var(--ok); stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; animation: tick .6s .15s ease-out forwards; }
+@keyframes tick { to { stroke-dashoffset: 0; } }
+.done b { color: var(--ok); }
+.done button { margin-left: auto; background: var(--ok); color: #fff; border: none; border-radius: 999px; padding: 7px 14px; }
+
+@media (max-width: 720px) {
+  .node { width: 200px; }
+  #board-title h1 { font-size: 19px; }
+  #legend { font-size: 12px; padding: 10px 12px; }
+  #toolbar button { padding: 7px 10px; font-size: 13px; }
+  .paper-head h2 { font-size: 19px; }
+  .pline { line-height: 2.4; }
+}
+</style>
+</head>
+<body>
+
+<div id="board">
+  <div id="board-title">
+    <h1>微積分知識地圖</h1>
+    <p>極限 → 連續 → 微分　｜　拖曳卡片可重新排列，<b>點一下</b>卡片打開內容與練習</p>
+  </div>
+  <div id="canvas">
+    <svg id="edges" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1 L9 5 L1 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="arrow-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1 L9 5 L1 9" fill="none" stroke="#f1efe4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="arrow-y" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1 L9 5 L1 9" fill="none" stroke="#f3d46a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="arrow-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M1 1 L9 5 L1 9" fill="none" stroke="#f0a3ae" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <g id="edge-lines"></g>
+      <g id="edge-labels"></g>
+    </svg>
+    <div id="nodes"></div>
+  </div>
+</div>
+
+<div id="legend" aria-label="連線圖例">
+  <div class="lg"><svg viewBox="0 0 54 12"><line x1="2" y1="6" x2="46" y2="6" stroke="#f1efe4" stroke-width="2.2"/><path d="M42 2 L48 6 L42 10" fill="none" stroke="#f1efe4" stroke-width="1.6"/></svg><span>依賴：後者的定義用到前者</span></div>
+  <div class="lg"><svg viewBox="0 0 54 12"><line x1="4" y1="6" x2="50" y2="6" stroke="#f3d46a" stroke-width="2.4" stroke-dasharray="7 5"/></svg><span>等價：本質上是同一件事</span></div>
+  <div class="lg"><svg viewBox="0 0 54 12"><line x1="4" y1="6" x2="50" y2="6" stroke="#f0a3ae" stroke-width="2.6" stroke-dasharray="2 5"/></svg><span>借用工具：證明時臨時用到</span></div>
+  <div class="lg"><svg viewBox="0 0 54 12"><line x1="4" y1="6" x2="50" y2="6" stroke="rgba(241,239,228,0.4)" stroke-width="3" stroke-dasharray="1 6"/></svg><span>結構類比：形式相似，值得對照</span></div>
+</div>
+
+<div id="toolbar">
+  <button id="btn-reset-layout" type="button">重設排列</button>
+</div>
+
+<div id="sheet" role="dialog" aria-modal="true">
+  <div class="paper">
+    <div class="paper-head">
+      <h2><span class="tag"></span><span id="sheet-title"></span></h2>
+      <button id="sheet-close" type="button">回到黑板</button>
+    </div>
+    <div class="paper-body"><div class="col" id="sheet-content"></div></div>
+  </div>
+</div>
+
+<script>
+const R = String.raw;
+
+/* 節點資料：id、群組、標題、卡片摘要、初始位置、內容段落、練習
+   練習 lines 中用 [[答案]] 標記空格，可用 [[答案|提示]] 附提示 */
+const NODES = [
+{
+  id: 'limit', group: 'limit', x: 40, y: 380,
+  title: '極限存在',
+  sum: R`$\lim_{x\to a} f(x) = L$`,
+  sections: [
+    { h: '定義（ε-δ）', html: R`
+      <div class="thm"><b>定義</b>　$\displaystyle\lim_{x\to a}f(x)=L$ 表示：對任意 $\varepsilon>0$，存在 $\delta>0$，使得只要 $0<|x-a|<\delta$，就有 $|f(x)-L|<\varepsilon$。</div>
+      <p>白話：不管你要 $f(x)$ 跟 $L$ 多接近，我都找得到一個夠小的範圍，只要 $x$ 落在裡面（但不等於 $a$），$f(x)$ 就一定夠接近 $L$。注意 $x=a$ 那一點本身不算在內。</p>` },
+    { h: '等價敘述（板書）', html: R`
+      <div class="disp">$\displaystyle\lim_{x\to a}f(x)=L \iff \lim_{x\to a^-}f(x)=\lim_{x\to a^+}f(x)=L$</div>
+      <div class="disp">$\displaystyle\lim_{x\to a}f(x)=L \iff \lim_{x\to a}\big(f(x)-L\big)=0 \iff \lim_{x\to a}\big|f(x)-L\big|=0$</div>
+      <div class="disp">$\displaystyle\lim_{x\to a}f(x)=L \iff \lim_{h\to0}f(a+h)=L$（代換 $x=a+h$）</div>
+      <p>第一條最常用：左右極限算出來不一樣，就能斷定極限不存在。第三條在證三角函數極限時會用到（把 $\sin(a+h)$ 用和角公式展開）。</p>` },
+    { h: '極限不存在的例子', html: R`
+      <p>$\displaystyle\lim_{x\to0}\sin\frac1x$ 不存在：$x\to0$ 時 $\frac1x\to\pm\infty$，$\sin$ 在 $-1$ 與 $1$ 之間無限次來回震盪，不趨近任何單一值。</p>
+      <p class="note">不能寫成「$=\sin(\infty)$」，極限符號不能直接代入無窮大。</p>` }
+  ],
+  practice: {
+    title: '拼出極限的定義與等價敘述',
+    lines: [
+      R`$\displaystyle\lim_{x\to a}f(x)=L$ 的意思是：對 [[任意|ε 是「任何人來挑戰都要成立」的量]] $\varepsilon>0$，[[存在|δ 是「我只要找得到一個就好」的量]] $\delta>0$，使得只要 [[$0<|x-a|<\delta$|x 不能等於 a 本身]]，就有 [[$|f(x)-L|<\varepsilon$]]。`,
+      R`$\displaystyle\lim_{x\to a}f(x)=L$ [[若且唯若|這是雙向的等價關係]] $\displaystyle\lim_{x\to a^-}f(x)=\lim_{x\to a^+}f(x)$ [[$=L$]]。`,
+      R`若左極限與右極限都存在但 [[不相等]]，則 $\displaystyle\lim_{x\to a}f(x)$ [[不存在]]。`,
+      R`代換 $x=a+h$：$\displaystyle\lim_{x\to a}f(x)=L \iff \lim_{h\to0}$ [[$f(a+h)$]] $=L$。`
+    ],
+    distractors: [
+      R`$0\le|x-a|<\delta$`, R`$|x-a|<\delta$`, R`$|f(x)-L|\le\varepsilon$`, R`$|f(x)-a|<\varepsilon$`,
+      '若', '僅若', '相等', '存在', R`$=f(a)$`, R`$=0$`, R`$f(a-h)$`, R`$f(h)$`, '唯一'
+    ]
+  }
+},
+{
+  id: 'limitOps', group: 'limit', x: 40, y: 130,
+  title: '極限的四則運算與夾擠定理',
+  sum: R`$\lim(fg)=\lim f\cdot\lim g$、$g\le f\le h$`,
+  sections: [
+    { h: '四則運算', html: R`
+      <div class="thm"><b>定理</b>　若 $\lim_{x\to a}f(x)=L$、$\lim_{x\to a}g(x)=M$，$c\in\mathbb R$，則
+      <ul>
+        <li>$\lim_{x\to a}\big(f(x)\pm g(x)\big)=L\pm M$，$\lim_{x\to a}c\,f(x)=cL$</li>
+        <li>$\lim_{x\to a}f(x)g(x)=LM$</li>
+        <li>$\lim_{x\to a}\dfrac{f(x)}{g(x)}=\dfrac LM$，前提 $M\neq0$</li>
+      </ul></div>
+      <p>前提是兩個極限都要先各自存在，才能拆開來算。</p>` },
+    { h: '夾擠定理', html: R`
+      <div class="thm"><b>定理</b>　若在 $a$ 附近（$x\neq a$）恆有 $g(x)\le f(x)\le h(x)$，且 $\lim_{x\to a}g(x)=\lim_{x\to a}h(x)=L$，則 $\lim_{x\to a}f(x)=L$。</div>` },
+    { h: '板書例：$x\sin\frac1x$', html: R`
+      <p>$\displaystyle\lim_{x\to0}\sin\frac1x$ 不存在，但 $\displaystyle\lim_{x\to0}x\sin\frac1x=0$：</p>
+      <div class="disp">$0\le\left|x\sin\tfrac1x-0\right|\le|x|$，且 $\displaystyle\lim_{x\to0}0=0=\lim_{x\to0}|x|$</div>
+      <p>所以 $\displaystyle\lim_{x\to0}\left|x\sin\tfrac1x-0\right|=0$，由等價敘述得 $\displaystyle\lim_{x\to0}x\sin\tfrac1x=0$。</p>
+      <p class="note">這裡不能用乘法法則 $\lim(fg)=\lim f\cdot\lim g$，因為 $\lim\sin\frac1x$ 根本不存在，只能用夾擠。</p>` }
+  ],
+  practice: {
+    title: '用夾擠定理證 $\lim_{x\to0}x\sin\frac1x=0$',
+    lines: [
+      R`對所有 $x\ne0$，$\left|\sin\frac1x\right|$ [[$\le$]] $1$，所以 $0\le\left|x\sin\frac1x-0\right|\le$ [[$|x|$|把 |x| 乘進去]]。`,
+      R`而 $\displaystyle\lim_{x\to0}0=0=\lim_{x\to0}$ [[$|x|$]]。`,
+      R`由 [[夾擠定理]]，$\displaystyle\lim_{x\to0}\left|x\sin\frac1x-0\right|=$ [[0]]，故 $\displaystyle\lim_{x\to0}x\sin\frac1x=$ [[0]]。`,
+      R`注意：$\displaystyle\lim_{x\to0}\sin\frac1x$ [[不存在]]，所以 [[不能]] 用乘法法則把兩個極限拆開相乘。`
+    ],
+    distractors: [
+      R`$<$`, R`$\ge$`, R`$=$`, R`$x$`, R`$x^2$`, R`$1$`, R`$-1$`, '中間值定理', '四則運算', '存在', '可以', R`$\infty$`
+    ]
+  }
+},
+{
+  id: 'conti', group: 'conti', x: 350, y: 360,
+  title: '連續與不連續',
+  sum: R`$\lim_{x\to a}f(x)=f(a)$`,
+  sections: [
+    { h: '定義', html: R`
+      <div class="thm"><b>定義</b>　$f$ 在 $a$ 連續 $\iff\ \displaystyle\lim_{x\to a}f(x)=f(a)$。</div>
+      <p>這一行其實包含三個條件，缺一不可：</p>
+      <ul>
+        <li>$f(a)$ 存在（$a$ 在定義域內）</li>
+        <li>$\displaystyle\lim_{x\to a}f(x)$ 存在</li>
+        <li>兩者相等</li>
+      </ul>
+      <p>板書特別把「極限值」與「函數值」分開標，就是在強調這是兩個獨立的東西，各自要先存在，然後還要相等。</p>` },
+    { h: '不連續的三種情況', html: R`
+      <p>$f$ 在 $x_0$ 不連續，只要下面任一條成立：</p>
+      <ul>
+        <li>$f(x_0)$ 沒有定義</li>
+        <li>$\displaystyle\lim_{x\to x_0}f(x)$ 不存在</li>
+        <li>$f(x_0)$ 有定義、極限也存在，但 $\displaystyle\lim_{x\to x_0}f(x)\ne f(x_0)$</li>
+      </ul>` },
+    { h: '單邊連續與區間連續', html: R`
+      <ul>
+        <li>從右連續：$\displaystyle\lim_{x\to a^+}f(x)=f(a)$</li>
+        <li>從左連續：$\displaystyle\lim_{x\to a^-}f(x)=f(a)$</li>
+        <li>$f$ 在 $(a,b)$ 連續：在每一點 $c\in(a,b)$ 都連續</li>
+        <li>$f$ 在 $[a,b]$ 連續：在 $(a,b)$ 連續，且在 $a$ 從右連續、在 $b$ 從左連續</li>
+      </ul>
+      <p>端點只能談單邊，因為另一邊沒有函數值可以靠近。板書例：證 $f(x)=\sqrt{1-x^2}$ 在 $[-1,1]$ 連續，就要分「內部」與「兩端點」三段處理。</p>` },
+    { h: '板書例', html: R`
+      <ul>
+        <li>$f(x)=\dfrac{x^2-x-2}{x-2}$ 在 $x=2$ 不連續（沒定義）</li>
+        <li>$f(x)=\dfrac1{x^2}$ 在 $x=0$ 不連續（極限是 $\infty$，不存在）</li>
+        <li>$f(x)=\lfloor x\rfloor$ 在每個整數不連續（左右極限差 1）</li>
+        <li>$h(x)=\begin{cases}x+1,&x\le0\\x^2+1,&x>0\end{cases}$ 在 $0$ 連續：左右極限都是 $1=h(0)$</li>
+      </ul>` }
+  ],
+  practice: {
+    title: '拼出連續的定義',
+    lines: [
+      R`$f$ 在 $a$ 連續 [[若且唯若]] $\displaystyle\lim_{x\to a}f(x)$ [[$=f(a)$]]。`,
+      R`這包含三個條件：[[$f(a)$|函數值]] 存在、[[$\displaystyle\lim_{x\to a}f(x)$|極限值]] 存在、且兩者 [[相等]]。`,
+      R`$f$ 在 $a$ 從右連續 若 [[$\displaystyle\lim_{x\to a^+}f(x)$]] $=f(a)$；從左連續 若 [[$\displaystyle\lim_{x\to a^-}f(x)$]] $=f(a)$。`,
+      R`$f$ 在 $[a,b]$ 上連續 若 $f$ 在 [[$(a,b)$|內部用開區間]] 上連續，且 [[$\displaystyle\lim_{x\to a^+}f(x)=f(a)$|左端點只能從右邊靠近]]，[[$\displaystyle\lim_{x\to b^-}f(x)=f(b)$]]。`
+    ],
+    distractors: [
+      '若', '僅若', R`$=L$`, R`$=0$`, R`$f'(a)$`, '不相等', R`$\displaystyle\lim_{x\to a}f(x)=L$`,
+      R`$[a,b]$`, R`$\displaystyle\lim_{x\to a^-}f(x)=f(a)$`, R`$\displaystyle\lim_{x\to b^+}f(x)=f(b)$`, R`$\displaystyle\lim_{x\to a}f(x)$`, '存在'
+    ]
+  }
+},
+{
+  id: 'removable', group: 'conti', x: 350, y: 130,
+  title: '可移除／不可移除不連續點',
+  sum: R`看極限存不存在`,
+  sections: [
+    { h: '定義', html: R`
+      <div class="thm"><b>定義</b>　設 $f$ 在 $x_0$ 不連續。<br>
+      若 $\displaystyle\lim_{x\to x_0}f(x)$ 存在，稱 $x_0$ 為 <b>removable discontinuity</b>（可移除）；<br>
+      若 $\displaystyle\lim_{x\to x_0}f(x)$ 不存在，稱 $x_0$ 為 <b>nonremovable discontinuity</b>（不可移除）。</div>
+      <p>「可移除」的意思：只要重新定義 $f(x_0)$ 這一點的值，讓它等於極限值，破洞就補好了。極限不存在時，沒有一個「該補上」的值，怎麼改都救不了。</p>` },
+    { h: '板書例', html: R`
+      <p>$f(x)=\dfrac{x^2-x-2}{x-2}$ 在 $x=2$ 沒定義，但</p>
+      <div class="disp">$\displaystyle\lim_{x\to2}\frac{x^2-x-2}{x-2}=\lim_{x\to2}\frac{(x-2)(x+1)}{x-2}=\lim_{x\to2}(x+1)=3$</div>
+      <p>極限存在，所以是可移除的。修補後：</p>
+      <div class="disp">$h(x)=\begin{cases}\dfrac{x^2-x-2}{x-2},&x\ne2\\[6pt]3,&x=2\end{cases}$，$h$ 在 $2$ 連續。</div>
+      <p>相對地，$\sin\frac1x$ 在 $0$ 極限不存在，是不可移除的；$\lfloor x\rfloor$ 在整數點左右極限不等，也是不可移除的。</p>
+      <p class="note">約分只是「看出極限存在」的常見手法，判斷的根本依據永遠是極限存不存在。</p>` }
+  ],
+  practice: {
+    title: '分類 $f(x)=\dfrac{x^2-x-2}{x-2}$ 在 $x=2$ 的不連續點',
+    lines: [
+      R`$f(x)=\dfrac{x^2-x-2}{x-2}$ 在 $x=2$ 時 [[$f(2)$ 沒有定義]]，所以 $f$ 在 $2$ [[不連續]]。`,
+      R`分子因式分解：$x^2-x-2=$ [[$(x-2)(x+1)$]]，約分後 $\displaystyle\lim_{x\to2}\frac{x^2-x-2}{x-2}=\lim_{x\to2}$ [[$(x+1)$]] $=$ [[3]]。`,
+      R`因為極限 [[存在]]，所以 $x=2$ 是 [[removable]] discontinuity。`,
+      R`修補：$h(x)=\begin{cases}f(x),&x\ne2\\ ?,&x=2\end{cases}$，取 $h(2)=$ [[3|補上極限值]]，則 $h$ 在 $2$ [[連續]]。`,
+      R`反之，$\displaystyle\lim_{x\to0}\sin\frac1x$ [[不存在]]（無限震盪），故 $x=0$ 是 [[nonremovable]]。`
+    ],
+    distractors: [
+      R`$f(2)=0$`, R`$(x-2)(x-1)$`, R`$(x+2)(x-1)$`, R`$(x-1)$`, R`$(x+2)$`, '2', '0', '1', '等於 0', '可微', '不可微'
+    ]
+  }
+},
+{
+  id: 'contiOps', group: 'conti', x: 350, y: 640,
+  title: '連續的四則運算與合成',
+  sum: R`$cf\pm g,\ fg,\ \tfrac fg,\ f\circ g$ 都連續`,
+  sections: [
+    { h: '四則運算', html: R`
+      <div class="thm"><b>定理</b>　若 $f,g$ 在 $a$ 連續，$c\in\mathbb R$，則 $cf\pm g$、$fg$ 在 $a$ 連續；$\dfrac fg$ 在 $a$ 連續，前提 $g(a)\ne0$。</div>
+      <p>證明就是把連續定義寫成極限，再套極限的四則運算。形式跟極限的四則運算一模一樣，因為連續本來就是「極限等於函數值」。</p>` },
+    { h: '合成', html: R`
+      <div class="thm"><b>定理</b>　若 $g$ 在 $a$ 連續，$f$ 在 $g(a)$ 連續，則 $f\circ g$ 在 $a$ 連續，且
+      $\displaystyle\lim_{x\to a}f\big(g(x)\big)=f\Big(\lim_{x\to a}g(x)\Big)=f\big(g(a)\big)$。</div>
+      <p>注意 $f$ 要在 $g(a)$ 這個點連續，不是在 $a$。板書例：$\sin(x^2)$ 是 $g(x)=x^2$ 再套 $f(x)=\sin x$；$\sin^2x$ 是 $g(x)=\sin x$ 再套 $f(x)=x^2$。</p>` },
+    { h: '基本函數', html: R`
+      <p>多項式、有理函數、根式函數、三角函數在其定義域內每一點都連續。這是之後「直接代入算極限」的理論根據，例如 $\displaystyle\lim_{x\to a}\sin x=\sin a$、$\displaystyle\lim_{x\to a}\tan x=\tan a$（$\cos a\ne0$）。</p>
+      <p class="note">不動點定理的證明裡「$h(x)=f(x)-x$ 連續」，用的就是這裡的減法規則。</p>` }
+  ],
+  practice: {
+    title: '拼出四則運算與合成的條件',
+    lines: [
+      R`若 $f,g$ 在 $a$ 連續，$c\in\mathbb R$，則 $cf\pm g$ 在 $a$ [[連續]]，$fg$ 在 $a$ 連續，且 $\dfrac fg$ 在 $a$ 連續，前提是 [[$g(a)\ne0$|分母那個函數在 a 的值]]。`,
+      R`若 $g$ 在 $a$ 連續，且 $f$ 在 [[$g(a)$|f 接收的是 g 的輸出]] 連續，則 $f\circ g$ 在 [[$a$]] 連續。`,
+      R`此時 $\displaystyle\lim_{x\to a}f\big(g(x)\big)=f\big(\,?\,\big)$，括號裡是 [[$\displaystyle\lim_{x\to a}g(x)$|極限可以搬進 f 裡面]]，最後等於 [[$f(g(a))$]]。`,
+      R`多項式、有理函數、根式函數、三角函數在其 [[定義域]] 內每一點都連續。`
+    ],
+    distractors: [
+      '可微', R`$g(a)=0$`, R`$f(a)\ne0$`, R`$f(a)$`, R`$g(f(a))$`, R`$\displaystyle\lim_{x\to a}f(x)$`, R`$f(g(x))$`, R`$g(a)$`, '實數線', '區間', '不連續'
+    ]
+  }
+},
+{
+  id: 'fixed', group: 'conti', x: 660, y: 130,
+  title: '不動點定理',
+  sum: R`$f:[a,b]\to[a,b]$ 連續 $\Rightarrow f(c)=c$`,
+  sections: [
+    { h: '定理', html: R`
+      <div class="thm"><b>定理</b>　若 $f:[a,b]\to[a,b]$ 連續，則存在 $c\in[a,b]$ 使得 $f(c)=c$。這個 $c$ 叫做<b>不動點</b>。</div>` },
+    { h: '證明（板書）', html: R`
+      <p>若 $f(a)=a$ 或 $f(b)=b$，直接取那個端點即可。否則 $f(a)\ne a$、$f(b)\ne b$，因為 $f$ 的值都落在 $[a,b]$ 內，所以 $f(a)>a$、$f(b)<b$。</p>
+      <p>令 $h(x)=f(x)-x$。$h$ 在 $[a,b]$ 連續（連續函數相減）。</p>
+      <div class="disp">$h(a)=f(a)-a>0,\qquad h(b)=f(b)-b<0$</div>
+      <p>由 IVT，存在 $c\in(a,b)$ 使得 $h(c)=0$，即 $f(c)=c$。</p>
+      <p class="note">「$h$ 連續」這一步借用了連續的四則運算（減法）。地圖上的粉紅點線就是這條關係。</p>` },
+    { h: '跟 IVT 的關係', html: R`
+      <p>證明手法跟 IVT 的「兩端異號」用法完全一樣：設一個輔助函數，讓它在兩端點正負相反，再用 IVT 找零點。板書寫「與勘根定理等價」，指的就是這種互相推導的關係。</p>` }
+  ],
+  practice: {
+    title: '拼出不動點定理的證明',
+    lines: [
+      R`假設 $f(a)$ [[$\ne$]] $a$ 且 $f(b)\ne b$。因為 $f(a)\in[a,b]$，所以 $f(a)$ [[$>$|f(a) 不能小於區間左端]] $a$；同理 $f(b)$ [[$<$]] $b$。`,
+      R`令 $h(x)=$ [[$f(x)-x$]]。由連續函數相減仍連續，$h$ 在 $[a,b]$ 上 [[連續]]。`,
+      R`$h(a)=f(a)-a$ [[$>0$]]，$h(b)=f(b)-b$ [[$<0$]]。`,
+      R`由 [[中間值定理]]，[[存在|IVT 只保證有，不保證唯一]] $c\in(a,b)$ 使得 $h(c)=$ [[0]]，即 $f(c)=$ [[$c$]]。`
+    ],
+    distractors: [
+      R`$=$`, R`$\ge$`, R`$\le$`, R`$x-f(x)$`, R`$f(x)+x$`, R`$f(x)$`, '可微', R`$=0$`, R`$\ge0$`, R`$\le0$`, '唯一', '任意', '夾擠定理', R`$a$`, R`$f(a)$`, '1'
+    ]
+  }
+},
+{
+  id: 'ivt', group: 'conti', x: 960, y: 130,
+  title: '中間值定理 IVT',
+  sum: R`$f$ 在 $[a,b]$ 連續 $\Rightarrow$ 中間的值都取得到`,
+  sections: [
+    { h: '定理', html: R`
+      <div class="thm"><b>定理</b>　若 $f$ 在 $[a,b]$ 連續，$f(a)\ne f(b)$，且 $k$ 介於 $f(a)$ 與 $f(b)$ 之間，則存在 $c\in[a,b]$ 使得 $f(c)=k$。</div>
+      <p>「存在」（$\exists$）只保證至少有一個，不保證唯一，也不告訴你 $c$ 是多少。</p>` },
+    { h: '最常用的形式：兩端異號', html: R`
+      <p>取 $k=0$：若 $f$ 在 $[a,b]$ 連續且 $f(a)\cdot f(b)<0$，則方程式 $f(x)=0$ 在 $(a,b)$ 內至少有一個根。板書寫「與勘根定理等價」。</p>` },
+    { h: '板書例：證 $\sqrt2$ 介於 1.4 與 1.5', html: R`
+      <p>令 $f(x)=x^2$，連續。$f(1.4)=1.96$，$f(1.5)=2.25$，而 $1.96<2<2.25$。由 IVT 存在 $c\in(1.4,1.5)$ 使 $c^2=2$，$c>0$ 故 $c=\sqrt2$。</p>
+      <p class="note">連續是前提。$f(x)=\dfrac1x$ 在 $[-1,1]$ 有 $f(-1)<0<f(1)$，卻沒有零點，因為它在 $0$ 不連續。</p>` }
+  ],
+  practice: {
+    title: '證明 $\sqrt2$ 介於 1.4 與 1.5 之間',
+    lines: [
+      R`令 $f(x)=$ [[$x^2$]]，$f$ 是多項式，故在 $[1.4,1.5]$ 上 [[連續|IVT 的前提]]。`,
+      R`$f(1.4)=$ [[1.96]]，$f(1.5)=$ [[2.25]]，且 $1.96<$ [[2|目標值 k]] $<2.25$。`,
+      R`由 [[中間值定理]]，[[存在]] $c\in(1.4,1.5)$ 使得 $f(c)=2$，即 $c^2=2$。`,
+      R`因為 $c>0$，所以 $c=$ [[$\sqrt2$]]，故 $\sqrt2$ 介於 $1.4$ 與 $1.5$ 之間。`
+    ],
+    distractors: [
+      R`$\sqrt x$`, R`$x^2+2$`, R`$2x$`, '可微', '有界', '1.4', '2.56', '3', '1.5', '唯一', '任意', '夾擠定理', '不動點定理', R`$-\sqrt2$`, R`$2$`
+    ]
+  }
+},
+{
+  id: 'deriv', group: 'diff', x: 640, y: 510,
+  title: '微分的定義與切線方程式',
+  sum: R`$f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h}$`,
+  sections: [
+    { h: '定義', html: R`
+      <div class="thm"><b>定義</b>　$f$ 在 $a$ 的導數為
+      $$f'(a)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}=\lim_{h\to0}\frac{f(a+h)-f(a)}{h}$$
+      若這個極限存在，稱 $f$ 在 $a$ <b>可微</b>。$f$ 在 $(a,b)$ 可微，若在每一點 $c\in(a,b)$ 都可微。</div>
+      <p>兩種寫法差一個代換 $x=a+h$。$f'(x)$ 是 $x$ 的函數，定義域是所有讓這個極限存在的 $x$。</p>
+      <p>記號：$f'(x)=y'=\dfrac{dy}{dx}=\dfrac{df}{dx}=\dfrac{d}{dx}f(x)=Df(x)=D_xf(x)$，而 $f'(a)=f'(x)\big|_{x=a}$。</p>` },
+    { h: '導數＝切線斜率', html: R`
+      <p>$\dfrac{f(x)-f(a)}{x-a}$ 是割線斜率；$x\to a$ 時割線趨近切線，所以 $f'(a)$ 就是 $y=f(x)$ 在 $(a,f(a))$ 處切線的斜率 $m$。</p>
+      <div class="thm"><b>切線方程式</b>　$y-f(a)=f'(a)\,(x-a)$</div>
+      <p>若 $f'(a)=0$，切線是水平線 $y=f(a)$。板書例：$y=x^4-6x^2+4$ 的水平切線，令 $y'=4x^3-12x=4x(x^2-3)=0$ 得 $x=0,\pm\sqrt3$。</p>` },
+    { h: '板書例：直接用定義算', html: R`
+      <ul>
+        <li>$f(x)=x^2-8x+9$：$f'(a)=\displaystyle\lim_{x\to a}\frac{(x^2-a^2)-8(x-a)}{x-a}=2a-8$；在 $P(3,-6)$ 切線 $y+6=-2(x-3)$</li>
+        <li>$f(x)=\sqrt x$：分子分母同乘 $\sqrt{x+h}+\sqrt x$，得 $f'(x)=\dfrac1{2\sqrt x}$，$x>0$</li>
+        <li>$f(x)=\dfrac1x$：通分後得 $f'(x)=-\dfrac1{x^2}$，$x\ne0$</li>
+        <li>$f(x)=|x|$：$a>0$ 時 $f'(a)=1$，$a<0$ 時 $f'(a)=-1$</li>
+      </ul>` }
+  ],
+  practice: {
+    title: '拼出導數的定義與切線方程式',
+    lines: [
+      R`$f'(a)=\displaystyle\lim_{x\to a}\dfrac{f(x)-f(a)}{\,?\,}$，分母是 [[$x-a$]]；也等於 $\displaystyle\lim_{h\to0}\dfrac{\,?\,}{h}$，分子是 [[$f(a+h)-f(a)$|兩種寫法差一個代換 x=a+h]]。`,
+      R`$f$ 在 $a$ 可微 若 [[$f'(a)$]] 存在；$f$ 在 $(a,b)$ 可微 若 $f$ 在 [[每一點]] $c\in(a,b)$ 都可微。`,
+      R`$f'(a)$ 是 $y=f(x)$ 的圖形在 [[$(a,f(a))$]] 處切線的 [[斜率]]。`,
+      R`切線方程式為 $y-f(a)=$ [[$f'(a)$]] $(x-a)$；若 [[$f'(a)=0$]]，則切線是水平線 $y=f(a)$。`
+    ],
+    distractors: [
+      R`$x+a$`, R`$h$`, R`$f(a+h)+f(a)$`, R`$f(a)-f(a+h)$`, R`$f(a)$`, '某一點', R`$(a,0)$`, R`$(0,f(a))$`, '截距', R`$f'(x)$`, R`$f(a)=0$`, R`$f'(a)=1$`, '可微'
+    ]
+  }
+},
+{
+  id: 'diffConti', group: 'diff', x: 640, y: 760,
+  title: '可微 ⟹ 連續，與三種不可微',
+  sum: R`不連續 $\Rightarrow$ 不可微；角點、垂直切線也不行`,
+  sections: [
+    { h: '定理', html: R`
+      <div class="thm"><b>定理</b>　若 $f$ 在 $a$ 可微，則 $f$ 在 $a$ 連續。<br><b>等價說法</b>　若 $f$ 在 $a$ 不連續，則 $f$ 在 $a$ 不可微。</div>
+      <p>證明：$\displaystyle\lim_{x\to a}\big(f(x)-f(a)\big)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}\cdot(x-a)=f'(a)\cdot0=0$，所以 $\lim_{x\to a}f(x)=f(a)$。</p>
+      <p>反過來不成立：連續不代表可微。</p>` },
+    { h: '三種不可微的情況（板書 Remark）', html: R`
+      <ul>
+        <li><b>角點</b>：$f(x)=|x|$ 在 $0$ 連續，但 $\displaystyle\lim_{h\to0}\frac{|h|-|0|}{h}$ 左邊是 $-1$、右邊是 $1$，極限不存在。</li>
+        <li><b>不連續點</b>：$f(x)=\lfloor x\rfloor$ 在每個整數不連續，故不可微。</li>
+        <li><b>垂直切線</b>：若 $f$ 在 $a$ 連續且 $\displaystyle\lim_{x\to a}|f'(x)|=\infty$，則 $x=a$ 是圖形在 $(a,f(a))$ 的垂直切線，$f'(a)$ 不存在。</li>
+      </ul>
+      <p class="note">三種情況共同的本質：定義裡那個極限不存在。角點是左右不等，垂直切線是發散到無窮，不連續點是連分子都不趨近 0。</p>` }
+  ],
+  practice: {
+    title: '證明可微 ⟹ 連續，並列出三種不可微',
+    lines: [
+      R`設 $f$ 在 $a$ 可微。要證 $\displaystyle\lim_{x\to a}f(x)=$ [[$f(a)$]]。`,
+      R`$\displaystyle\lim_{x\to a}\big(f(x)-f(a)\big)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}\cdot$ [[$(x-a)$|乘一個再除一個]] $=$ [[$f'(a)$]] $\cdot0=0$。`,
+      R`故 $f$ 在 $a$ [[連續]]。等價說法：若 $f$ 在 $a$ [[不連續]]，則 $f$ 在 $a$ [[不可微]]。`,
+      R`反過來 [[不成立]]：$f(x)=|x|$ 在 $0$ 連續，但左導數 $=$ [[$-1$]]、右導數 $=$ [[$1$]]，不相等，這種點叫 [[角點]]。`,
+      R`若 $f$ 在 $a$ 連續且 $\displaystyle\lim_{x\to a}|f'(x)|=$ [[$\infty$]]，則 $x=a$ 是 [[垂直切線]]。`
+    ],
+    distractors: [
+      R`$L$`, R`$0$`, R`$(x+a)$`, R`$h$`, R`$f(a)$`, '可微', '不存在', '成立', '不連續點', '水平切線', R`$f'(a)$`, R`$-1$`, '間斷點'
+    ]
+  }
+},
+{
+  id: 'diffOps', group: 'diff', x: 960, y: 530,
+  title: '微分的四則運算',
+  sum: R`$(fg)'=f'g+fg'$、$\left(\tfrac fg\right)'=\tfrac{f'g-fg'}{g^2}$`,
+  sections: [
+    { h: '定理', html: R`
+      <div class="thm"><b>定理</b>
+      <ul>
+        <li>$\dfrac{d}{dx}\big[c\,f(x)\big]=c\,f'(x)$</li>
+        <li>$\dfrac{d}{dx}\big[f(x)+g(x)\big]=f'(x)+g'(x)$</li>
+        <li>$\dfrac{d}{dx}\big[f(x)g(x)\big]=f'(x)g(x)+f(x)g'(x)$</li>
+        <li>$\dfrac{d}{dx}\left[\dfrac{f(x)}{g(x)}\right]=\dfrac{f'(x)g(x)-f(x)g'(x)}{\big[g(x)\big]^2}$，$g(x)\ne0$</li>
+      </ul></div>
+      <p>乘法不是「各自微分再相乘」，這是最常見的錯誤。商法則的分子順序是「上微下不微，減，上不微下微」，寫反符號就錯了。</p>` },
+    { h: '商法則證明（板書）', html: R`
+      <div class="disp">$\displaystyle\frac{d}{dx}\left[\frac fg\right]=\lim_{h\to0}\frac1h\cdot\frac{f(x+h)g(x)-f(x)g(x+h)}{g(x+h)g(x)}$</div>
+      <p>分子加減同一項 $f(x)g(x)$，拆成兩塊：</p>
+      <div class="disp">$\displaystyle=\lim_{h\to0}\frac{1}{g(x+h)g(x)}\left(\frac{f(x+h)-f(x)}{h}\,g(x)-f(x)\,\frac{g(x+h)-g(x)}{h}\right)=\frac{f'(x)g(x)-f(x)g'(x)}{g(x)^2}$</div>
+      <p>板書例：$\dfrac{d}{dx}\dfrac{x^2+x-2}{x^3+6}=\dfrac{(2x+1)(x^3+6)-(x^2+x-2)(3x^2)}{(x^3+6)^2}$。</p>` }
+  ],
+  practice: {
+    title: '拼出四則運算公式與商法則證明',
+    lines: [
+      R`$\dfrac{d}{dx}\big[f(x)g(x)\big]=$ [[$f'(x)g(x)+f(x)g'(x)$|不是各自微分相乘]]；$\dfrac{d}{dx}\big[c\,f(x)\big]=$ [[$c\,f'(x)$]]。`,
+      R`通分：$\dfrac{f(x+h)}{g(x+h)}-\dfrac{f(x)}{g(x)}=\dfrac{f(x+h)g(x)-f(x)g(x+h)}{\,?\,}$，分母是 [[$g(x+h)g(x)$]]。`,
+      R`分子加減同一項 [[$f(x)g(x)$]]：$f(x+h)g(x)-f(x)g(x)+f(x)g(x)-f(x)g(x+h)$。`,
+      R`拆成兩塊：$\dfrac{f(x+h)-f(x)}{h}$ 乘上 [[$g(x)$]]，減去 $f(x)$ 乘上 [[$\dfrac{g(x+h)-g(x)}{h}$]]，前面再乘 $\dfrac1{g(x+h)g(x)}$。`,
+      R`取極限 $h\to0$：$g(x+h)\to g(x)$，所以分母變成 [[$g(x)^2$]]，得 $\dfrac{f'(x)g(x)-f(x)g'(x)}{g(x)^2}$，前提 [[$g(x)\ne0$]]。`
+    ],
+    distractors: [
+      R`$f'(x)g'(x)$`, R`$f'(x)g(x)-f(x)g'(x)$`, R`$c$`, R`$f'(x)$`, R`$g(x+h)^2$`, R`$f(x+h)g(x+h)$`, R`$g(x+h)$`, R`$f(x+h)-f(x)$`, R`$g(x)+g(x+h)$`, R`$g(x)=0$`, R`$f(x)\ne0$`, R`$g(x)-g(x+h)$`
+    ]
+  }
+},
+{
+  id: 'trig', group: 'diff', x: 1270, y: 380,
+  title: '三角函數的微分',
+  sum: R`$(\sin x)'=\cos x$、$(\tan x)'=\sec^2x$`,
+  sections: [
+    { h: '公式', html: R`
+      <div class="thm">
+      $\dfrac{d}{dx}\sin x=\cos x$　　$\dfrac{d}{dx}\cos x=-\sin x$<br>
+      $\dfrac{d}{dx}\tan x=\sec^2x$　　$\dfrac{d}{dx}\cot x=-\csc^2x$<br>
+      $\dfrac{d}{dx}\sec x=\sec x\tan x$　　$\dfrac{d}{dx}\csc x=-\csc x\cot x$
+      </div>
+      <p>「co-」開頭的三個都帶負號。$\tan,\sec,\csc,\cot$ 全部可由 $\sin,\cos$ 加商法則推出，例如板書 $\dfrac{d}{dx}\sec x=\dfrac{d}{dx}\dfrac1{\cos x}=\dfrac{\sin x}{\cos^2x}=\sec x\tan x$。</p>` },
+    { h: '$\sin x$ 的證明（板書）', html: R`
+      <div class="disp">$\displaystyle\frac{d}{dx}\sin x=\lim_{h\to0}\frac{\sin(x+h)-\sin x}{h}=\lim_{h\to0}\frac{\sin x\cos h+\cos x\sin h-\sin x}{h}$</div>
+      <div class="disp">$\displaystyle=\lim_{h\to0}\left(\sin x\cdot\frac{\cos h-1}{h}+\cos x\cdot\frac{\sin h}{h}\right)=\sin x\cdot0+\cos x\cdot1=\cos x$</div>
+      <p>用到兩個基本極限：$\displaystyle\lim_{h\to0}\frac{\sin h}{h}=1$、$\displaystyle\lim_{h\to0}\frac{\cos h-1}{h}=0$。這兩個是從極限那邊借來的工具。</p>
+      <p>板書相關極限：$\displaystyle\lim_{x\to0}\frac{\sin7x}{4x}=\frac74$，$\displaystyle\lim_{x\to0}x\cot x=\lim_{x\to0}\cos x\cdot\frac{1}{\sin x/x}=1$。</p>` }
+  ],
+  practice: {
+    title: '證明 $\dfrac{d}{dx}\sin x=\cos x$',
+    lines: [
+      R`$\dfrac{d}{dx}\sin x=\displaystyle\lim_{h\to0}\dfrac{\,?\,-\sin x}{h}$，分子第一項是 [[$\sin(x+h)$]]。`,
+      R`和角公式：$\sin(x+h)=\sin x\cos h+$ [[$\cos x\sin h$]]。`,
+      R`整理：$=\displaystyle\lim_{h\to0}\left(\sin x\cdot\dfrac{\,?\,}{h}+\cos x\cdot\dfrac{\sin h}{h}\right)$，問號處是 [[$\cos h-1$|注意順序，是 cos h 減 1]]。`,
+      R`$=\sin x\cdot$ [[0]] $+\cos x\cdot$ [[1]] $=$ [[$\cos x$]]。`,
+      R`同理 $\dfrac{d}{dx}\cos x=$ [[$-\sin x$]]，$\dfrac{d}{dx}\tan x=$ [[$\sec^2x$]]，$\dfrac{d}{dx}\sec x=$ [[$\sec x\tan x$]]。`
+    ],
+    distractors: [
+      R`$\sin x+h$`, R`$\sin x\sin h$`, R`$\cos x\cos h$`, R`$1-\cos h$`, R`$\cos h$`, R`$-\cos x$`, R`$\sin x$`, R`$\sec x$`, R`$\tan^2x$`, R`$\sec x\cot x$`, R`$-\sec x\tan x$`, R`$\cos x\cdot h$`
+    ]
+  }
+},
+{
+  id: 'exp', group: 'diff', x: 1270, y: 680,
+  title: '指數函數的微分',
+  sum: R`$(e^x)'=e^x$、$(a^x)'=a^x\ln a$`,
+  sections: [
+    { h: '公式', html: R`
+      <div class="thm">$\dfrac{d}{dx}e^x=e^x$　　$\dfrac{d}{dx}a^x=a^x\ln a$（$a>0$）</div>
+      <p class="note">這個主題的板書沒有拍到，下面是標準的推導方式。如果上課用的是別的方法，告訴我再改。</p>` },
+    { h: '推導', html: R`
+      <div class="disp">$\displaystyle\frac{d}{dx}e^x=\lim_{h\to0}\frac{e^{x+h}-e^x}{h}=\lim_{h\to0}e^x\cdot\frac{e^h-1}{h}=e^x\cdot1=e^x$</div>
+      <p>關鍵是 $\displaystyle\lim_{h\to0}\frac{e^h-1}{h}=1$，這其實就是 $e$ 這個數的定義之一：唯一讓 $y=a^x$ 在 $x=0$ 切線斜率為 $1$ 的底數。</p>
+      <p>一般底數：$a^x=e^{x\ln a}$，微分後多一個常數 $\ln a$。$a=e$ 時 $\ln e=1$，回到 $(e^x)'=e^x$。</p>` }
+  ],
+  practice: {
+    title: '推導 $\dfrac{d}{dx}e^x=e^x$',
+    lines: [
+      R`$\dfrac{d}{dx}e^x=\displaystyle\lim_{h\to0}\dfrac{e^{x+h}-e^x}{h}=\lim_{h\to0}e^x\cdot\dfrac{\,?\,}{h}$，提出 $e^x$ 後問號處是 [[$e^h-1$]]。`,
+      R`因為 $\displaystyle\lim_{h\to0}\frac{e^h-1}{h}=$ [[1]]，所以 $\dfrac{d}{dx}e^x=$ [[$e^x$]]。`,
+      R`一般底數：$\dfrac{d}{dx}a^x=$ [[$a^x\ln a$]]（$a>0$）。`
+    ],
+    distractors: [
+      R`$e^h$`, R`$e^{h-1}$`, R`$e^h+1$`, '0', R`$e$`, R`$xe^{x-1}$`, R`$e^x\ln x$`, R`$xa^{x-1}$`, R`$a^x$`, R`$\ln a$`, R`$a^x\ln x$`
+    ]
+  }
+},
+{
+  id: 'power', group: 'diff', x: 960, y: 780,
+  title: '$x^n$ 的微分',
+  sum: R`$(x^n)'=nx^{n-1}$`,
+  sections: [
+    { h: '定理', html: R`
+      <div class="thm"><b>定理</b>　$\dfrac{d}{dx}x^n=nx^{n-1}$，$n\in\mathbb Z$。（$\dfrac{d}{dx}c=0$）</div>` },
+    { h: '$n\in\mathbb N$：二項式定理（板書）', html: R`
+      <div class="disp">$\displaystyle\frac{d}{dx}x^n=\lim_{h\to0}\frac{(x+h)^n-x^n}{h}=\lim_{h\to0}\frac{x^n+\binom n1x^{n-1}h+\binom n2x^{n-2}h^2+\cdots+h^n-x^n}{h}$</div>
+      <div class="disp">$\displaystyle=\lim_{h\to0}\Big(nx^{n-1}+\binom n2x^{n-2}h+\cdots+h^{n-1}\Big)=nx^{n-1}$</div>
+      <p>消去 $x^n$ 後每一項都至少有一個 $h$，約掉分母的 $h$ 之後，除了第一項，其餘都還帶 $h$，取極限全部歸零。</p>` },
+    { h: '$n\in\mathbb Z^-$：商法則（板書）', html: R`
+      <p>令 $k=-n\in\mathbb N$，則 $x^n=\dfrac1{x^k}$：</p>
+      <div class="disp">$\displaystyle\frac{d}{dx}\frac1{x^k}=\frac{0\cdot x^k-1\cdot kx^{k-1}}{x^{2k}}=(-k)x^{k-1-2k}=(-k)x^{-k-1}=nx^{n-1}$</div>
+      <p class="note">二項式定理只對非負整數次方成立，所以負整數要另外用商法則證。分數或實數次方之後會用別的方法（對數）。</p>` }
+  ],
+  practice: {
+    title: '證明 $\dfrac{d}{dx}x^n=nx^{n-1}$',
+    lines: [
+      R`$\dfrac{d}{dx}x^n=\displaystyle\lim_{h\to0}\dfrac{\,?\,-x^n}{h}$，問號處是 [[$(x+h)^n$]]。`,
+      R`二項式展開：$(x+h)^n=x^n+$ [[$\binom n1x^{n-1}h$]] $+\binom n2x^{n-2}h^2+\cdots+h^n$`,
+      R`消去 $x^n$ 後每一項都至少含一個 [[$h$]]，可與分母約分。`,
+      R`$=\displaystyle\lim_{h\to0}\Big(nx^{n-1}+\binom n2x^{n-2}h+\cdots+h^{n-1}\Big)=$ [[$nx^{n-1}$]]。`,
+      R`當 $n\in\mathbb Z^-$，令 $k=-n\in\mathbb N$，$x^n=\dfrac1{x^k}$，用 [[商法則]] 得 $\dfrac{-kx^{k-1}}{x^{2k}}=$ [[$(-k)x^{-k-1}$]] $=nx^{n-1}$。`
+    ],
+    distractors: [
+      R`$(x-h)^n$`, R`$x^n+h$`, R`$\binom n1x^nh$`, R`$nx^nh$`, R`$x$`, R`$n$`, R`$(n-1)x^n$`, R`$nx^n$`, '乘法則', '鏈鎖律', R`$(-k)x^{k+1}$`, R`$kx^{-k-1}$`
+    ]
+  }
+}
+];
+
+/* 連線：type = dep（依賴，有箭頭）/ equiv（等價）/ borrow（借用工具，可加 label）/ analogy（結構類比） */
+const EDGES = [
+  { from: 'limit', to: 'conti', type: 'dep' },
+  { from: 'limit', to: 'limitOps', type: 'dep' },
+  { from: 'limit', to: 'deriv', type: 'dep' },
+  { from: 'conti', to: 'removable', type: 'dep' },
+  { from: 'conti', to: 'fixed', type: 'dep' },
+  { from: 'conti', to: 'ivt', type: 'dep' },
+  { from: 'conti', to: 'diffConti', type: 'dep' },
+  { from: 'ivt', to: 'fixed', type: 'equiv', label: '同一種證法' },
+  { from: 'contiOps', to: 'fixed', type: 'borrow', label: 'h(x)=f(x)−x 連續', t: 0.72 },
+  { from: 'limitOps', to: 'contiOps', type: 'analogy' },
+  { from: 'contiOps', to: 'diffOps', type: 'analogy' },
+  { from: 'deriv', to: 'diffConti', type: 'dep' },
+  { from: 'deriv', to: 'diffOps', type: 'dep' },
+  { from: 'deriv', to: 'trig', type: 'dep' },
+  { from: 'deriv', to: 'exp', type: 'dep' },
+  { from: 'deriv', to: 'power', type: 'dep' },
+  { from: 'limitOps', to: 'trig', type: 'borrow', label: 'sin h / h → 1', t: 0.42 },
+  { from: 'diffOps', to: 'trig', type: 'borrow', label: 'tan、sec 用商法則' },
+  { from: 'diffOps', to: 'power', type: 'borrow', label: 'n<0 用商法則' }
+];
+const EDGE_NAMES = { dep: '依賴', equiv: '等價', borrow: '借用工具', analogy: '結構類比' };
+</script>
+<script>
+(() => {
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const NODE_BY_ID = Object.fromEntries(NODES.map(n => [n.id, n]));
+  const STORE_KEY = 'calc-map-positions-v1';
+
+  /* ── MathJax：載入前先排隊，載入後補排版 ── */
+  let mjReady = false;
+  const pending = [];
+  window.__mjReady = () => { mjReady = true; pending.splice(0).forEach(el => typeset(el)); };
+  function typeset(el) {
+    if (mjReady && window.MathJax && MathJax.typesetPromise) {
+      return MathJax.typesetPromise([el]).catch(() => {});
+    }
+    pending.push(el);
+    return Promise.resolve();
+  }
+  if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+    MathJax.startup.promise.then(() => window.__mjReady());
+  }
+
+  /* ── 位置存取 ── */
+  function loadPositions() {
+    try { const raw = localStorage.getItem(STORE_KEY); return raw ? JSON.parse(raw) : {}; } catch (e) { return {}; }
+  }
+  function savePositions() {
+    const pos = {};
+    $$('.node').forEach(el => { pos[el.dataset.id] = { x: parseFloat(el.style.left), y: parseFloat(el.style.top) }; });
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(pos)); } catch (e) {}
+  }
+
+  /* ── 黑板：節點 ── */
+  const board = $('#board');
+  const canvas = $('#canvas');
+  const nodesEl = $('#nodes');
+  const linesG = $('#edge-lines');
+  const labelsG = $('#edge-labels');
+  const CW = canvas.offsetWidth, CH = canvas.offsetHeight;
+
+  function renderNodes() {
+    const saved = loadPositions();
+    nodesEl.innerHTML = '';
+    NODES.forEach(n => {
+      const el = document.createElement('div');
+      el.className = 'node';
+      el.dataset.id = n.id;
+      el.dataset.group = n.group;
+      const p = saved[n.id] || { x: n.x, y: n.y };
+      el.style.left = p.x + 'px';
+      el.style.top = p.y + 'px';
+      el.innerHTML = `<div class="n-title">${n.title}</div><div class="n-sum">${n.sum}</div>`;
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSheet(n.id); } });
+      attachNodeDrag(el);
+      nodesEl.appendChild(el);
+    });
+    typeset(nodesEl).then(drawEdges);
+  }
+
+  function attachNodeDrag(el) {
+    let start = null, moved = false;
+    el.addEventListener('pointerdown', e => {
+      if (e.button !== undefined && e.button !== 0) return;
+      start = { x: e.clientX, y: e.clientY, left: parseFloat(el.style.left), top: parseFloat(el.style.top) };
+      moved = false;
+      el.setPointerCapture(e.pointerId);
+      e.stopPropagation();
+    });
+    el.addEventListener('pointermove', e => {
+      if (!start) return;
+      const dx = e.clientX - start.x, dy = e.clientY - start.y;
+      if (!moved && Math.hypot(dx, dy) < 5) return;
+      if (!moved) { moved = true; el.classList.add('dragging'); }
+      const w = el.offsetWidth, h = el.offsetHeight;
+      const nx = Math.max(0, Math.min(CW - w, start.left + dx));
+      const ny = Math.max(0, Math.min(CH - h, start.top + dy));
+      el.style.left = nx + 'px'; el.style.top = ny + 'px';
+      requestAnimationFrame(drawEdges);
+    });
+    const end = e => {
+      if (!start) return;
+      const wasMoved = moved;
+      start = null; moved = false;
+      el.classList.remove('dragging');
+      if (wasMoved) { savePositions(); drawEdges(); }
+      else if (e.type === 'pointerup') openSheet(el.dataset.id);
+    };
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+  }
+
+  /* ── 黑板：滑鼠拖曳平移（觸控用原生捲動） ── */
+  let pan = null;
+  board.addEventListener('pointerdown', e => {
+    if (e.pointerType !== 'mouse' || e.target.closest('.node')) return;
+    pan = { x: e.clientX, y: e.clientY, sl: board.scrollLeft, st: board.scrollTop };
+    board.classList.add('panning');
+  });
+  board.addEventListener('pointermove', e => {
+    if (!pan) return;
+    board.scrollLeft = pan.sl - (e.clientX - pan.x);
+    board.scrollTop = pan.st - (e.clientY - pan.y);
+  });
+  const endPan = () => { pan = null; board.classList.remove('panning'); };
+  board.addEventListener('pointerup', endPan);
+  board.addEventListener('pointercancel', endPan);
+  board.addEventListener('pointerleave', endPan);
+
+  /* ── 連線 ── */
+  function rectOf(id) {
+    const el = nodesEl.querySelector(`.node[data-id="${id}"]`);
+    return { x: parseFloat(el.style.left), y: parseFloat(el.style.top), w: el.offsetWidth, h: el.offsetHeight };
+  }
+  // 從矩形中心往目標點的射線，與矩形邊界的交點
+  function borderPoint(r, tx, ty) {
+    const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    const dx = tx - cx, dy = ty - cy;
+    if (dx === 0 && dy === 0) return { x: cx, y: cy };
+    const sx = (r.w / 2) / Math.abs(dx || 1e-9), sy = (r.h / 2) / Math.abs(dy || 1e-9);
+    const s = Math.min(sx, sy);
+    return { x: cx + dx * s, y: cy + dy * s };
+  }
+  let firstDraw = true;
+  function drawEdges() {
+    linesG.innerHTML = ''; labelsG.innerHTML = '';
+    const gap = 6;
+    EDGES.forEach(ed => {
+      const a = rectOf(ed.from), b = rectOf(ed.to);
+      const ac = { x: a.x + a.w / 2, y: a.y + a.h / 2 }, bc = { x: b.x + b.w / 2, y: b.y + b.h / 2 };
+      let p1 = borderPoint(a, bc.x, bc.y), p2 = borderPoint(b, ac.x, ac.y);
+      const len = Math.hypot(p2.x - p1.x, p2.y - p1.y) || 1;
+      const ux = (p2.x - p1.x) / len, uy = (p2.y - p1.y) / len;
+      p1 = { x: p1.x + ux * gap, y: p1.y + uy * gap };
+      p2 = { x: p2.x - ux * gap, y: p2.y - uy * gap };
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M${p1.x} ${p1.y} L${p2.x} ${p2.y}`);
+      path.setAttribute('class', 'edge ' + ed.type + (firstDraw && ed.type === 'dep' ? ' draw' : ''));
+      if (ed.type === 'dep') path.setAttribute('marker-end', 'url(#arrow-w)');
+      if (ed.type === 'equiv') { path.setAttribute('marker-end', 'url(#arrow-y)'); path.setAttribute('marker-start', 'url(#arrow-y)'); }
+      if (ed.type === 'borrow') path.setAttribute('marker-end', 'url(#arrow-p)');
+      linesG.appendChild(path);
+      if (ed.label) {
+        const t = ed.t || 0.5; const mx = p1.x + (p2.x - p1.x) * t, my = p1.y + (p2.y - p1.y) * t;
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('class', 'edge-label' + (ed.type === 'equiv' ? ' eq' : ''));
+        text.setAttribute('x', mx); text.setAttribute('y', my + 4);
+        text.setAttribute('text-anchor', 'middle');
+        text.textContent = ed.label;
+        g.appendChild(text);
+        labelsG.appendChild(g);
+        const w = text.getComputedTextLength ? text.getComputedTextLength() + 16 : ed.label.length * 12 + 16;
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('class', 'edge-label-bg' + (ed.type === 'equiv' ? ' eq' : ''));
+        rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my - 10);
+        rect.setAttribute('width', w); rect.setAttribute('height', 20);
+        g.insertBefore(rect, text);
+      }
+    });
+    firstDraw = false;
+  }
+
+  $('#btn-reset-layout').addEventListener('click', () => {
+    try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+    NODES.forEach(n => {
+      const el = nodesEl.querySelector(`.node[data-id="${n.id}"]`);
+      el.style.left = n.x + 'px'; el.style.top = n.y + 'px';
+    });
+    drawEdges();
+  });
+
+  /* ── 講義面板 ── */
+  const sheet = $('#sheet'), sheetTitle = $('#sheet-title'), sheetContent = $('#sheet-content');
+  const tagEl = $('#sheet .tag');
+  const GROUP_COLOR = { limit: '#d7ddd9', conti: '#f3d46a', diff: '#f0a3ae' };
+  let currentPractice = null;
+
+  function openSheet(id) {
+    const n = NODE_BY_ID[id];
+    sheetTitle.innerHTML = n.title;
+    tagEl.style.setProperty('--tag', GROUP_COLOR[n.group]);
+    sheetContent.innerHTML = '';
+    n.sections.forEach(s => {
+      const sec = document.createElement('section');
+      sec.className = 'sec';
+      sec.innerHTML = `<h3>${s.h}</h3>${s.html}`;
+      sheetContent.appendChild(sec);
+    });
+    // 相關節點
+    const rel = EDGES.filter(e => e.from === id || e.to === id);
+    if (rel.length) {
+      const sec = document.createElement('section');
+      sec.className = 'sec';
+      const btns = rel.map(e => {
+        const otherId = e.from === id ? e.to : e.from;
+        const dir = e.type === 'dep' ? (e.from === id ? '→ 被它用到' : '← 用到它') :
+                    e.type === 'borrow' ? (e.from === id ? '→ 借給它' : '← 向它借') : '↔';
+        return `<button type="button" data-open="${otherId}"><span>${EDGE_NAMES[e.type]} ${dir}</span>${NODE_BY_ID[otherId].title}</button>`;
+      }).join('');
+      sec.innerHTML = `<h3>地圖上相連的節點</h3><div class="rel">${btns}</div>`;
+      sec.addEventListener('click', ev => { const b = ev.target.closest('[data-open]'); if (b) openSheet(b.dataset.open); });
+      sheetContent.appendChild(sec);
+    }
+    // 練習
+    if (n.practice) {
+      const sec = document.createElement('section');
+      sec.className = 'sec practice';
+      sheetContent.appendChild(sec);
+      currentPractice = buildPractice(n.practice, sec);
+    }
+    typeset(sheetContent);
+    sheet.classList.add('open');
+    $('.paper-body', sheet).scrollTop = 0;
+  }
+  function closeSheet() { sheet.classList.remove('open'); currentPractice = null; }
+  $('#sheet-close').addEventListener('click', closeSheet);
+  sheet.addEventListener('click', e => { if (e.target === sheet) closeSheet(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet(); });
+
+  /* ── 練習：解析 [[答案]] 與 [[答案|提示]]（只有 $…$ 之外的 | 算分隔） ── */
+  function splitAnsHint(s) {
+    let inMath = false;
+    for (let i = 0; i < s.length; i++) {
+      const ch = s[i];
+      if (ch === '$') inMath = !inMath;
+      else if (ch === '|' && !inMath) return [s.slice(0, i).trim(), s.slice(i + 1).trim()];
+    }
+    return [s.trim(), ''];
+  }
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
+    return arr;
+  }
+
+  function buildPractice(p, sec) {
+    sec.innerHTML = `
+      <div class="p-head"><h3>練習：${p.title}</h3><span class="p-progress"></span></div>
+      <p>把正確的卡片拖進空格，或點一下卡片，它會依序填進下一個空格。填錯會彈回來。</p>
+      <div class="plines"></div>
+      <div class="hint" aria-live="polite"></div>
+      <div class="done"><svg viewBox="0 0 34 34"><path d="M7 18 L14 25 L27 10"/></svg><div><b>全部正確。</b>這一段的定義／證明你自己拼出來了。</div><button type="button" class="again">再練一次</button></div>
+      <div class="tray"><div class="t-label"><span>卡片（含干擾項）</span><button type="button" class="restart">重新開始</button></div><div class="pool"></div></div>`;
+    const linesEl = $('.plines', sec), pool = $('.pool', sec), hintEl = $('.hint', sec), progress = $('.p-progress', sec), done = $('.done', sec);
+    const blanks = [];
+    const answers = [];
+    const re = /\[\[([\s\S]+?)\]\]/g;
+    p.lines.forEach(line => {
+      const div = document.createElement('div');
+      div.className = 'pline';
+      let last = 0, m;
+      while ((m = re.exec(line))) {
+        div.appendChild(document.createTextNode(line.slice(last, m.index)));
+        const [ans, hint] = splitAnsHint(m[1]);
+        const b = document.createElement('span');
+        b.className = 'blank'; b.dataset.ans = ans; b.dataset.hint = hint; b.textContent = '\u3000';
+        b.setAttribute('role', 'button'); b.setAttribute('aria-label', '空格');
+        b.addEventListener('click', () => { if (!b.classList.contains('filled')) showHint(b, false); });
+        div.appendChild(b); blanks.push(b); answers.push(ans);
+        last = re.lastIndex;
+      }
+      div.appendChild(document.createTextNode(line.slice(last)));
+      linesEl.appendChild(div);
+    });
+    const cardTexts = shuffle(answers.concat(p.distractors));
+    cardTexts.forEach(t => {
+      const c = document.createElement('div');
+      c.className = 'card'; c.dataset.text = t; c.innerHTML = t;
+      attachCard(c);
+      pool.appendChild(c);
+    });
+
+    const state = { blanks, filledCount: 0 };
+    function nextBlank() { return blanks.find(b => !b.classList.contains('filled')) || null; }
+    function markNext() {
+      blanks.forEach(b => b.classList.remove('next'));
+      const nb = nextBlank(); if (nb) nb.classList.add('next');
+      progress.textContent = `${state.filledCount} / ${blanks.length}`;
+    }
+    function showHint(b, wrong) {
+      const h = b.dataset.hint;
+      hintEl.textContent = wrong ? (h ? `不是這張。提示：${h}` : '不是這張，再看一次這一格前後在講什麼。')
+                                 : (h ? `提示：${h}` : '這一格要填什麼？從下面的卡片拖進來，或點一下卡片。');
+      hintEl.style.color = wrong ? 'var(--bad)' : 'var(--ink-2)';
+    }
+    function fill(b, card) {
+      b.innerHTML = card.innerHTML;
+      b.classList.add('filled'); b.classList.remove('next', 'over');
+      card.classList.add('gone');
+      setTimeout(() => card.remove(), 220);
+      state.filledCount++;
+      hintEl.textContent = '';
+      markNext();
+      if (state.filledCount === blanks.length) {
+        done.classList.add('show');
+        $('.tray', sec).style.display = 'none';
+      }
+    }
+    function reject(b, card) {
+      b.classList.remove('wrong', 'over'); void b.offsetWidth; b.classList.add('wrong');
+      card.classList.remove('wrong'); void card.offsetWidth; card.classList.add('wrong');
+      setTimeout(() => { b.classList.remove('wrong'); card.classList.remove('wrong'); }, 450);
+      showHint(b, true);
+    }
+
+    /* 卡片：拖曳 & 點擊 */
+    function attachCard(card) {
+      let start = null, ghost = null, dragging = false, over = null;
+      const centerOf = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
+      function makeGhost(x, y) {
+        ghost = card.cloneNode(true);
+        ghost.classList.add('ghost'); ghost.classList.remove('lifted', 'wrong');
+        ghost.style.width = card.getBoundingClientRect().width + 'px';
+        ghost.style.left = x + 'px'; ghost.style.top = y + 'px';
+        document.body.appendChild(ghost);
+      }
+      function fly(to, after) {
+        if (!ghost || reduceMotion) { if (ghost) ghost.remove(); ghost = null; after(); return; }
+        const g = ghost; ghost = null;
+        let doneFly = false;
+        const finish = () => { if (doneFly) return; doneFly = true; g.remove(); after(); };
+        g.addEventListener('transitionend', finish, { once: true });
+        requestAnimationFrame(() => {
+          g.classList.add('fly'); g.style.left = to.x + 'px'; g.style.top = to.y + 'px';
+          g.style.transform = 'translate(-50%, -50%) rotate(0deg) scale(1)';
+        });
+        setTimeout(finish, 420);
+      }
+      function setOver(el) {
+        if (over && over !== el) over.classList.remove('over');
+        over = el;
+        if (over) over.classList.add('over');
+      }
+      function attempt(b, viaTap) {
+        const ok = card.dataset.text === b.dataset.ans;
+        if (ok) {
+          card.classList.add('lifted');
+          if (!ghost) makeGhost(centerOf(card).x, centerOf(card).y);
+          fly(centerOf(b), () => fill(b, card));
+        } else {
+          if (ghost) fly(centerOf(card), () => { card.classList.remove('lifted'); });
+          reject(b, card);
+        }
+      }
+      card.addEventListener('pointerdown', e => {
+        if (e.button !== undefined && e.button !== 0) return;
+        if (card.classList.contains('gone')) return;
+        start = { x: e.clientX, y: e.clientY }; dragging = false;
+        card.setPointerCapture(e.pointerId);
+        e.preventDefault();
+      });
+      card.addEventListener('pointermove', e => {
+        if (!start) return;
+        if (!dragging) {
+          if (Math.hypot(e.clientX - start.x, e.clientY - start.y) < 6) return;
+          dragging = true; card.classList.add('lifted'); makeGhost(e.clientX, e.clientY);
+        }
+        ghost.style.left = e.clientX + 'px'; ghost.style.top = e.clientY + 'px';
+        const under = document.elementFromPoint(e.clientX, e.clientY);
+        const b = under && under.closest ? under.closest('.blank') : null;
+        setOver(b && !b.classList.contains('filled') && sec.contains(b) ? b : null);
+      });
+      const end = e => {
+        if (!start) return;
+        start = null;
+        if (dragging) {
+          dragging = false;
+          const target = over; setOver(null);
+          if (target && e.type === 'pointerup') attempt(target, false);
+          else fly(centerOf(card), () => card.classList.remove('lifted'));
+        } else if (e.type === 'pointerup') {
+          const nb = nextBlank();
+          if (nb) { nb.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' }); attempt(nb, true); }
+        }
+      };
+      card.addEventListener('pointerup', end);
+      card.addEventListener('pointercancel', end);
+    }
+
+    const restart = () => { buildPractice(p, sec); typeset(sec); };
+    $('.restart', sec).addEventListener('click', restart);
+    $('.again', sec).addEventListener('click', restart);
+    markNext();
+    return state;
+  }
+
+  renderNodes();
+})();
+</script>
+</body>
+</html>

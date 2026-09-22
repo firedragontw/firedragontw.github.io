@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'enyu': '/enyu.html',
         'gsatouo': '/gsatouo.html',
         'sf': '/sf.html',
+        'calculus': '/calculus.html',
     };
     
     // 確定要載入的 HTML 檔案
