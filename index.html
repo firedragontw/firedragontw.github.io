@@ -3,302 +3,267 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>以心 · yihsin725</title>
+<title>firedragontw</title>
+<meta name="description" content="以心的個人頁：社群連結、學經歷、專案作品與部落格。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700&display=swap">
+<link rel="stylesheet" href="/firedragon-ui.css">
 <style>
-:root{
-  --bg-1:#0a0118;
-  --bg-2:#150826;
-  --card:rgba(24,12,45,0.55);
-  --card-border:rgba(255,255,255,0.09);
-  --ink:#f3eeff;
-  --ink-dim:#b7a9dd;
-  --neon-pink:#ff3ea5;
-  --neon-cyan:#3ef8ff;
-  --neon-purple:#a76bff;
-  --neon-yellow:#ffe66d;
-  --font-ui:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-  --font-disp:"Space Grotesk","Noto Sans TC",sans-serif;
-}
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 15% 0%, rgba(255,62,165,0.20), transparent 45%),
-    radial-gradient(circle at 85% 15%, rgba(62,248,255,0.16), transparent 45%),
-    radial-gradient(circle at 50% 100%, rgba(167,107,255,0.22), transparent 50%),
-    linear-gradient(180deg, var(--bg-1), var(--bg-2) 60%, var(--bg-1));
-  background-attachment:fixed;
-  color:var(--ink);
-  font-family:var(--font-ui);
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
+  body { margin: 0; min-height: 100vh; }
 
-/* ───────── floating neon orbs ───────── */
-.orb{
-  position:fixed; border-radius:50%; filter:blur(70px); pointer-events:none; z-index:0;
-  opacity:0.55; will-change:transform;
-}
-.orb.o1{width:340px;height:340px;background:var(--neon-pink);top:-80px;left:-100px;animation:drift1 16s ease-in-out infinite;}
-.orb.o2{width:300px;height:300px;background:var(--neon-cyan);top:40%;right:-120px;animation:drift2 20s ease-in-out infinite;}
-.orb.o3{width:260px;height:260px;background:var(--neon-purple);bottom:-100px;left:20%;animation:drift3 18s ease-in-out infinite;}
-@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,80px)}}
-@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-70px,60px)}}
-@keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(50px,-60px)}}
-@media (prefers-reduced-motion:reduce){ .orb{animation:none !important;} }
+  .page { max-width: 640px; margin: 0 auto; padding: var(--space-6) var(--space-4) var(--space-16); display: flex; flex-direction: column; gap: var(--space-5); }
 
-.wrap{
-  position:relative; z-index:1;
-  max-width:760px; margin:0 auto;
-  padding:56px 20px 80px;
-}
+  /* 頂欄 */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding-bottom: var(--space-4); border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .brand svg { width: 30px; height: 30px; flex: none; }
+  .brand b { font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; letter-spacing: .02em; }
+  .theme { display: flex; gap: 6px; }
+  .theme .fd-pill { min-height: 32px; padding: 0 12px; font-size: 12.5px; }
 
-/* ───────── glass section ───────── */
-.section{
-  opacity:0; transform:translateY(18px);
-  transition:opacity .6s ease, transform .6s ease;
-}
-.section.in{ opacity:1; transform:translateY(0); }
-.glass{
-  background:var(--card);
-  border:1px solid var(--card-border);
-  border-radius:20px;
-  padding:22px 22px 20px;
-  margin-bottom:20px;
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  box-shadow:0 18px 40px -24px rgba(0,0,0,0.6);
-}
-.sec-title{
-  font-family:var(--font-disp);
-  display:flex; align-items:center; gap:9px;
-  font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--neon-cyan); margin:0 0 14px;
-}
-.sec-title::before{
-  content:""; width:8px; height:8px; border-radius:50%;
-  background:var(--neon-cyan); box-shadow:0 0 10px 2px var(--neon-cyan);
-}
+  /* 區塊標題 */
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+  .eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); font-weight: 600; margin: 0 0 4px; }
+  .sec-head h2 { font-size: var(--text-xl); }
+  .sec-head .fd-btn.fd-link { font-size: 13px; }
 
-/* ───────── social links ───────── */
-.social-grid{ display:flex; flex-wrap:wrap; gap:10px; }
-.social-link{
-  flex:1 1 150px;
-  display:flex; align-items:center; gap:10px;
-  text-decoration:none; color:var(--ink);
-  background:rgba(255,255,255,0.04);
-  border:1px solid var(--card-border);
-  border-radius:12px; padding:12px 14px;
-  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
-  position:relative; overflow:hidden;
-}
-.social-link:hover{
-  transform:translateY(-3px);
-  background:rgba(255,255,255,0.07);
-}
-.social-link .ic{
-  position:relative; width:38px; height:38px; flex:none; border-radius:10px; overflow:hidden;
-  display:grid; place-items:center; font-size:15px;
-  color:#0a0118; font-weight:900;
-}
-/* 圖片載入失敗時會被移除，露出底下的文字備援 */
-.social-link .ic img{
-  position:absolute; inset:0; width:100%; height:100%;
-  object-fit:contain; padding:4px; background:#fff;
-}
-.social-link.ig:hover{ border-color:var(--neon-pink); box-shadow:0 0 22px -6px var(--neon-pink); }
-.social-link.ig .ic{ background:linear-gradient(135deg,var(--neon-yellow),var(--neon-pink),var(--neon-purple)); }
-.social-link.discord:hover{ border-color:var(--neon-purple); box-shadow:0 0 22px -6px var(--neon-purple); }
-.social-link.discord .ic{ background:var(--neon-purple); }
-.social-link.mail:hover{ border-color:var(--neon-cyan); box-shadow:0 0 22px -6px var(--neon-cyan); }
-.social-link.mail .ic{ background:var(--neon-cyan); }
-.social-link .meta{ min-width:0; }
-.social-link .meta b{ display:block; font-size:13px; }
-.social-link .meta span{ display:block; font-size:12px; color:var(--ink-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.copy-hint{ position:absolute; right:10px; top:6px; font-size:10px; color:var(--ink-dim); opacity:0; transition:opacity .2s; }
-.social-link.discord:hover .copy-hint{ opacity:1; }
+  /* 社群連結：lit.link 那種一條一條 */
+  .links { display: flex; flex-direction: column; gap: 10px; }
+  .link {
+    display: flex; align-items: center; gap: 14px;
+    min-height: 60px; padding: 10px 14px;
+    background: var(--surface-2); color: var(--ink);
+    border-radius: var(--radius-lg); text-decoration: none;
+    transition: background var(--dur-3) var(--ease), color var(--dur-3) var(--ease),
+                transform var(--dur-3) var(--ease-spring), box-shadow var(--dur-3) var(--ease);
+  }
+  .link:hover { background: linear-gradient(90deg, var(--primary), var(--glow)); color: #fff; transform: translateY(-3px); box-shadow: var(--shadow-glow); }
+  .link .ic {
+    position: relative; width: 40px; height: 40px; flex: none; border-radius: var(--radius);
+    display: grid; place-items: center; overflow: hidden;
+    background: var(--surface); color: var(--primary);
+    font-family: var(--font-mono); font-weight: 600; font-size: 13px;
+    box-shadow: var(--shadow-sm);
+  }
+  .link .ic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 5px; background: #fff; }
+  .link .meta { min-width: 0; flex: 1; }
+  .link .meta b { display: block; font-size: 15px; }
+  .link .meta span { display: block; font-size: 12.5px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color var(--dur-3) var(--ease); }
+  .link:hover .meta span { color: rgba(255,255,255,.82); }
+  .link .tail { flex: none; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); transition: color var(--dur-3) var(--ease); }
+  .link:hover .tail { color: rgba(255,255,255,.9); }
 
-/* ───────── timeline ───────── */
-.timeline{ list-style:none; margin:0; padding:0; }
-.timeline li{
-  position:relative; padding:2px 0 18px 26px; border-left:2px solid rgba(255,255,255,0.12);
-}
-.timeline li:last-child{ padding-bottom:2px; border-left-color:transparent; }
-.timeline li::before{
-  content:""; position:absolute; left:-7px; top:3px; width:12px; height:12px; border-radius:50%;
-  background:var(--bg-1); border:2px solid var(--neon-pink); box-shadow:0 0 10px 1px var(--neon-pink);
-}
-.timeline li.current::before{ border-color:var(--neon-cyan); box-shadow:0 0 12px 2px var(--neon-cyan); }
-.timeline .tt{ font-weight:700; font-size:14.5px; }
-.timeline .ts{ font-size:12.5px; color:var(--ink-dim); margin-top:2px; }
+  /* 學經歷 */
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline li { position: relative; padding: 0 0 18px 24px; border-left: 2px solid var(--line); }
+  .timeline li:last-child { padding-bottom: 0; border-left-color: transparent; }
+  .timeline li::before {
+    content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--surface); border: 2px solid var(--line-strong);
+  }
+  .timeline li.now::before { border-color: var(--primary); background: var(--primary); box-shadow: var(--ring); }
+  .timeline .t { font-weight: 700; font-size: 15px; }
+  .timeline .s { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
 
-/* ───────── project cards ───────── */
-.proj-group{ margin-bottom:6px; }
-.proj-group + .proj-group{ margin-top:22px; }
-.proj-label{
-  display:flex; align-items:center; gap:10px; margin:0 0 12px;
-  font-family:var(--font-disp); font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
-  color:var(--ink-dim);
-}
-.proj-label .pill{
-  padding:3px 10px; border-radius:999px; font-size:11px; letter-spacing:.06em;
-  color:#0a0118; font-weight:800;
-}
-.proj-group.hs .pill{ background:linear-gradient(90deg,var(--neon-yellow),var(--neon-pink)); }
-.proj-group.uni .pill{ background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple)); }
-.proj-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
-.proj-card{
-  position:relative; display:block; text-decoration:none; color:var(--ink);
-  background:rgba(255,255,255,0.03); border:1px solid var(--card-border); border-radius:14px;
-  padding:16px 14px; overflow:hidden;
-  transition:transform .25s ease, border-color .25s ease;
-}
-.proj-card::before{
-  content:""; position:absolute; inset:0; border-radius:14px; padding:1px;
-  background:linear-gradient(135deg,var(--neon-pink),var(--neon-cyan),var(--neon-purple));
-  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor; mask-composite:exclude;
-  opacity:0; transition:opacity .25s ease;
-}
-.proj-card:hover{ transform:translateY(-4px) scale(1.015); }
-.proj-card:hover::before{ opacity:1; }
-.proj-card .pt{ font-weight:700; font-size:14px; display:block; margin-bottom:4px; }
-.proj-card .pp{ font-family:var(--font-disp); font-size:11px; color:var(--ink-dim); letter-spacing:.04em; }
+  /* 專案 */
+  .group + .group { margin-top: var(--space-5); }
+  .group-head { display: flex; align-items: center; gap: 10px; margin-bottom: var(--space-3); }
+  .group-head small { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .fd-tile { flex-direction: column; gap: 4px; min-height: 72px; }
+  .fd-tile small { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--ink-3); transition: color var(--dur-3) var(--ease); }
+  .fd-tile:hover small { color: rgba(255,255,255,.85); }
 
-.foot{
-  text-align:center; margin-top:34px; font-size:12px; color:var(--ink-dim); line-height:1.8;
-}
-.foot .heart{ color:var(--neon-pink); }
+  /* 部落格 */
+  .posts { display: flex; flex-direction: column; gap: 10px; }
+  .post { display: block; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--surface-2); color: var(--ink); text-decoration: none; transition: background var(--dur-2) var(--ease), transform var(--dur-3) var(--ease-spring); }
+  .post:hover { background: var(--primary-soft); transform: translateY(-2px); }
+  .post b { display: block; font-size: 15px; }
+  .post .d { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+  .post p { font-size: 13.5px; color: var(--ink-2); margin-top: 6px; }
+  .empty {
+    display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+    padding: var(--space-8) var(--space-4);
+    border: 2px dashed var(--line-strong); border-radius: var(--radius-lg);
+    color: var(--ink-2); font-size: 14px;
+  }
+  .empty b { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+  .empty .fd-dots { margin-top: 4px; }
 
-@media (max-width:480px){
-  .glass{ padding:18px 16px 16px; }
-}
-@media (prefers-reduced-motion:reduce){
-  .section{ transition:none; }
-}
+  .foot { text-align: center; font-size: 12.5px; color: var(--ink-3); padding-top: var(--space-4); border-top: 1px solid var(--line); }
+  .foot a { color: var(--ink-2); text-decoration: none; }
+  .foot a:hover { color: var(--primary); }
+
+  .reveal { opacity: 0; transform: translateY(10px); transition: opacity var(--dur-4) var(--ease), transform var(--dur-4) var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  @media (max-width: 480px) {
+    .page { padding: var(--space-4) var(--space-3) var(--space-12); }
+    .fd-card { padding: var(--space-5); }
+    .theme .fd-pill span { display: none; }
+  }
 </style>
 </head>
-<body>
+<body class="fd-base">
 
-<div class="orb o1"></div>
-<div class="orb o2"></div>
-<div class="orb o3"></div>
+<div class="page">
 
-<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="var(--primary)" d="M12 1.5c.6 4.2 5.5 6.4 5.5 11.5a5.5 5.5 0 0 1-11 0c0-2.1 1-3.4 2.1-4.6-.1 2.2.9 3.6 2.2 3.6 1.2-3.4-1.3-6.6 1.2-10.5z"/><path fill="var(--glow)" opacity=".85" d="M12 11c.4 2 2.6 3 2.6 5.4a2.6 2.6 0 0 1-5.2 0c0-1 .5-1.7 1-2.2 0 1 .4 1.7 1 1.7.6-1.6-.6-3.1.6-4.9z"/></svg>
+      <b>firedragontw.github.io</b>
+    </a>
+    <div class="theme" role="group" aria-label="主題">
+      <button class="fd-pill" type="button" data-set-theme="system" aria-pressed="true">自動</button>
+      <button class="fd-pill" type="button" data-set-theme="light" aria-pressed="false">亮</button>
+      <button class="fd-pill" type="button" data-set-theme="dark" aria-pressed="false">暗</button>
+    </div>
+  </header>
 
-  <section class="section" data-animate>
-    <div class="glass">
-      <h2 class="sec-title">社群連結</h2>
-      <div class="social-grid">
-        <a class="social-link ig" href="https://instagram.com/yihsin725" target="_blank" rel="noopener">
-          <span class="ic">IG<img src="https://img.magnific.com/premium-vector/instagram-vector-logo-icon-social-media-logotype_901408-392.jpg?semt=ais_hybrid&amp;w=740&amp;q=80" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>
-          <span class="meta"><b>Instagram</b><span>@yihsin725</span></span>
-        </a>
-        <a class="social-link discord" href="#" id="discordLink">
-          <span class="ic">DC<img src="https://www.freelogovectors.net/wp-content/uploads/2023/01/discord_logo-freelogovectors.net_.png" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>
-          <span class="meta"><b>Discord</b><span>yihsin725</span></span>
-          <span class="copy-hint">點擊複製</span>
-        </a>
-        <a class="social-link mail" href="mailto:s1152041@mail.ncyu.edu.tw">
-          <span class="ic">@<img src="https://static.vecteezy.com/system/resources/previews/022/613/021/non_2x/google-mail-gmail-icon-logo-symbol-free-png.png" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>
-          <span class="meta"><b>Email</b><span>s1152041@mail.ncyu.edu.tw</span></span>
-        </a>
+  <section class="fd-card reveal" id="links">
+    <div class="sec-head">
+      <div><p class="eyebrow">Links</p><h2>社群連結</h2></div>
+    </div>
+    <div class="links">
+      <a class="link" href="https://instagram.com/yihsin725" target="_blank" rel="noopener">
+        <span class="ic">IG<img src="https://img.magnific.com/premium-vector/instagram-vector-logo-icon-social-media-logotype_901408-392.jpg?semt=ais_hybrid&amp;w=740&amp;q=80" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>
+        <span class="meta"><b>Instagram</b><span>@yihsin725</span></span>
+        <span class="tail">↗</span>
+      </a>
+      <a class="link" href="#" id="discordLink">
+        <span class="ic">DC<img src="https://www.freelogovectors.net/wp-content/uploads/2023/01/discord_logo-freelogovectors.net_.png" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>
+        <span class="meta"><b>Discord</b><span>yihsin725</span></span>
+        <span class="tail" id="discordTail">複製</span>
+      </a>
+      <a class="link" href="mailto:s1152041@mail.ncyu.edu.tw">
+        <span class="ic">@<img src="https://static.vecteezy.com/system/resources/previews/022/613/021/non_2x/google-mail-gmail-icon-logo-symbol-free-png.png" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>
+        <span class="meta"><b>Email</b><span>s1152041@mail.ncyu.edu.tw</span></span>
+        <span class="tail">✉</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="fd-card reveal" id="edu">
+    <div class="sec-head">
+      <div><p class="eyebrow">Timeline</p><h2>學經歷</h2></div>
+    </div>
+    <ul class="timeline">
+      <li>
+        <div class="t">數位實驗高中 第二屆</div>
+        <div class="s">高中母校</div>
+      </li>
+      <li class="now">
+        <div class="t">大學專案開發中</div>
+        <div class="s">校系待補</div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="fd-card reveal" id="projects">
+    <div class="sec-head">
+      <div><p class="eyebrow">Projects</p><h2>專案作品</h2></div>
+    </div>
+
+    <div class="group">
+      <div class="group-head"><span class="fd-badge">大學專案</span><small>2 個</small></div>
+      <div class="tiles">
+        <a class="fd-tile" href="/sf">有效數字練習<small>/sf</small></a>
+        <a class="fd-tile" href="/calculus">微積分知識地圖<small>/calculus</small></a>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-head"><span class="fd-badge fd-neutral">高中專案</span><small>7 個</small></div>
+      <div class="tiles">
+        <a class="fd-tile" href="/yihsin">弱智猜數字神器<small>/yihsin</small></a>
+        <a class="fd-tile" href="/ptcg">寶可夢卡牌通靈<small>/ptcg</small></a>
+        <a class="fd-tile" href="/egc">每日精力計算器<small>/egc</small></a>
+        <a class="fd-tile" href="/learningcard">學習卡輔助神器<small>/learningcard</small></a>
+        <a class="fd-tile" href="/ai-card">AI學習卡<small>/ai-card</small></a>
+        <a class="fd-tile" href="/eng">U8急救<small>/eng</small></a>
+        <a class="fd-tile" href="/enyu">ENYU<small>/enyu</small></a>
       </div>
     </div>
   </section>
 
-  <section class="section" data-animate>
-    <div class="glass">
-      <h2 class="sec-title">學經歷</h2>
-      <ul class="timeline">
-        <li>
-          <div class="tt">數位實驗高中 第二屆</div>
-          <div class="ts">高中母校</div>
-        </li>
-        <li class="current">
-          <div class="tt">大學專案開發中</div>
-          <div class="ts">校系待補</div>
-        </li>
-      </ul>
+  <section class="fd-card reveal" id="blog">
+    <div class="sec-head">
+      <div><p class="eyebrow">Blog</p><h2>部落格</h2></div>
+      <a class="fd-btn fd-link" href="/blog/">全部文章 →</a>
     </div>
+    <div class="posts" id="posts"></div>
   </section>
 
-  <section class="section" data-animate>
-    <div class="glass">
-      <h2 class="sec-title">專案作品</h2>
-
-      <div class="proj-group hs">
-        <div class="proj-label"><span class="pill">高中專案</span></div>
-        <div class="proj-grid">
-          <a class="proj-card" href="/yihsin"><span class="pt">弱智猜數字神器</span><span class="pp">/yihsin</span></a>
-          <a class="proj-card" href="/ptcg"><span class="pt">寶可夢卡牌通靈</span><span class="pp">/ptcg</span></a>
-          <a class="proj-card" href="/egc"><span class="pt">每日精力計算器</span><span class="pp">/egc</span></a>
-          <a class="proj-card" href="/learningcard"><span class="pt">學習卡輔助神器</span><span class="pp">/learningcard</span></a>
-          <a class="proj-card" href="/ai-card"><span class="pt">AI學習卡</span><span class="pp">/ai-card</span></a>
-          <a class="proj-card" href="/eng"><span class="pt">U8急救</span><span class="pp">/eng</span></a>
-          <a class="proj-card" href="/enyu"><span class="pt">ENYU</span><span class="pp">/enyu</span></a>
-        </div>
-      </div>
-
-      <div class="proj-group uni">
-        <div class="proj-label"><span class="pill">大學專案</span></div>
-        <div class="proj-grid">
-          <a class="proj-card" href="/sf"><span class="pt">有效數字練習</span><span class="pp">/sf</span></a>
-          <a class="proj-card" href="/calculus"><span class="pt">微積分知識地圖</span><span class="pp">/calculus</span></a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <p class="foot">用 <span class="heart">♥</span> 跟一堆霓虹燈打造 · firedragontw.github.io</p>
+  <footer class="foot">
+    <a href="https://github.com/firedragontw/firedragontw.github.io" target="_blank" rel="noopener">firedragontw.github.io</a> · 用 FireDragon UI 打造
+  </footer>
 
 </div>
 
 <script>
-(function(){
+(function () {
   'use strict';
+  var root = document.documentElement;
 
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* 進場動畫：滾動到哪就亮哪 */
-  var sections = document.querySelectorAll('[data-animate]');
-  if('IntersectionObserver' in window && !reduceMotion){
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          entry.target.classList.add('in');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-    sections.forEach(function(s){ io.observe(s); });
-  } else {
-    sections.forEach(function(s){ s.classList.add('in'); });
+  /* 主題：跟 firedragon-ui 的三態一致，記在 localStorage */
+  var themeBtns = document.querySelectorAll('[data-set-theme]');
+  function applyTheme(t) {
+    if (t === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', t);
+    themeBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-theme') === t)); });
+    try { localStorage.setItem('fd-theme', t); } catch (e) {}
   }
+  var saved = 'system';
+  try { saved = localStorage.getItem('fd-theme') || 'system'; } catch (e) {}
+  if (saved !== 'system') applyTheme(saved);
+  themeBtns.forEach(function (b) { b.addEventListener('click', function () { applyTheme(b.getAttribute('data-set-theme')); }); });
 
-  /* Discord 帳號點擊複製 */
-  var discordLink = document.getElementById('discordLink');
-  discordLink.addEventListener('click', function(e){
+  /* 部落格文章清單：之後在 blog/posts.json 加文章就會出現在這裡 */
+  var host = document.getElementById('posts');
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function renderEmpty() {
+    host.innerHTML =
+      '<div class="empty">' +
+        '<b>還沒有文章</b>' +
+        '<span>第一篇正在醞釀中，之後會放在這裡。</span>' +
+        '<span class="fd-dots"><i class="fd-active"></i><i></i><i></i></span>' +
+      '</div>';
+  }
+  function renderPosts(posts) {
+    host.innerHTML = posts.slice(0, 3).map(function (p) {
+      return '<a class="post" href="' + esc(p.url) + '">' +
+        '<b>' + esc(p.title) + '</b>' +
+        '<div class="d">' + esc(p.date || '') + '</div>' +
+        (p.summary ? '<p>' + esc(p.summary) + '</p>' : '') +
+      '</a>';
+    }).join('');
+  }
+  fetch('/blog/posts.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (posts) { if (Array.isArray(posts) && posts.length) renderPosts(posts); else renderEmpty(); })
+    .catch(renderEmpty);
+
+  /* Discord 點一下複製 */
+  var dc = document.getElementById('discordLink'), tail = document.getElementById('discordTail');
+  dc.addEventListener('click', function (e) {
     e.preventDefault();
-    var handle = 'yihsin725';
-    var hint = discordLink.querySelector('.copy-hint');
-    function done(ok){
-      if(!hint) return;
-      hint.textContent = ok ? '已複製！' : '複製失敗';
-      hint.style.opacity = '1';
-      setTimeout(function(){ hint.textContent = '點擊複製'; }, 1500);
-    }
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(handle).then(function(){ done(true); }, function(){ done(false); });
-    } else {
-      done(false);
-    }
+    function done(ok) { tail.textContent = ok ? '已複製' : 'yihsin725'; setTimeout(function () { tail.textContent = '複製'; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText('yihsin725').then(function () { done(true); }, function () { done(false); });
+    } else done(false);
   });
+
+  /* 進場 */
+  var cards = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.12 });
+    cards.forEach(function (c) { io.observe(c); });
+  } else {
+    cards.forEach(function (c) { c.classList.add('in'); });
+  }
 })();
 </script>
 </body>

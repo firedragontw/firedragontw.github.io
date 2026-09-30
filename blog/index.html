@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>部落格 · firedragontw</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700&display=swap">
+<link rel="stylesheet" href="/firedragon-ui.css">
+<style>
+  body { margin: 0; min-height: 100vh; }
+  .page { max-width: 640px; margin: 0 auto; padding: var(--space-6) var(--space-4) var(--space-16); display: flex; flex-direction: column; gap: var(--space-5); }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding-bottom: var(--space-4); border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .brand svg { width: 30px; height: 30px; flex: none; }
+  .brand b { font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; letter-spacing: .02em; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); font-weight: 600; margin: 0 0 4px; }
+  .hero h1 { font-size: var(--text-2xl); }
+  .hero p { color: var(--ink-2); margin-top: 8px; font-size: 15px; }
+  .posts { display: flex; flex-direction: column; gap: 10px; }
+  .post { display: block; padding: 16px 18px; border-radius: var(--radius-lg); background: var(--surface-2); color: var(--ink); text-decoration: none; transition: background var(--dur-2) var(--ease), transform var(--dur-3) var(--ease-spring); }
+  .post:hover { background: var(--primary-soft); transform: translateY(-2px); }
+  .post b { display: block; font-size: 16px; }
+  .post .d { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+  .post p { font-size: 14px; color: var(--ink-2); margin-top: 6px; }
+  .empty { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; padding: var(--space-10) var(--space-4); border: 2px dashed var(--line-strong); border-radius: var(--radius-lg); color: var(--ink-2); font-size: 14px; }
+  .empty b { font-family: var(--font-display); font-size: 20px; color: var(--ink); }
+</style>
+</head>
+<body class="fd-base">
+<div class="page">
+  <header class="top">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="var(--primary)" d="M12 1.5c.6 4.2 5.5 6.4 5.5 11.5a5.5 5.5 0 0 1-11 0c0-2.1 1-3.4 2.1-4.6-.1 2.2.9 3.6 2.2 3.6 1.2-3.4-1.3-6.6 1.2-10.5z"/><path fill="var(--glow)" opacity=".85" d="M12 11c.4 2 2.6 3 2.6 5.4a2.6 2.6 0 0 1-5.2 0c0-1 .5-1.7 1-2.2 0 1 .4 1.7 1 1.7.6-1.6-.6-3.1.6-4.9z"/></svg>
+      <b>firedragontw.github.io</b>
+    </a>
+    <a class="fd-btn fd-link" href="/">← 回首頁</a>
+  </header>
+
+  <section class="fd-card hero">
+    <p class="eyebrow">Blog</p>
+    <h1>部落格</h1>
+    <p>文章清單來自 <code>blog/posts.json</code>，每篇文章一個物件：<code>{ "title", "date", "url", "summary" }</code>。</p>
+  </section>
+
+  <section class="fd-card">
+    <div class="posts" id="posts"></div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  try { var t = localStorage.getItem('fd-theme'); if (t && t !== 'system') root.setAttribute('data-theme', t); } catch (e) {}
+
+  var host = document.getElementById('posts');
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function renderEmpty() {
+    host.innerHTML = '<div class="empty"><b>還沒有文章</b><span>第一篇正在醞釀中。</span></div>';
+  }
+  fetch('/blog/posts.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (posts) {
+      if (!Array.isArray(posts) || !posts.length) return renderEmpty();
+      host.innerHTML = posts.map(function (p) {
+        return '<a class="post" href="' + esc(p.url) + '"><b>' + esc(p.title) + '</b><div class="d">' + esc(p.date || '') + '</div>' + (p.summary ? '<p>' + esc(p.summary) + '</p>' : '') + '</a>';
+      }).join('');
+    })
+    .catch(renderEmpty);
+})();
+</script>
+</body>
+</html>
