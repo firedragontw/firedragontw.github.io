@@ -57,38 +57,6 @@ body{
   padding:56px 20px 80px;
 }
 
-/* ───────── profile header ───────── */
-.profile{ text-align:center; margin-bottom:40px; }
-.avatar-ring{
-  position:relative; width:132px; height:132px; margin:0 auto 22px;
-  border-radius:50%;
-  padding:4px;
-  background:conic-gradient(from 0deg, var(--neon-pink), var(--neon-cyan), var(--neon-purple), var(--neon-yellow), var(--neon-pink));
-  animation:spin 6s linear infinite;
-}
-@media (prefers-reduced-motion:reduce){ .avatar-ring{animation:none;} }
-@keyframes spin{ to{ transform:rotate(360deg); } }
-.avatar-ring img{
-  display:block; width:100%; height:100%; border-radius:50%;
-  object-fit:cover; background:var(--bg-2);
-  border:3px solid var(--bg-1);
-}
-.name{
-  font-family:var(--font-disp);
-  font-size:38px; font-weight:700; margin:0 0 8px;
-  letter-spacing:.02em;
-  background:linear-gradient(90deg, var(--neon-pink), var(--neon-cyan), var(--neon-purple), var(--neon-pink));
-  background-size:300% auto;
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  animation:hue 6s linear infinite;
-}
-@keyframes hue{ to{ background-position:300% center; } }
-.tagline{
-  font-size:15px; color:var(--ink-dim); min-height:1.6em; margin:0;
-}
-.tagline .cursor{ display:inline-block; width:2px; background:var(--neon-cyan); margin-left:2px; animation:blink 1s step-end infinite; }
-@keyframes blink{ 50%{ opacity:0; } }
-
 /* ───────── glass section ───────── */
 .section{
   opacity:0; transform:translateY(18px);
@@ -133,9 +101,14 @@ body{
   background:rgba(255,255,255,0.07);
 }
 .social-link .ic{
-  width:34px; height:34px; flex:none; border-radius:9px;
-  display:grid; place-items:center; font-size:16px;
+  position:relative; width:38px; height:38px; flex:none; border-radius:10px; overflow:hidden;
+  display:grid; place-items:center; font-size:15px;
   color:#0a0118; font-weight:900;
+}
+/* 圖片載入失敗時會被移除，露出底下的文字備援 */
+.social-link .ic img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:contain; padding:4px; background:#fff;
 }
 .social-link.ig:hover{ border-color:var(--neon-pink); box-shadow:0 0 22px -6px var(--neon-pink); }
 .social-link.ig .ic{ background:linear-gradient(135deg,var(--neon-yellow),var(--neon-pink),var(--neon-purple)); }
@@ -202,11 +175,9 @@ body{
 .foot .heart{ color:var(--neon-pink); }
 
 @media (max-width:480px){
-  .name{ font-size:30px; }
   .glass{ padding:18px 16px 16px; }
 }
 @media (prefers-reduced-motion:reduce){
-  .name{ animation:none; }
   .section{ transition:none; }
 }
 </style>
@@ -219,29 +190,21 @@ body{
 
 <div class="wrap">
 
-  <header class="profile">
-    <div class="avatar-ring">
-      <img src="images/fire.png" alt="以心 的頭像">
-    </div>
-    <h1 class="name">以心</h1>
-    <p class="tagline" id="tagline"><span id="taglineText"></span><span class="cursor" id="cursor"></span></p>
-  </header>
-
   <section class="section" data-animate>
     <div class="glass">
       <h2 class="sec-title">社群連結</h2>
       <div class="social-grid">
         <a class="social-link ig" href="https://instagram.com/yihsin725" target="_blank" rel="noopener">
-          <span class="ic">IG</span>
+          <span class="ic">IG<img src="https://img.magnific.com/premium-vector/instagram-vector-logo-icon-social-media-logotype_901408-392.jpg?semt=ais_hybrid&amp;w=740&amp;q=80" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>
           <span class="meta"><b>Instagram</b><span>@yihsin725</span></span>
         </a>
         <a class="social-link discord" href="#" id="discordLink">
-          <span class="ic">DC</span>
+          <span class="ic">DC<img src="https://www.freelogovectors.net/wp-content/uploads/2023/01/discord_logo-freelogovectors.net_.png" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>
           <span class="meta"><b>Discord</b><span>yihsin725</span></span>
           <span class="copy-hint">點擊複製</span>
         </a>
         <a class="social-link mail" href="mailto:s1152041@mail.ncyu.edu.tw">
-          <span class="ic">@</span>
+          <span class="ic">@<img src="https://static.vecteezy.com/system/resources/previews/022/613/021/non_2x/google-mail-gmail-icon-logo-symbol-free-png.png" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>
           <span class="meta"><b>Email</b><span>s1152041@mail.ncyu.edu.tw</span></span>
         </a>
       </div>
@@ -300,40 +263,7 @@ body{
 (function(){
   'use strict';
 
-  /* 打字機自我介紹 */
-  var lines = ['嗨，我是以心 👋', '數位實驗高中 第二屆', '現在在做大學專案', '歡迎逛逛我的作品 ✨'];
-  var el = document.getElementById('taglineText');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if(reduceMotion){
-    el.textContent = lines[0];
-  } else {
-    var li = 0, ci = 0, deleting = false;
-    function tick(){
-      var full = lines[li];
-      if(!deleting){
-        ci++;
-        el.textContent = full.slice(0, ci);
-        if(ci === full.length){
-          deleting = true;
-          setTimeout(tick, 1400);
-          return;
-        }
-        setTimeout(tick, 55);
-      } else {
-        ci--;
-        el.textContent = full.slice(0, ci);
-        if(ci === 0){
-          deleting = false;
-          li = (li + 1) % lines.length;
-          setTimeout(tick, 300);
-          return;
-        }
-        setTimeout(tick, 28);
-      }
-    }
-    tick();
-  }
 
   /* 進場動畫：滾動到哪就亮哪 */
   var sections = document.querySelectorAll('[data-animate]');
