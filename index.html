@@ -40,7 +40,7 @@
   }
   .link:hover { background: linear-gradient(90deg, var(--primary), var(--glow)); color: #fff; transform: translateY(-3px); box-shadow: var(--shadow-glow); }
   .link .ic { width: 40px; height: 40px; flex: none; display: grid; place-items: center; }
-  .link .ic svg { width: 36px; height: 36px; display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,.18)); }
+  .link .ic img { width: 36px; height: 36px; display: block; object-fit: contain; }
   .link .meta { min-width: 0; flex: 1; }
   .link .meta b { display: block; font-size: 15px; }
   .link .meta span { display: block; font-size: 12.5px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color var(--dur-3) var(--ease); }
@@ -120,17 +120,17 @@
     </div>
     <div class="links">
       <a class="link" href="https://instagram.com/yihsin725" target="_blank" rel="noopener">
-        <span class="ic"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="igg" cx="30%" cy="107%" r="140%"><stop offset="0" stop-color="#fdf497"/><stop offset=".05" stop-color="#fdf497"/><stop offset=".45" stop-color="#fd5949"/><stop offset=".6" stop-color="#d6249f"/><stop offset=".9" stop-color="#285AEB"/></radialGradient></defs><rect x="3" y="3" width="42" height="42" rx="12" fill="url(#igg)"/><rect x="12.5" y="12.5" width="23" height="23" rx="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="24" cy="24" r="5.6" fill="none" stroke="#fff" stroke-width="3"/><circle cx="31" cy="17" r="1.8" fill="#fff"/></svg></span>
+        <span class="ic"><img src="/images/icons/instagram.svg" alt="" width="36" height="36"></span>
         <span class="meta"><b>Instagram</b><span>@yihsin725</span></span>
         <span class="tail">↗</span>
       </a>
       <a class="link" href="#" id="discordLink">
-        <span class="ic"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="3" width="42" height="42" rx="12" fill="#5865F2"/><path fill="#fff" d="M16 14.5C18.5 13.3 20.5 12.8 20.5 12.8L21.2 14.2C23 13.9 25 13.9 26.8 14.2L27.5 12.8C27.5 12.8 29.5 13.3 32 14.5C35 19 36 24 35.6 29.5C33.8 30.8 31.8 31.8 29.8 32.4L28.4 30.2C29.2 29.9 30 29.5 30.7 29C26.4 31 21.6 31 17.3 29C18 29.5 18.8 29.9 19.6 30.2L18.2 32.4C16.2 31.8 14.2 30.8 12.4 29.5C12 24 13 19 16 14.5Z"/><ellipse cx="20" cy="23.2" rx="2.3" ry="2.7" fill="#5865F2"/><ellipse cx="28" cy="23.2" rx="2.3" ry="2.7" fill="#5865F2"/></svg></span>
+        <span class="ic"><img src="/images/icons/discord.svg" alt="" width="36" height="36"></span>
         <span class="meta"><b>Discord</b><span>yihsin725</span></span>
         <span class="tail" id="discordTail">複製</span>
       </a>
       <a class="link" href="mailto:s1152041@mail.ncyu.edu.tw">
-        <span class="ic"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M6 40h8.500V19.500L6 13z"/><path fill="#34A853" d="M33.500 40H42V13l-8.500 6.500z"/><path fill="#FBBC04" d="M33.500 8v11.500L42 13v-3.500c0-3.100-3.500-4.900-6-3z"/><path fill="#EA4335" d="M14.500 19.500V8L24 15.200 33.500 8v11.500L24 26.700z"/><path fill="#C5221F" d="M6 9.500V13l8.500 6.500V8L12 6.500C9.500 4.600 6 6.400 6 9.500z"/></svg></span>
+        <span class="ic"><img src="/images/icons/gmail.svg" alt="" width="36" height="36"></span>
         <span class="meta"><b>Email</b><span>s1152041@mail.ncyu.edu.tw</span></span>
         <span class="tail">✉</span>
       </a>
