@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>離子化合物命名練習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --bg:#F6F4FB; --dot:#E4E0F2; --surface:#FFFFFF; --ink:#26214A; --muted:#6E6A8A; --line:#E6E2F3;
+    --accent:#6C5CE7; --accent-soft:#ECE8FF;
+    --ok:#22A47A; --ok-soft:#DFF5EC; --ok-ink:#155F47;
+    --bad:#E4574F; --bad-soft:#FDE4E2; --bad-ink:#8E2A25;
+    --root:#0B8FC7;
+    --readout-bg:#2A2450; --readout-ink:#F3EFFF; --readout-dim:#9C93D6;
+    --input-bg:#FBFAFF; --track:#E9E5F5; --kbd:#F1EEFA;
+    --radius-lg:22px; --radius:14px; --radius-sm:10px;
+    --font-ui:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    --font-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+    --ease:cubic-bezier(.2,.8,.2,1);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14121F; --dot:#221F33; --surface:#1D1A2B; --ink:#EEEBFA; --muted:#A7A2C4; --line:#312C47;
+      --accent:#8F80F5; --accent-soft:#2A2550;
+      --ok:#3BC795; --ok-soft:#173A2E; --ok-ink:#9BE8C8;
+      --bad:#F07870; --bad-soft:#40201F; --bad-ink:#F6B3AE;
+      --root:#4CC2F2;
+      --readout-bg:#0F0D1A; --input-bg:#16142A; --track:#2A2640; --kbd:#2A2640;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14121F; --dot:#221F33; --surface:#1D1A2B; --ink:#EEEBFA; --muted:#A7A2C4; --line:#312C47;
+    --accent:#8F80F5; --accent-soft:#2A2550;
+    --ok:#3BC795; --ok-soft:#173A2E; --ok-ink:#9BE8C8;
+    --bad:#F07870; --bad-soft:#40201F; --bad-ink:#F6B3AE;
+    --root:#4CC2F2;
+    --readout-bg:#0F0D1A; --input-bg:#16142A; --track:#2A2640; --kbd:#2A2640;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{
+    min-height:100%;
+    background-color:var(--bg);
+    background-image:radial-gradient(var(--dot) 1.3px, transparent 1.3px);
+    background-size:22px 22px;
+    color:var(--ink); font-family:var(--font-ui);
+    -webkit-font-smoothing:antialiased;
+    padding:28px 16px 48px;
+  }
+  .app{max-width:660px;margin:0 auto;}
+
+  .top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;}
+  .top h1{margin:0;font-size:26px;font-weight:900;line-height:1.1;}
+  .top h1 small{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:6px;}
+  .streak{
+    display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
+    border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;color:var(--muted);white-space:nowrap;
+  }
+  .streak .n{font-family:var(--font-mono);font-size:18px;color:var(--ink);min-width:1.2em;text-align:center;display:inline-block;}
+  .streak .n.bump{animation:bump .35s var(--ease);}
+  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+
+  .progress{height:8px;border-radius:999px;background:var(--track);overflow:hidden;margin-bottom:18px;}
+  .progress > i{display:block;height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#A78BFA);transition:width .6s var(--ease);}
+  .progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:-12px 2px 16px;}
+
+  .group-label{font-size:12px;font-weight:800;color:var(--muted);margin:0 0 6px 2px;letter-spacing:.04em;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .chip{
+    appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);
+    border-radius:999px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;
+    transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .15s var(--ease);
+  }
+  .chip:active{transform:scale(.97);}
+  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .chip:focus-visible,.btn:focus-visible,.input:focus-visible,.link:focus-visible,summary:focus-visible{outline:3px solid #C7BEFF;outline-offset:2px;}
+  .switch{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin:2px 2px 16px;cursor:pointer;user-select:none;}
+  .switch input{accent-color:var(--accent);width:16px;height:16px;}
+
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);
+    padding:22px 22px 20px;box-shadow:0 10px 30px -18px rgba(38,33,74,.25);
+    transition:box-shadow .35s var(--ease);
+  }
+  .card.is-ok{box-shadow:0 0 0 4px rgba(34,164,122,.18),0 10px 30px -18px rgba(38,33,74,.25);}
+  .card.is-bad{box-shadow:0 0 0 4px rgba(228,87,79,.16),0 10px 30px -18px rgba(38,33,74,.25);}
+  .card.shake{animation:shake .38s var(--ease);}
+  @keyframes shake{10%{transform:translateX(-6px)}30%{transform:translateX(5px)}50%{transform:translateX(-4px)}70%{transform:translateX(3px)}90%{transform:translateX(-1px)}}
+
+  .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px;}
+  .badges{display:flex;gap:6px;flex-wrap:wrap;}
+  .badge{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:800;}
+  .badge.t2{background:#FDEBD3;color:#A65F0B;}
+  .badge.old{background:#F9E1EB;color:#A8325F;}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .badge.t2{background:#3F2D12;color:#F1B25C;}
+    :root:not([data-theme="light"]) .badge.old{background:#43222D;color:#F08CAB;}
+  }
+  :root[data-theme="dark"] .badge.t2{background:#3F2D12;color:#F1B25C;}
+  :root[data-theme="dark"] .badge.old{background:#43222D;color:#F08CAB;}
+  .qcount{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;}
+
+  .readout{
+    background:var(--readout-bg);color:var(--readout-ink);border-radius:var(--radius);
+    padding:22px 20px 20px;font-family:var(--font-mono);font-weight:600;
+    font-size:clamp(22px,5.4vw,34px);line-height:1.3;letter-spacing:.02em;
+    box-shadow:inset 0 2px 10px rgba(0,0,0,.35);overflow-wrap:anywhere;position:relative;min-height:88px;
+  }
+  .readout.word{font-family:var(--font-ui);font-weight:700;letter-spacing:.01em;}
+  .readout sup{font-size:.55em;vertical-align:.7em;margin-left:1px;}
+  .readout sub{font-size:.6em;vertical-align:-.25em;}
+  .readout .dim{color:var(--readout-dim);font-weight:500;margin:0 .25em;}
+  .readout .ch{display:inline-block;}
+  .readout .ch.in{animation:roll .42s var(--ease) both;}
+  @keyframes roll{from{opacity:0;transform:translateY(.55em)}to{opacity:1;transform:translateY(0)}}
+  .readout::after{content:"";position:absolute;left:14px;right:14px;bottom:10px;height:2px;border-radius:2px;background:var(--ok);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease);}
+  .readout.ok::after{transform:scaleX(1);}
+  .readout.bad::after{background:var(--bad);transform:scaleX(1);}
+
+  .prompt{margin:14px 2px 12px;font-size:16px;font-weight:700;line-height:1.5;}
+  .prompt .sub{display:block;font-size:12.5px;font-weight:500;color:var(--muted);margin-top:4px;}
+
+  .row{display:flex;gap:10px;}
+  .input{
+    flex:1;min-width:0;border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;
+    font:inherit;font-family:var(--font-mono);font-size:17px;color:var(--ink);background:var(--input-bg);
+    transition:border-color .2s var(--ease),box-shadow .2s var(--ease);
+  }
+  .input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(108,92,231,.12);outline:none;}
+  .input:disabled{opacity:.7;}
+  .btn{
+    appearance:none;border:none;border-radius:var(--radius-sm);padding:12px 20px;font:inherit;font-size:15px;font-weight:800;
+    cursor:pointer;background:var(--accent);color:#fff;transition:transform .12s var(--ease),filter .2s var(--ease),opacity .2s;white-space:nowrap;
+  }
+  .btn:hover{filter:brightness(1.06);}
+  .btn:active{transform:scale(.97);}
+  .btn:disabled{opacity:.45;cursor:not-allowed;filter:none;transform:none;}
+  .btn.ghost{background:var(--accent-soft);color:var(--accent);}
+
+  .fb-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease);}
+  .fb-wrap.open{grid-template-rows:1fr;}
+  .fb-wrap > div{overflow:hidden;}
+  .fb{margin-top:14px;border-radius:var(--radius);padding:14px 16px 16px;opacity:0;transform:translateY(6px);
+    transition:opacity .35s var(--ease) .1s,transform .35s var(--ease) .1s;font-size:14.5px;line-height:1.75;}
+  .fb-wrap.open .fb{opacity:1;transform:none;}
+  .fb.ok{background:var(--ok-soft);color:var(--ok-ink);}
+  .fb.bad{background:var(--bad-soft);color:var(--bad-ink);}
+  .fb-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:900;margin-bottom:6px;flex-wrap:wrap;}
+  .mark{width:26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;flex:none;background:var(--ok);}
+  .fb.bad .mark{background:var(--bad);}
+  .mark svg{width:16px;height:16px;}
+  .mark svg path{stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:30;stroke-dashoffset:30;}
+  .fb-wrap.open .mark svg path{animation:draw .45s var(--ease) .25s forwards;}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .ans{font-family:var(--font-mono);font-weight:600;background:rgba(255,255,255,.65);padding:1px 8px;border-radius:6px;color:inherit;}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ans{background:rgba(255,255,255,.08);} }
+  :root[data-theme="dark"] .ans{background:rgba(255,255,255,.08);}
+  .ans sub{font-size:.75em;}
+  .body{font-weight:500;}
+  .body b{font-weight:800;}
+  .rt{color:var(--root);font-weight:800;}
+  .diff{margin:8px 0 10px;font-family:var(--font-mono);font-size:15px;line-height:1.9;}
+  .diff .lab{font-family:var(--font-ui);font-size:12px;font-weight:700;opacity:.8;display:inline-block;width:5.5em;}
+  .diff .x{background:var(--bad);color:#fff;border-radius:3px;padding:0 1px;}
+  .diff .m{background:var(--ok);color:#fff;border-radius:3px;padding:0 1px;}
+
+  .actions{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:12px;}
+  .kbd-hint{font-size:12px;color:var(--muted);}
+  .kbd-hint kbd{font-family:var(--font-mono);font-size:11px;background:var(--kbd);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:var(--ink);}
+
+  .panel{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 20px 14px;}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .panel-head h2{margin:0;font-size:14px;font-weight:800;color:var(--muted);}
+  .link{appearance:none;border:none;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--accent);cursor:pointer;padding:4px 6px;border-radius:6px;}
+  .link:hover{background:var(--accent-soft);}
+  .stat{display:grid;grid-template-columns:110px 1fr 64px;align-items:center;gap:12px;padding:7px 0;font-size:13.5px;}
+  .stat + .stat{border-top:1px dashed var(--line);}
+  .stat .label{font-weight:700;}
+  .stat .bar{height:7px;border-radius:999px;background:var(--track);overflow:hidden;}
+  .stat .bar i{display:block;height:100%;width:0%;background:var(--accent);border-radius:999px;transition:width .5s var(--ease);}
+  .stat .num{font-family:var(--font-mono);font-size:13px;color:var(--muted);text-align:right;}
+  .stat.dim{opacity:.45;}
+
+  details.ref{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:14px 20px;}
+  details.ref summary{cursor:pointer;font-size:14px;font-weight:800;color:var(--muted);list-style:none;display:flex;justify-content:space-between;align-items:center;}
+  details.ref summary::-webkit-details-marker{display:none;}
+  details.ref summary::after{content:"展開";font-size:12.5px;color:var(--accent);}
+  details.ref[open] summary::after{content:"收起";}
+  .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-top:12px;}
+  .ref-block h3{margin:0 0 6px;font-size:13px;font-weight:800;}
+  .ref-wrap{overflow-x:auto;}
+  .ref-block table{width:100%;border-collapse:collapse;font-size:13px;}
+  .ref-block td{padding:4px 6px;border-top:1px solid var(--line);white-space:nowrap;}
+  .ref-block td:first-child{font-family:var(--font-mono);font-weight:600;}
+  .ref-block sup{font-size:.7em;}
+  .ref-block sub{font-size:.7em;}
+  .ref-note{font-size:12px;color:var(--muted);margin:10px 0 0;line-height:1.6;}
+
+  .foot{text-align:center;font-size:12px;color:var(--muted);margin-top:22px;line-height:1.7;}
+
+  @media (max-width:480px){
+    body{padding:18px 12px 40px;}
+    .top h1{font-size:22px;}
+    .card{padding:18px 16px 16px;}
+    .stat{grid-template-columns:96px 1fr 56px;}
+  }
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <h1>離子化合物命名<small>Table 5.1 Type I ＋ Table 5.2 Type II</small></h1>
+    <div class="streak" title="連續答對">連對 <span class="n" id="streak">0</span></div>
+  </header>
+
+  <div class="progress"><i id="progressBar"></i></div>
+  <div class="progress-meta"><span id="progressLeft">還沒開始作答</span><span id="progressRight"></span></div>
+
+  <p class="group-label">題型</p>
+  <div class="chips" id="modeChips">
+    <button class="chip" data-mode="ionspell" aria-pressed="true">離子拼字</button>
+    <button class="chip" data-mode="ion2name" aria-pressed="true">離子組合 → 名稱</button>
+    <button class="chip" data-mode="name2formula" aria-pressed="true">名稱 → 化學式</button>
+  </div>
+
+  <p class="group-label">陽離子範圍</p>
+  <div class="chips" id="scopeChips">
+    <button class="chip" data-scope="t1" aria-pressed="true">Type I 固定電荷</button>
+    <button class="chip" data-scope="t2" aria-pressed="true">Type II 電荷可變</button>
+  </div>
+
+  <label class="switch"><input type="checkbox" id="strictCase" checked> 化學式大小寫要正確（Co 跟 CO 是不同東西）</label>
+
+  <section class="card" id="card">
+    <div class="card-head">
+      <div class="badges" id="badges"></div>
+      <span class="qcount" id="qcount">第 1 題</span>
+    </div>
+    <div class="readout" id="readout" aria-live="polite"></div>
+    <p class="prompt" id="prompt"></p>
+    <div class="row">
+      <input class="input" id="answer" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="輸入答案">
+      <button class="btn" id="submit">送出</button>
+    </div>
+    <div class="fb-wrap" id="fbWrap">
+      <div>
+        <div class="fb" id="fb">
+          <div class="fb-title"><span class="mark" id="mark"></span><span id="fbTitle"></span></div>
+          <div class="diff" id="diff"></div>
+          <div class="body" id="fbBody"></div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="kbd-hint"><kbd>Enter</kbd> 送出，答錯要照正確答案訂正一次</span>
+      <button class="btn ghost" id="next" hidden>下一題</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>各題型正確率</h2>
+      <button class="link" id="reset">重設統計</button>
+    </div>
+    <div id="statList"></div>
+  </section>
+
+  <details class="ref" id="ref">
+    <summary>背誦用對照表</summary>
+    <div class="ref-grid" id="refGrid"></div>
+    <p class="ref-note">陰離子的藍色部分是字根，字根加上 -ide 就是陰離子名稱。舊式名稱電荷高的用 -ic，電荷低的用 -ous。Ag⁺ 跟 Zn²⁺ 雖然是過渡金屬，但只會形成一種離子，所以不用加羅馬數字。</p>
+  </details>
+
+  <p class="foot">名稱題不分大小寫，也不管空格跟括號。<br>化學式直接打數字，例如 Fe2O3。</p>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- 資料 Table 5.1 / 5.2 ---------- */
+  const TYPE1 = [
+    {sym:'H',  c:1, name:'hydrogen',  inCompound:false},
+    {sym:'Li', c:1, name:'lithium',   hydride:true},
+    {sym:'Na', c:1, name:'sodium',    hydride:true},
+    {sym:'K',  c:1, name:'potassium', hydride:true},
+    {sym:'Cs', c:1, name:'cesium',    hydride:true},
+    {sym:'Be', c:2, name:'beryllium'},
+    {sym:'Mg', c:2, name:'magnesium', hydride:true},
+    {sym:'Ca', c:2, name:'calcium',   hydride:true},
+    {sym:'Ba', c:2, name:'barium',    hydride:true},
+    {sym:'Al', c:3, name:'aluminum'},
+    {sym:'Ag', c:1, name:'silver', alt:'silver(I)'},
+    {sym:'Zn', c:2, name:'zinc',   alt:'zinc(II)'}
+  ].map(o => Object.assign({type:1, inCompound:true}, o));
+
+  const ANIONS = [
+    {sym:'H',  c:1, root:'hydr',  name:'hydride'},
+    {sym:'F',  c:1, root:'fluor', name:'fluoride'},
+    {sym:'Cl', c:1, root:'chlor', name:'chloride'},
+    {sym:'Br', c:1, root:'brom',  name:'bromide'},
+    {sym:'I',  c:1, root:'iod',   name:'iodide'},
+    {sym:'O',  c:2, root:'ox',    name:'oxide'},
+    {sym:'S',  c:2, root:'sulf',  name:'sulfide'}
+  ];
+
+  const TYPE2 = [
+    {sym:'Fe',  c:3, el:'iron',    name:'iron(III)',     old:'ferric',     level:'high', latin:'ferrum',  oroot:'ferr'},
+    {sym:'Fe',  c:2, el:'iron',    name:'iron(II)',      old:'ferrous',    level:'low',  latin:'ferrum',  oroot:'ferr'},
+    {sym:'Cu',  c:2, el:'copper',  name:'copper(II)',    old:'cupric',     level:'high', latin:'cuprum',  oroot:'cupr'},
+    {sym:'Cu',  c:1, el:'copper',  name:'copper(I)',     old:'cuprous',    level:'low',  latin:'cuprum',  oroot:'cupr'},
+    {sym:'Co',  c:3, el:'cobalt',  name:'cobalt(III)',   old:'cobaltic',   level:'high', latin:null,      oroot:'cobalt'},
+    {sym:'Co',  c:2, el:'cobalt',  name:'cobalt(II)',    old:'cobaltous',  level:'low',  latin:null,      oroot:'cobalt'},
+    {sym:'Sn',  c:4, el:'tin',     name:'tin(IV)',       old:'stannic',    level:'high', latin:'stannum', oroot:'stann'},
+    {sym:'Sn',  c:2, el:'tin',     name:'tin(II)',       old:'stannous',   level:'low',  latin:'stannum', oroot:'stann'},
+    {sym:'Pb',  c:4, el:'lead',    name:'lead(IV)',      old:'plumbic',    level:'high', latin:'plumbum', oroot:'plumb'},
+    {sym:'Pb',  c:2, el:'lead',    name:'lead(II)',      old:'plumbous',   level:'low',  latin:'plumbum', oroot:'plumb'},
+    {sym:'Hg',  c:2, el:'mercury', name:'mercury(II)',   old:'mercuric',   level:'high', latin:null,      oroot:'mercur'},
+    {sym:'Hg2', c:2, el:'mercury', name:'mercury(I)',    old:'mercurous',  level:'low',  latin:null,      oroot:'mercur', pair:true}
+  ].map(o => Object.assign({type:2}, o));
+
+  const ROMAN = {1:'I',2:'II',3:'III',4:'IV'};
+
+  /* ---------- 工具 ---------- */
+  const rand = arr => arr[Math.floor(Math.random()*arr.length)];
+  const gcd = (a,b) => b ? gcd(b, a%b) : a;
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  function symHTML(sym){ return esc(sym).replace(/(\d+)/g,'<sub>$1</sub>'); }
+  function chargeStr(c, sign){ return (c>1 ? c : '') + (sign>0 ? '+' : '−'); }
+  function ionHTML(sym, c, sign){ return symHTML(sym) + '<sup>' + chargeStr(c, sign) + '</sup>'; }
+  function ionText(sym, c, sign){
+    const supMap = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','+':'⁺','−':'⁻'};
+    const subMap = {'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄'};
+    const s = sym.replace(/\d/g, d => subMap[d]);
+    return s + chargeStr(c, sign).split('').map(ch => supMap[ch] || ch).join('');
+  }
+  function formulaOf(cat, an){
+    const L = cat.c * an.c / gcd(cat.c, an.c);
+    const nc = L / cat.c, na = L / an.c;
+    return { plain: cat.sym + (nc>1?nc:'') + an.sym + (na>1?na:''), nc, na, L };
+  }
+  function formulaHTML(plain){ return esc(plain).replace(/(\d+)/g,'<sub>$1</sub>'); }
+  function rootHTML(an){ return `<span class="rt">${an.root}</span>ide`; }
+
+  /* ---------- 抽題範圍 ---------- */
+  function scopes(){
+    return Array.from(document.querySelectorAll('#scopeChips .chip'))
+      .filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.scope);
+  }
+  // Type II 抽法：鐵佔一半，其他平分另一半
+  function pickType2(){
+    const fe = TYPE2.filter(x => x.sym === 'Fe');
+    const others = TYPE2.filter(x => x.sym !== 'Fe');
+    return Math.random() < 0.5 ? rand(fe) : rand(others);
+  }
+  function pickCation(sc, forCompound){
+    const useT2 = sc.includes('t2') && (!sc.includes('t1') || Math.random() < 0.5);
+    if(useT2) return pickType2();
+    const pool = forCompound ? TYPE1.filter(x => x.inCompound) : TYPE1;
+    return rand(pool);
+  }
+  function pickAnionFor(cat){
+    const pool = ANIONS.filter(a => a.sym !== 'H' || (cat.type === 1 && cat.hydride));
+    return rand(pool);
+  }
+  // 要不要考舊式名稱：鐵比例高，其他偶爾出現
+  function wantOld(cat, boost){
+    if(cat.type !== 2) return false;
+    const p = cat.sym === 'Fe' ? 0.45 : (boost ? 0.22 : 0.12);
+    return Math.random() < p;
+  }
+
+  /* ---------- 說明文字 ---------- */
+  function cationExplain(cat, useOld){
+    const ion = ionText(cat.sym, cat.c, 1);
+    if(cat.type === 1){
+      if(cat.alt) return `${ion} 只會形成一種離子，不用加羅馬數字，直接用元素名稱 <b>${cat.name}</b>（寫成 ${cat.alt} 也不算錯）`;
+      return `${ion} 是 Type I，電荷固定，直接用元素名稱 <b>${cat.name}</b>`;
+    }
+    if(useOld){
+      const sib = TYPE2.find(x => x.el === cat.el && x !== cat);
+      const sibIon = ionText(sib.sym, sib.c, 1);
+      const latin = cat.latin ? `${cat.el} 的拉丁文是 ${cat.latin}，字根取 <span class="rt">${cat.oroot}</span>。` : `字根是 <span class="rt">${cat.oroot}</span>。`;
+      const hi = cat.level === 'high';
+      const pairNote = cat.pair ? 'Hg₂²⁺ 是兩個汞成對，每個汞只有 +1，比 Hg²⁺ 低，' : '';
+      return `舊式命名，${latin}${pairNote}${ion} 跟 ${sibIon} 比起來電荷${hi?'比較高，用 -ic':'比較低，用 -ous'}，所以是 <b>${cat.old}</b>`;
+    }
+    const pairNote = cat.pair ? '，Hg₂²⁺ 是兩個汞成對，每個汞 +1，所以是 (I)' : '';
+    return `${ion} 是 Type II，電荷可變，要在元素名稱後面用羅馬數字標出電荷 <b>${cat.name}</b>${pairNote}`;
+  }
+
+  /* ---------- 題目產生 ---------- */
+  function genIonSpell(sc){
+    if(Math.random() < 0.35){
+      const an = rand(ANIONS);
+      return {
+        mode:'ionspell', kind:'name', badges:[['陰離子','']],
+        readout: ionHTML(an.sym, an.c, -1), word:false,
+        prompt:'寫出這個陰離子的英文名稱', sub:'',
+        answers:[an.name], display: an.name,
+        explanation:`陰離子名稱是字根加上 -ide，${an.sym} 的字根是 <span class="rt">${an.root}</span>，所以是 ${rootHTML(an)}。`
+      };
+    }
+    const cat = pickCation(sc, false);
+    if(cat.type === 1){
+      return {
+        mode:'ionspell', kind:'name', badges:[['Type I','']],
+        readout: ionHTML(cat.sym, cat.c, 1), word:false,
+        prompt:'寫出這個陽離子的英文名稱', sub:'',
+        answers: cat.alt ? [cat.name, cat.alt] : [cat.name], display: cat.name,
+        explanation: cationExplain(cat, false) + '。'
+      };
+    }
+    const old = wantOld(cat, true);
+    return {
+      mode:'ionspell', kind:'name', badges: old ? [['Type II','t2'],['舊式名稱','old']] : [['Type II','t2']],
+      readout: ionHTML(cat.sym, cat.c, 1), word:false,
+      prompt: old ? '用舊式名稱寫出（-ous / -ic）' : '用羅馬數字系統寫出名稱',
+      sub: old ? '' : '例如 iron(III)，括號可以省略',
+      answers:[old ? cat.old : cat.name], display: old ? cat.old : cat.name,
+      explanation: cationExplain(cat, old) + '。'
+    };
+  }
+
+  function compoundName(cat, an, old){
+    return (old ? cat.old : cat.name) + ' ' + an.name;
+  }
+  function compoundAnswers(cat, an, old){
+    const list = [compoundName(cat, an, old)];
+    if(cat.alt) list.push(cat.alt + ' ' + an.name);
+    return list;
+  }
+  function typeBadges(cat, old){
+    const b = [[cat.type === 1 ? 'Type I' : 'Type II', cat.type === 1 ? '' : 't2']];
+    if(old) b.push(['舊式名稱','old']);
+    return b;
+  }
+
+  function genIon2Name(sc){
+    const cat = pickCation(sc, true), an = pickAnionFor(cat), old = wantOld(cat, false);
+    const name = compoundName(cat, an, old);
+    return {
+      mode:'ion2name', kind:'name', badges: typeBadges(cat, old),
+      readout: ionHTML(cat.sym, cat.c, 1) + '<span class="dim">+</span>' + ionHTML(an.sym, an.c, -1), word:false,
+      prompt: old ? '用舊式名稱寫出化合物名稱' : '寫出化合物的英文名稱', sub:'陽離子在前，陰離子在後',
+      answers: compoundAnswers(cat, an, old), display: name,
+      explanation: `陽離子先寫，${cationExplain(cat, old)}。陰離子後寫，${an.sym} 字根 <span class="rt">${an.root}</span> 加 -ide 變成 ${rootHTML(an)}。合起來就是 <b>${name}</b>。`
+    };
+  }
+
+  function genName2Formula(sc){
+    const cat = pickCation(sc, true), an = pickAnionFor(cat), old = wantOld(cat, false);
+    const name = compoundName(cat, an, old);
+    const f = formulaOf(cat, an);
+    const catIon = ionText(cat.sym, cat.c, 1), anIon = ionText(an.sym, an.c, -1);
+    let chargeSrc;
+    if(cat.type === 1) chargeSrc = `${cat.name} 是 Type I，電荷固定是 ${catIon}`;
+    else if(old) chargeSrc = `${cat.old} 是舊式名稱，-${cat.level === 'high' ? 'ic 代表電荷高的那個' : 'ous 代表電荷低的那個'}，也就是 ${catIon}`;
+    else chargeSrc = `${cat.name} 的羅馬數字 ${ROMAN[cat.pair ? 1 : cat.c]} 代表電荷，所以是 ${catIon}`;
+    let balance;
+    if(cat.c === an.c) balance = `兩邊電荷一樣大，1 比 1 就抵銷了`;
+    else balance = `正負電荷要抵銷，${cat.c} 跟 ${an.c} 的最小公倍數是 ${f.L}，所以需要 ${f.nc} 個陽離子、${f.na} 個陰離子`;
+    const pairNote = cat.pair ? '。Hg₂ 是一整組，寫化學式時要保留下標 2' : '';
+    const romanNote = (cat.type === 2 && !old && ROMAN[cat.c] && f.na !== cat.c && !cat.pair)
+      ? `。注意羅馬數字是電荷不是個數，這題下標跟羅馬數字不一樣` : '';
+    return {
+      mode:'name2formula', kind:'formula', badges: typeBadges(cat, old),
+      readout: esc(name), word:true,
+      prompt:'寫出化學式', sub:'數字直接打，例如 Fe2O3',
+      answers:[f.plain], display: f.plain,
+      explanation: `${chargeSrc}，${an.name} 是 ${anIon}。${balance}，得到 <b>${f.plain}</b>${pairNote}${romanNote}。`
+    };
+  }
+
+  const generators = { ionspell: genIonSpell, ion2name: genIon2Name, name2formula: genName2Formula };
+  const modeNames = { ionspell:'離子拼字', ion2name:'離子 → 名稱', name2formula:'名稱 → 化學式' };
+  const modeOrder = ['ionspell','ion2name','name2formula'];
+
+  /* ---------- 比對 ---------- */
+  const normName = s => s.toLowerCase().replace(/[\s()\-（）]/g,'').replace(/ion$/,'');
+  function normFormula(s, strict){
+    const subs = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
+    let t = s.replace(/[₀-₉]/g, d => subs[d]).replace(/\s/g,'');
+    return strict ? t : t.toLowerCase();
+  }
+  function isMatch(raw){
+    if(current.kind === 'formula'){
+      const strict = document.getElementById('strictCase').checked;
+      return current.answers.some(a => normFormula(raw, strict) === normFormula(a, strict));
+    }
+    return current.answers.some(a => normName(raw) === normName(a));
+  }
+
+  // 拼字差異標示：只比對字母跟數字，空格括號不算
+  function diffHTML(user, target){
+    const sig = s => { const out=[]; for(let i=0;i<s.length;i++){ if(/[a-z0-9]/i.test(s[i])) out.push(i); } return out; };
+    const ui = sig(user), ti = sig(target);
+    const u = ui.map(i => user[i].toLowerCase()), t = ti.map(i => target[i].toLowerCase());
+    const n=u.length, m=t.length, dp = Array.from({length:n+1}, () => new Array(m+1).fill(0));
+    for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--) dp[i][j] = u[i]===t[j] ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j], dp[i][j+1]);
+    const uKeep = new Set(), tKeep = new Set();
+    let i=0,j=0;
+    while(i<n && j<m){
+      if(u[i]===t[j]){ uKeep.add(ui[i]); tKeep.add(ti[j]); i++; j++; }
+      else if(dp[i+1][j] >= dp[i][j+1]) i++; else j++;
+    }
+    const render = (s, keep, cls) => Array.from(s).map((ch,k) => {
+      if(!/[a-z0-9]/i.test(ch) || keep.has(k)) return esc(ch);
+      return `<span class="${cls}">${esc(ch)}</span>`;
+    }).join('');
+    return `<div><span class="lab">你的拼法</span>${render(user, uKeep, 'x')}</div>`
+         + `<div><span class="lab">正確拼法</span>${render(target, tKeep, 'm')}</div>`;
+  }
+
+  /* ---------- 狀態與 DOM ---------- */
+  const stats = {}; modeOrder.forEach(k => stats[k] = {correct:0,total:0});
+  let current = null, answered = false, needsCorrection = false, streak = 0, qIndex = 0;
+  const $ = id => document.getElementById(id);
+  const card=$('card'), readoutEl=$('readout'), promptEl=$('prompt'), badgesEl=$('badges'), qcount=$('qcount');
+  const input=$('answer'), submitBtn=$('submit'), nextBtn=$('next');
+  const fbWrap=$('fbWrap'), fb=$('fb'), fbTitle=$('fbTitle'), fbBody=$('fbBody'), mark=$('mark'), diffEl=$('diff');
+  const statList=$('statList'), progressBar=$('progressBar'), progressLeft=$('progressLeft'), progressRight=$('progressRight'), streakEl=$('streak');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function enabledModes(){
+    return Array.from(document.querySelectorAll('#modeChips .chip'))
+      .filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.mode);
+  }
+
+  function renderReadout(html, word){
+    readoutEl.classList.remove('ok','bad');
+    readoutEl.classList.toggle('word', !!word);
+    if(reduceMotion){ readoutEl.innerHTML = html; return; }
+    const tmp = document.createElement('div'); tmp.innerHTML = html;
+    let idx = 0;
+    const build = node => {
+      if(node.nodeType === 3){
+        const f = document.createDocumentFragment();
+        for(const ch of node.textContent){
+          if(ch === ' '){ f.appendChild(document.createTextNode(' ')); continue; }
+          const s = document.createElement('span');
+          s.className = 'ch in'; s.textContent = ch;
+          s.style.animationDelay = (Math.min(idx, 28) * 24) + 'ms';
+          f.appendChild(s); idx++;
+        }
+        return f;
+      }
+      const el = node.cloneNode(false);
+      Array.from(node.childNodes).forEach(c => el.appendChild(build(c)));
+      return el;
+    };
+    const frag = document.createDocumentFragment();
+    Array.from(tmp.childNodes).forEach(c => frag.appendChild(build(c)));
+    readoutEl.innerHTML = ''; readoutEl.appendChild(frag);
+  }
+
+  function renderStats(){
+    let html = '', tc = 0, tt = 0;
+    for(const k of modeOrder){
+      const s = stats[k]; tc += s.correct; tt += s.total;
+      const pct = s.total ? Math.round(100*s.correct/s.total) : 0;
+      html += `<div class="stat ${s.total?'':'dim'}"><span class="label">${modeNames[k]}</span><span class="bar"><i style="width:${pct}%"></i></span><span class="num">${s.correct}/${s.total}</span></div>`;
+    }
+    statList.innerHTML = html;
+    const overall = tt ? Math.round(100*tc/tt) : 0;
+    progressBar.style.width = overall + '%';
+    progressLeft.textContent = tt ? `總正確率 ${overall}%` : '還沒開始作答';
+    progressRight.textContent = tt ? `${tc} / ${tt} 題` : '';
+  }
+
+  function newQuestion(){
+    const modes = enabledModes(), sc = scopes();
+    answered = false; needsCorrection = false;
+    submitBtn.textContent = '送出'; input.placeholder = '輸入答案';
+    card.classList.remove('is-ok','is-bad','shake');
+    fbWrap.classList.remove('open');
+    nextBtn.hidden = true;
+    if(!modes.length || !sc.length){
+      readoutEl.classList.add('word');
+      readoutEl.innerHTML = `<span class="dim">${!modes.length ? '請至少選一種題型' : '請至少選一種陽離子範圍'}</span>`;
+      badgesEl.innerHTML = ''; promptEl.textContent = '';
+      input.disabled = true; submitBtn.disabled = true; current = null;
+      return;
+    }
+    qIndex++;
+    current = generators[rand(modes)](sc);
+    badgesEl.innerHTML = current.badges.map(([t,c]) => `<span class="badge ${c}">${esc(t)}</span>`).join('')
+      + `<span class="badge" style="opacity:.75">${modeNames[current.mode]}</span>`;
+    qcount.textContent = `第 ${qIndex} 題`;
+    renderReadout(current.readout, current.word);
+    promptEl.innerHTML = esc(current.prompt) + (current.sub ? `<span class="sub">${esc(current.sub)}</span>` : '');
+    input.value = ''; input.disabled = false; submitBtn.disabled = false;
+    input.focus();
+  }
+
+  function shake(){
+    if(reduceMotion) return;
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+  }
+
+  function checkAnswer(){
+    if(!current) return;
+    const raw = input.value;
+    if(!raw.trim()){ input.focus(); return; }
+
+    if(needsCorrection){
+      if(isMatch(raw)){
+        needsCorrection = false;
+        card.classList.remove('is-bad'); card.classList.add('is-ok');
+        readoutEl.classList.remove('bad'); readoutEl.classList.add('ok');
+        fbTitle.innerHTML = '訂正完成，記住這個拼法';
+        input.disabled = true; submitBtn.disabled = true; submitBtn.textContent = '送出';
+        nextBtn.hidden = false; nextBtn.focus();
+      } else { shake(); input.select(); }
+      return;
+    }
+    if(answered) return;
+
+    const ok = isMatch(raw);
+    answered = true;
+    const s = stats[current.mode]; s.total++; if(ok) s.correct++;
+    renderStats();
+
+    if(ok){ streak++; streakEl.classList.remove('bump'); void streakEl.offsetWidth; streakEl.classList.add('bump'); }
+    else streak = 0;
+    streakEl.textContent = streak;
+
+    card.classList.toggle('is-ok', ok); card.classList.toggle('is-bad', !ok);
+    readoutEl.classList.toggle('ok', ok); readoutEl.classList.toggle('bad', !ok);
+    if(!ok) shake();
+
+    const shownAns = current.kind === 'formula' ? formulaHTML(current.display) : esc(current.display);
+    fb.className = 'fb ' + (ok ? 'ok' : 'bad');
+    mark.innerHTML = ok
+      ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>'
+      : '<svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg>';
+    fbTitle.innerHTML = ok ? `答對了 <span class="ans">${shownAns}</span>` : `答錯了，正確答案是 <span class="ans">${shownAns}</span>`;
+    diffEl.innerHTML = ok ? '' : diffHTML(raw.trim(), current.display);
+    diffEl.style.display = ok ? 'none' : 'block';
+    fbBody.innerHTML = current.explanation;
+    fbWrap.classList.add('open');
+
+    if(ok){
+      input.disabled = true; submitBtn.disabled = true;
+      nextBtn.hidden = false; nextBtn.focus();
+    } else {
+      needsCorrection = true;
+      input.value = ''; input.placeholder = '照正確答案再打一次才能繼續';
+      submitBtn.textContent = '訂正';
+      input.focus();
+    }
+  }
+
+  /* ---------- 對照表 ---------- */
+  function buildRef(){
+    const t1 = TYPE1.map(x => `<tr><td>${ionHTML(x.sym,x.c,1)}</td><td>${x.name}</td></tr>`).join('');
+    const an = ANIONS.map(x => `<tr><td>${ionHTML(x.sym,x.c,-1)}</td><td>${rootHTML(x)}</td></tr>`).join('');
+    const t2 = TYPE2.map(x => `<tr><td>${ionHTML(x.sym,x.c,1)}</td><td>${x.name}</td><td>${x.old}</td></tr>`).join('');
+    $('refGrid').innerHTML =
+      `<div class="ref-block"><h3>Type I 陽離子</h3><div class="ref-wrap"><table>${t1}</table></div></div>`+
+      `<div class="ref-block"><h3>陰離子</h3><div class="ref-wrap"><table>${an}</table></div></div>`+
+      `<div class="ref-block" style="grid-column:1 / -1;min-width:0"><h3>Type II 陽離子</h3><div class="ref-wrap"><table>${t2}</table></div></div>`;
+  }
+
+  /* ---------- 事件 ---------- */
+  submitBtn.addEventListener('click', checkAnswer);
+  nextBtn.addEventListener('click', newQuestion);
+  input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); checkAnswer(); } });
+  document.addEventListener('keydown', e => {
+    if(e.target === input || e.target === nextBtn || e.target === submitBtn) return;
+    if(e.target.closest && e.target.closest('summary')) return;
+    if(e.key === 'Enter' && answered && !needsCorrection && !nextBtn.hidden){ e.preventDefault(); newQuestion(); }
+  });
+  ['modeChips','scopeChips'].forEach(id => {
+    $(id).addEventListener('click', e => {
+      const b = e.target.closest('.chip'); if(!b) return;
+      b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+      newQuestion();
+    });
+  });
+  $('reset').addEventListener('click', () => {
+    modeOrder.forEach(k => { stats[k].correct = 0; stats[k].total = 0; });
+    streak = 0; streakEl.textContent = '0'; qIndex = 0;
+    renderStats(); newQuestion();
+  });
+
+  buildRef();
+  renderStats();
+  newQuestion();
+
+  // 測試用
+  window.__ionic = { TYPE1, TYPE2, ANIONS, formulaOf, generators, getCurrent: () => current };
+})();
+</script>
+</body>
+</html>
