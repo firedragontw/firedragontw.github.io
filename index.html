@@ -4,108 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>firedragontw</title>
-<meta name="description" content="以心的個人頁：社群連結、學經歷、專案作品與部落格。">
+<meta name="description" content="firedragontw 的個人頁：社群連結、偷吃步用網站、學經歷與部落格。">
+<link rel="icon" href="/images/logo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700&display=swap">
 <link rel="stylesheet" href="/firedragon-ui.css">
-<style>
-  body { margin: 0; min-height: 100vh; }
-
-  .page { max-width: 640px; margin: 0 auto; padding: var(--space-6) var(--space-4) var(--space-16); display: flex; flex-direction: column; gap: var(--space-5); }
-
-  /* 頂欄 */
-  .top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding-bottom: var(--space-4); border-bottom: 1px solid var(--line); }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
-  .brand svg { width: 30px; height: 30px; flex: none; }
-  .brand b { font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; letter-spacing: .02em; }
-  .theme { display: flex; gap: 6px; }
-  .theme .fd-pill { min-height: 32px; padding: 0 12px; font-size: 12.5px; }
-
-  /* 區塊標題 */
-  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
-  .eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); font-weight: 600; margin: 0 0 4px; }
-  .sec-head h2 { font-size: var(--text-xl); }
-  .sec-head .fd-btn.fd-link { font-size: 13px; }
-
-  /* 社群連結：lit.link 那種一條一條 */
-  .links { display: flex; flex-direction: column; gap: 10px; }
-  .link {
-    display: flex; align-items: center; gap: 14px;
-    min-height: 60px; padding: 10px 14px;
-    background: var(--surface-2); color: var(--ink);
-    border-radius: var(--radius-lg); text-decoration: none;
-    transition: background var(--dur-3) var(--ease), color var(--dur-3) var(--ease),
-                transform var(--dur-3) var(--ease-spring), box-shadow var(--dur-3) var(--ease);
-  }
-  .link:hover { background: linear-gradient(90deg, var(--primary), var(--glow)); color: #fff; transform: translateY(-3px); box-shadow: var(--shadow-glow); }
-  .link .ic { width: 40px; height: 40px; flex: none; display: grid; place-items: center; }
-  .link .ic img { width: 36px; height: 36px; display: block; object-fit: contain; }
-  .link .meta { min-width: 0; flex: 1; }
-  .link .meta b { display: block; font-size: 15px; }
-  .link .meta span { display: block; font-size: 12.5px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color var(--dur-3) var(--ease); }
-  .link:hover .meta span { color: rgba(255,255,255,.82); }
-  .link .tail { flex: none; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); transition: color var(--dur-3) var(--ease); }
-  .link:hover .tail { color: rgba(255,255,255,.9); }
-
-  /* 學經歷 */
-  .timeline { list-style: none; margin: 0; padding: 0; }
-  .timeline li { position: relative; padding: 0 0 18px 24px; border-left: 2px solid var(--line); }
-  .timeline li:last-child { padding-bottom: 0; border-left-color: transparent; }
-  .timeline li::before {
-    content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%;
-    background: var(--surface); border: 2px solid var(--line-strong);
-  }
-  .timeline li.now::before { border-color: var(--primary); background: var(--primary); box-shadow: var(--ring); }
-  .timeline .t { font-weight: 700; font-size: 15px; }
-  .timeline .s { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
-
-  /* 專案 */
-  .group + .group { margin-top: var(--space-5); }
-  .group-head { display: flex; align-items: center; gap: 10px; margin-bottom: var(--space-3); }
-  .group-head small { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
-  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-  .fd-tile { min-height: 64px; }
-
-  /* 部落格 */
-  .posts { display: flex; flex-direction: column; gap: 10px; }
-  .post { display: block; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--surface-2); color: var(--ink); text-decoration: none; transition: background var(--dur-2) var(--ease), transform var(--dur-3) var(--ease-spring); }
-  .post:hover { background: var(--primary-soft); transform: translateY(-2px); }
-  .post b { display: block; font-size: 15px; }
-  .post .d { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
-  .post p { font-size: 13.5px; color: var(--ink-2); margin-top: 6px; }
-  .empty {
-    display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
-    padding: var(--space-8) var(--space-4);
-    border: 2px dashed var(--line-strong); border-radius: var(--radius-lg);
-    color: var(--ink-2); font-size: 14px;
-  }
-  .empty b { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
-  .empty .fd-dots { margin-top: 4px; }
-
-  .foot { text-align: center; font-size: 12.5px; color: var(--ink-3); padding-top: var(--space-4); border-top: 1px solid var(--line); }
-  .foot a { color: var(--ink-2); text-decoration: none; }
-  .foot a:hover { color: var(--primary); }
-
-  .reveal { opacity: 0; transform: translateY(10px); transition: opacity var(--dur-4) var(--ease), transform var(--dur-4) var(--ease); }
-  .reveal.in { opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
-
-  @media (max-width: 480px) {
-    .page { padding: var(--space-4) var(--space-3) var(--space-12); }
-    .fd-card { padding: var(--space-5); }
-    .theme .fd-pill span { display: none; }
-  }
-</style>
+<link rel="stylesheet" href="/home.css">
+<script>try{var t=localStorage.getItem('fd-theme');if(t&&t!=='system')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 </head>
 <body class="fd-base">
+
+<div class="bg" aria-hidden="true">
+  <div class="aurora"><i></i><i></i><i></i></div>
+  <div class="grid"></div>
+</div>
+<div class="cursor-glow" aria-hidden="true"></div>
+<div class="progress-top" aria-hidden="true"></div>
 
 <div class="page">
 
   <header class="top">
     <a class="brand" href="/">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="var(--primary)" d="M12 1.5c.6 4.2 5.5 6.4 5.5 11.5a5.5 5.5 0 0 1-11 0c0-2.1 1-3.4 2.1-4.6-.1 2.2.9 3.6 2.2 3.6 1.2-3.4-1.3-6.6 1.2-10.5z"/><path fill="var(--glow)" opacity=".85" d="M12 11c.4 2 2.6 3 2.6 5.4a2.6 2.6 0 0 1-5.2 0c0-1 .5-1.7 1-2.2 0 1 .4 1.7 1 1.7.6-1.6-.6-3.1.6-4.9z"/></svg>
-      <b>firedragontw.github.io</b>
+      <img src="/images/logo.png" alt="" width="40" height="40">
+      <b data-scramble>firedragontw.github.io</b>
     </a>
     <div class="theme" role="group" aria-label="主題">
       <button class="fd-pill" type="button" data-set-theme="system" aria-pressed="true">自動</button>
@@ -114,30 +36,62 @@
     </div>
   </header>
 
-  <section class="fd-card reveal" id="links">
+  <section class="hero" id="top">
+    <div class="hero-mark">
+      <svg viewBox="0 0 168 168" aria-hidden="true">
+        <circle class="ring r1" cx="84" cy="84" r="80"/>
+        <circle class="ring r2" cx="84" cy="84" r="68"/>
+        <g class="orbit"><circle class="dot" cx="84" cy="4" r="3.5"/></g>
+      </svg>
+      <img src="/images/logo.png" alt="firedragontw 的頭像插圖" width="112" height="112">
+    </div>
+    <h1 class="hero-title">firedragontw</h1>
+    <p class="hero-sub"><span class="txt">偷吃步用網站</span><span class="caret"></span></p>
+    <div class="hero-cta">
+      <a class="btn-glow" href="#projects" data-magnetic>看專案 <span class="arrow">→</span></a>
+      <a class="btn-glow alt" href="#links" data-magnetic>聯絡我</a>
+    </div>
+  </section>
+
+  <div class="marquee" aria-label="專案列表">
+    <div class="marquee-track">
+      <a class="uni" href="/sf">有效數字練習</a>
+      <a class="uni" href="/calculus">微積分知識地圖</a>
+      <a class="uni" href="/ionic">離子化合物命名</a>
+      <a href="/yihsin">弱智猜數字神器</a>
+      <a href="/ptcg">寶可夢卡牌通靈</a>
+      <a href="/egc">每日精力計算器</a>
+      <a href="/learningcard">學習卡輔助神器</a>
+      <a href="/ai-card">AI學習卡</a>
+      <a href="/eng">U8急救</a>
+      <a href="/enyu">ENYU</a>
+    </div>
+  </div>
+
+  <section class="fd-card beam spot reveal" id="links">
     <div class="sec-head">
       <div><p class="eyebrow">Links</p><h2>社群連結</h2></div>
     </div>
     <div class="links">
       <a class="link" href="https://instagram.com/yihsin725" target="_blank" rel="noopener">
         <span class="ic"><img src="/images/icons/instagram.svg" alt="" width="36" height="36"></span>
-        <span class="meta"><b>Instagram</b><span>@yihsin725</span></span>
+        <span class="meta"><b data-scramble>Instagram</b><span>@yihsin725</span></span>
         <span class="tail">↗</span>
       </a>
       <a class="link" href="#" id="discordLink">
         <span class="ic"><img src="/images/icons/discord.svg" alt="" width="36" height="36"></span>
-        <span class="meta"><b>Discord</b><span>yihsin725</span></span>
+        <span class="meta"><b data-scramble>Discord</b><span>yihsin725</span></span>
         <span class="tail" id="discordTail">複製</span>
       </a>
       <a class="link" href="mailto:s1152041@mail.ncyu.edu.tw">
         <span class="ic"><img src="/images/icons/gmail.svg" alt="" width="36" height="36"></span>
-        <span class="meta"><b>Email</b><span>s1152041@mail.ncyu.edu.tw</span></span>
+        <span class="meta"><b data-scramble>Email</b><span>s1152041@mail.ncyu.edu.tw</span></span>
         <span class="tail">✉</span>
       </a>
     </div>
   </section>
 
-  <section class="fd-card reveal" id="projects">
+  <section class="fd-card beam spot reveal" id="projects">
     <div class="sec-head">
       <div><p class="eyebrow">Projects</p><h2>偷吃步用網站</h2></div>
     </div>
@@ -165,7 +119,7 @@
     </div>
   </section>
 
-  <section class="fd-card reveal" id="edu">
+  <section class="fd-card beam spot reveal" id="edu">
     <div class="sec-head">
       <div><p class="eyebrow">Timeline</p><h2>學經歷</h2></div>
     </div>
@@ -185,7 +139,7 @@
     </ul>
   </section>
 
-  <section class="fd-card reveal" id="blog">
+  <section class="fd-card beam spot reveal" id="blog">
     <div class="sec-head">
       <div><p class="eyebrow">Blog</p><h2>部落格</h2></div>
       <a class="fd-btn fd-link" href="/blog/">全部文章 →</a>
@@ -199,69 +153,7 @@
 
 </div>
 
-<script>
-(function () {
-  'use strict';
-  var root = document.documentElement;
-
-  /* 主題：跟 firedragon-ui 的三態一致，記在 localStorage */
-  var themeBtns = document.querySelectorAll('[data-set-theme]');
-  function applyTheme(t) {
-    if (t === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', t);
-    themeBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-theme') === t)); });
-    try { localStorage.setItem('fd-theme', t); } catch (e) {}
-  }
-  var saved = 'system';
-  try { saved = localStorage.getItem('fd-theme') || 'system'; } catch (e) {}
-  if (saved !== 'system') applyTheme(saved);
-  themeBtns.forEach(function (b) { b.addEventListener('click', function () { applyTheme(b.getAttribute('data-set-theme')); }); });
-
-  /* 部落格文章清單：之後在 blog/posts.json 加文章就會出現在這裡 */
-  var host = document.getElementById('posts');
-  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
-  function renderEmpty() {
-    host.innerHTML =
-      '<div class="empty">' +
-        '<b>還沒有文章</b>' +
-        '<span>第一篇正在醞釀中，之後會放在這裡。</span>' +
-        '<span class="fd-dots"><i class="fd-active"></i><i></i><i></i></span>' +
-      '</div>';
-  }
-  function renderPosts(posts) {
-    host.innerHTML = posts.slice(0, 3).map(function (p) {
-      return '<a class="post" href="' + esc(p.url) + '">' +
-        '<b>' + esc(p.title) + '</b>' +
-        '<div class="d">' + esc(p.date || '') + '</div>' +
-        (p.summary ? '<p>' + esc(p.summary) + '</p>' : '') +
-      '</a>';
-    }).join('');
-  }
-  fetch('/blog/posts.json', { cache: 'no-store' })
-    .then(function (r) { return r.ok ? r.json() : []; })
-    .then(function (posts) { if (Array.isArray(posts) && posts.length) renderPosts(posts); else renderEmpty(); })
-    .catch(renderEmpty);
-
-  /* Discord 點一下複製 */
-  var dc = document.getElementById('discordLink'), tail = document.getElementById('discordTail');
-  dc.addEventListener('click', function (e) {
-    e.preventDefault();
-    function done(ok) { tail.textContent = ok ? '已複製' : 'yihsin725'; setTimeout(function () { tail.textContent = '複製'; }, 1500); }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText('yihsin725').then(function () { done(true); }, function () { done(false); });
-    } else done(false);
-  });
-
-  /* 進場 */
-  var cards = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
-    }, { threshold: 0.12 });
-    cards.forEach(function (c) { io.observe(c); });
-  } else {
-    cards.forEach(function (c) { c.classList.add('in'); });
-  }
-})();
-</script>
+<script src="/vendor/anime.umd.min.js"></script>
+<script src="/home.js"></script>
 </body>
 </html>
