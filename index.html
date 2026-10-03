@@ -14,6 +14,18 @@
 <script>try{var t=localStorage.getItem('fd-theme');if(t&&t!=='system')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 </head>
 <body class="fd-base">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="fd-electric" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feTurbulence type="turbulence" baseFrequency="0.09" numOctaves="6" seed="3" result="n1"/>
+      <feOffset in="n1" dx="0" dy="0" result="o1"><animate attributeName="dy" values="120;0" dur="4s" repeatCount="indefinite"/></feOffset>
+      <feTurbulence type="turbulence" baseFrequency="0.09" numOctaves="6" seed="9" result="n2"/>
+      <feOffset in="n2" dx="0" dy="0" result="o2"><animate attributeName="dy" values="0;-120" dur="4s" repeatCount="indefinite"/></feOffset>
+      <feComposite in="o1" in2="o2" operator="arithmetic" k1="0" k2="0.5" k3="0.5" k4="0" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+  </defs>
+</svg>
 
 <div class="bg" aria-hidden="true">
   <div class="aurora"><i></i><i></i><i></i></div>
@@ -74,17 +86,17 @@
     </div>
     <div class="links">
       <a class="link" href="https://instagram.com/yihsin725" target="_blank" rel="noopener">
-        <span class="ic"><img src="/images/icons/instagram.svg" alt="" width="36" height="36"></span>
+        <span class="ic"><img src="/images/icons/instagram.svg" alt="" width="36" height="36"><span class="electric"></span></span>
         <span class="meta"><b data-scramble>Instagram</b><span>@yihsin725</span></span>
         <span class="tail">↗</span>
       </a>
       <a class="link" href="#" id="discordLink">
-        <span class="ic"><img src="/images/icons/discord.svg" alt="" width="36" height="36"></span>
+        <span class="ic"><img src="/images/icons/discord.svg" alt="" width="36" height="36"><span class="electric"></span></span>
         <span class="meta"><b data-scramble>Discord</b><span>yihsin725</span></span>
         <span class="tail" id="discordTail">複製</span>
       </a>
       <a class="link" href="mailto:s1152041@mail.ncyu.edu.tw">
-        <span class="ic"><img src="/images/icons/gmail.svg" alt="" width="36" height="36"></span>
+        <span class="ic"><img src="/images/icons/gmail.svg" alt="" width="36" height="36"><span class="electric"></span></span>
         <span class="meta"><b data-scramble>Email</b><span>s1152041@mail.ncyu.edu.tw</span></span>
         <span class="tail">✉</span>
       </a>
