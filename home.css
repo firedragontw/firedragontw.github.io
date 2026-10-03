@@ -136,20 +136,11 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 .link:hover .ic { transform: scale(1.15) rotate(-6deg); }
 .link:hover .ic img { filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 6px rgba(255,255,255,.95)) drop-shadow(0 0 16px rgba(255,255,255,.7)); }
 .link .ic img { position: relative; z-index: 2; width: 36px; height: 36px; display: block; object-fit: contain; }
-.link .ic::before { content: ""; position: absolute; inset: -5px; border-radius: 14px; background: rgba(8, 14, 40, .6); opacity: 0; transition: opacity var(--dur-2) var(--ease); }
-.link:hover .ic::before { opacity: 1; }
-.link .ic .electric {
-  position: absolute; inset: -5px; z-index: 3; border-radius: 14px; pointer-events: none; opacity: 0;
-  border: 2px solid #fff; filter: url(#fd-electric);
-  box-shadow: 0 0 8px #fff, 0 0 18px var(--glow), inset 0 0 8px rgba(255,255,255,.55);
-  transition: opacity var(--dur-2) var(--ease);
-}
-.link:hover .ic .electric { opacity: 1; }
 .link .meta { min-width: 0; flex: 1; }
 .link .meta b { display: block; font-size: 15px; }
 .link .meta span { display: block; font-size: 12.5px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color var(--dur-3) var(--ease); }
 .link:hover .meta span { color: rgba(255,255,255,.85); }
-.link .tail { flex: none; font-family: var(--font-ui); font-weight: 700; font-size: 22px; line-height: 1; color: var(--ink-3); transition: color var(--dur-3) var(--ease), transform var(--dur-3) var(--ease-spring); }
+.link .tail { flex: none; font-family: var(--font-ui); font-weight: 700; font-size: 18px; line-height: 1; color: var(--ink-3); transition: color var(--dur-3) var(--ease), transform var(--dur-3) var(--ease-spring); }
 .link:hover .tail { color: rgba(255,255,255,.95); transform: translateX(3px); }
 
 /* 專案磁磚：3D 傾斜 */
@@ -207,4 +198,3 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
   .aurora i, .hero-mark .ring, .hero-mark .orbit, .hero-title .char, .marquee-track, .beam::before, .btn-glow::before, .timeline li.now::before, .empty .fd-dots i { animation: none !important; }
   .reveal { opacity: 1; transform: none; }
 }
-#discordTail { font-size: 15px; letter-spacing: .04em; }
