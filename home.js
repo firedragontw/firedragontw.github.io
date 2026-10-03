@@ -170,7 +170,7 @@
   var dc = $('#discordLink'), tail = $('#discordTail');
   if (dc) dc.addEventListener('click', function (e) {
     e.preventDefault();
-    function done(ok) { tail.textContent = ok ? '已複製' : 'yihsin725'; setTimeout(function () { tail.textContent = '複製'; }, 1500); }
+    function done(ok) { if (!ok) return; tail.classList.add('copied'); setTimeout(function () { tail.classList.remove('copied'); }, 1600); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText('yihsin725').then(function () { done(true); }, function () { done(false); });
     else done(false);
   });
