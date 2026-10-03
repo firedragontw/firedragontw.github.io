@@ -134,6 +134,7 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 .link:hover { background: linear-gradient(90deg, var(--primary), var(--glow)); color: #fff; transform: translateY(-3px); box-shadow: var(--shadow-glow); }
 .link .ic { width: 40px; height: 40px; flex: none; display: grid; place-items: center; transition: transform var(--dur-3) var(--ease-spring); }
 .link:hover .ic { transform: scale(1.15) rotate(-6deg); }
+.link:hover .ic img { filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 6px rgba(255,255,255,.95)) drop-shadow(0 0 16px rgba(255,255,255,.7)); }
 .link .ic img { width: 36px; height: 36px; display: block; object-fit: contain; }
 .link .meta { min-width: 0; flex: 1; }
 .link .meta b { display: block; font-size: 15px; }
