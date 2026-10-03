@@ -1,556 +1,1982 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>離子化合物命名練習</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>化學命名練習</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root{
-    box-sizing:border-box;
-    padding-top:env(safe-area-inset-top,0px);
-    padding-bottom:env(safe-area-inset-bottom,0px);
-    --bg:#F6F4FB; --dot:#E4E0F2; --surface:#FFFFFF; --ink:#26214A; --muted:#6E6A8A; --line:#E6E2F3;
-    --accent:#6C5CE7; --accent-soft:#ECE8FF;
-    --ok:#22A47A; --ok-soft:#DFF5EC; --ok-ink:#155F47;
-    --bad:#E4574F; --bad-soft:#FDE4E2; --bad-ink:#8E2A25;
-    --root:#0B8FC7;
-    --readout-bg:#2A2450; --readout-ink:#F3EFFF; --readout-dim:#9C93D6;
-    --input-bg:#FBFAFF; --track:#E9E5F5; --kbd:#F1EEFA;
-    --radius-lg:22px; --radius:14px; --radius-sm:10px;
-    --font-ui:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
-    --font-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
-    --ease:cubic-bezier(.2,.8,.2,1);
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#14121F; --dot:#221F33; --surface:#1D1A2B; --ink:#EEEBFA; --muted:#A7A2C4; --line:#312C47;
-      --accent:#8F80F5; --accent-soft:#2A2550;
-      --ok:#3BC795; --ok-soft:#173A2E; --ok-ink:#9BE8C8;
-      --bad:#F07870; --bad-soft:#40201F; --bad-ink:#F6B3AE;
-      --root:#4CC2F2;
-      --readout-bg:#0F0D1A; --input-bg:#16142A; --track:#2A2640; --kbd:#2A2640;
-    }
-  }
-  :root[data-theme="dark"]{
+/* 版面：單欄 680px，上方分頁（練習／組合表／對照表／錯題本），練習頁是一張大題卡 + 統計面板 */
+:root{
+  --bg:#F6F4FB; --dot:#E4E0F2; --surface:#FFFFFF; --ink:#26214A; --muted:#6E6A8A; --line:#E6E2F3;
+  --accent:#6C5CE7; --accent-soft:#ECE8FF; --accent-ink:#4B3FC4;
+  --ok:#22A47A; --ok-soft:#DFF5EC; --ok-ink:#155F47;
+  --bad:#E4574F; --bad-soft:#FDE4E2; --bad-ink:#8E2A25;
+  --warn-soft:#FFF4D6; --warn-ink:#7A5200;
+  --root:#0B8FC7;
+  --readout-bg:#2A2450; --readout-ink:#F3EFFF; --readout-dim:#9C93D6;
+  --input-bg:#FBFAFF; --track:#E9E5F5; --kbd:#F1EEFA;
+  --t2-bg:#FDEBD3; --t2-ink:#A65F0B;
+  --old-bg:#F9E1EB; --old-ink:#A8325F;
+  --t3-bg:#D9F3EF; --t3-ink:#0E7C6E;
+  --poly-bg:#DCE8FF; --poly-ink:#2456C9;
+  --acid-bg:#FFE5D6; --acid-ink:#B4451A;
+  --cls-bg:#ECEAF3; --cls-ink:#4F4A6E;
+  --pair-bg:#E6F0FF; --pair-ink:#1E4FA3;
+  --egg-bg:#FFF1C2; --egg-ink:#8A5A00;
+  --adv-bg:#F0E6FF; --adv-ink:#6B3FC4;
+  --radius-lg:22px; --radius:14px; --radius-sm:10px;
+  --font-ui:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
     --bg:#14121F; --dot:#221F33; --surface:#1D1A2B; --ink:#EEEBFA; --muted:#A7A2C4; --line:#312C47;
-    --accent:#8F80F5; --accent-soft:#2A2550;
+    --accent:#8F80F5; --accent-soft:#2A2550; --accent-ink:#B9AEFF;
     --ok:#3BC795; --ok-soft:#173A2E; --ok-ink:#9BE8C8;
     --bad:#F07870; --bad-soft:#40201F; --bad-ink:#F6B3AE;
+    --warn-soft:#3D3214; --warn-ink:#F1CF6B;
     --root:#4CC2F2;
     --readout-bg:#0F0D1A; --input-bg:#16142A; --track:#2A2640; --kbd:#2A2640;
+    --t2-bg:#3F2D12; --t2-ink:#F1B25C;
+    --old-bg:#43222D; --old-ink:#F08CAB;
+    --t3-bg:#13332F; --t3-ink:#5FD3C3;
+    --poly-bg:#1B2A4A; --poly-ink:#8FB2FF;
+    --acid-bg:#3F2316; --acid-ink:#FFA67A;
+    --cls-bg:#2A2740; --cls-ink:#BDB7D6;
+    --pair-bg:#1A2A45; --pair-ink:#8DB4FF;
+    --egg-bg:#3D3010; --egg-ink:#F3CF6A;
+    --adv-bg:#2D2150; --adv-ink:#C7B4FF;
   }
-  *,*::before,*::after{box-sizing:border-box;}
-  html,body{margin:0;}
-  body{
-    min-height:100%;
-    background-color:var(--bg);
-    background-image:radial-gradient(var(--dot) 1.3px, transparent 1.3px);
-    background-size:22px 22px;
-    color:var(--ink); font-family:var(--font-ui);
-    -webkit-font-smoothing:antialiased;
-    padding:28px 16px 48px;
-  }
-  .app{max-width:660px;margin:0 auto;}
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#14121F; --dot:#221F33; --surface:#1D1A2B; --ink:#EEEBFA; --muted:#A7A2C4; --line:#312C47;
+  --accent:#8F80F5; --accent-soft:#2A2550; --accent-ink:#B9AEFF;
+  --ok:#3BC795; --ok-soft:#173A2E; --ok-ink:#9BE8C8;
+  --bad:#F07870; --bad-soft:#40201F; --bad-ink:#F6B3AE;
+  --warn-soft:#3D3214; --warn-ink:#F1CF6B;
+  --root:#4CC2F2;
+  --readout-bg:#0F0D1A; --input-bg:#16142A; --track:#2A2640; --kbd:#2A2640;
+  --t2-bg:#3F2D12; --t2-ink:#F1B25C;
+  --old-bg:#43222D; --old-ink:#F08CAB;
+  --t3-bg:#13332F; --t3-ink:#5FD3C3;
+  --poly-bg:#1B2A4A; --poly-ink:#8FB2FF;
+  --acid-bg:#3F2316; --acid-ink:#FFA67A;
+  --cls-bg:#2A2740; --cls-ink:#BDB7D6;
+  --pair-bg:#1A2A45; --pair-ink:#8DB4FF;
+  --egg-bg:#3D3010; --egg-ink:#F3CF6A;
+  --adv-bg:#2D2150; --adv-ink:#C7B4FF;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;}
+body{
+  min-height:100%;
+  background-color:var(--bg);
+  background-image:radial-gradient(var(--dot) 1.3px, transparent 1.3px);
+  background-size:22px 22px;
+  color:var(--ink); font-family:var(--font-ui); font-size:14px;
+  -webkit-font-smoothing:antialiased;
+  padding-block:28px 48px; padding-inline:16px;
+}
+.app{max-width:680px;margin:0 auto;}
+button{font:inherit;}
 
-  .top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;}
-  .top h1{margin:0;font-size:26px;font-weight:900;line-height:1.1;}
-  .top h1 small{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:6px;}
-  .streak{
-    display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
-    border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;color:var(--muted);white-space:nowrap;
-  }
-  .streak .n{font-family:var(--font-mono);font-size:18px;color:var(--ink);min-width:1.2em;text-align:center;display:inline-block;}
-  .streak .n.bump{animation:bump .35s var(--ease);}
-  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+/* ---------- 頂部 ---------- */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;}
+.top h1{margin:0;font-size:26px;font-weight:900;line-height:1.1;text-wrap:balance;}
+.top h1 small{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:6px;letter-spacing:.01em;}
+.streak{
+  display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
+  border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px;color:var(--muted);white-space:nowrap;flex:none;
+}
+.streak .n{font-family:var(--font-mono);font-size:18px;color:var(--ink);min-width:1.2em;text-align:center;display:inline-block;font-variant-numeric:tabular-nums;}
+.streak .n.bump{animation:bump .35s var(--ease);}
+.streak .best{font-size:11.5px;font-weight:600;}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
 
-  .progress{height:8px;border-radius:999px;background:var(--track);overflow:hidden;margin-bottom:18px;}
-  .progress > i{display:block;height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#A78BFA);transition:width .6s var(--ease);}
-  .progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:-12px 2px 16px;}
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:18px;}
+.tab{flex:1;appearance:none;border:none;background:none;color:var(--muted);border-radius:999px;padding:9px 6px;font-size:13.5px;font-weight:800;cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease);white-space:nowrap;min-width:0;}
+.tab[aria-selected="true"]{background:var(--accent);color:#fff;}
+.tab .cnt{display:inline-block;font-family:var(--font-mono);font-size:11px;background:var(--bad);color:#fff;border-radius:999px;padding:0 6px;margin-left:4px;vertical-align:1px;}
+.tab[aria-selected="true"] .cnt{background:rgba(255,255,255,.3);}
+.page[hidden]{display:none;}
 
-  .group-label{font-size:12px;font-weight:800;color:var(--muted);margin:0 0 6px 2px;letter-spacing:.04em;}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
-  .chip{
-    appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);
-    border-radius:999px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;
-    transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .15s var(--ease);
-  }
-  .chip:active{transform:scale(.97);}
-  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;}
-  .chip:focus-visible,.btn:focus-visible,.input:focus-visible,.link:focus-visible,summary:focus-visible{outline:3px solid #C7BEFF;outline-offset:2px;}
-  .switch{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin:2px 2px 16px;cursor:pointer;user-select:none;}
-  .switch input{accent-color:var(--accent);width:16px;height:16px;}
+/* ---------- 進度 ---------- */
+.progress{height:8px;border-radius:999px;background:var(--track);overflow:hidden;margin-bottom:18px;}
+.progress > i{display:block;height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#A78BFA);transition:width .6s var(--ease);}
+.progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:-12px 2px 16px;font-variant-numeric:tabular-nums;}
 
-  .card{
-    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);
-    padding:22px 22px 20px;box-shadow:0 10px 30px -18px rgba(38,33,74,.25);
-    transition:box-shadow .35s var(--ease);
-  }
-  .card.is-ok{box-shadow:0 0 0 4px rgba(34,164,122,.18),0 10px 30px -18px rgba(38,33,74,.25);}
-  .card.is-bad{box-shadow:0 0 0 4px rgba(228,87,79,.16),0 10px 30px -18px rgba(38,33,74,.25);}
-  .card.shake{animation:shake .38s var(--ease);}
-  @keyframes shake{10%{transform:translateX(-6px)}30%{transform:translateX(5px)}50%{transform:translateX(-4px)}70%{transform:translateX(3px)}90%{transform:translateX(-1px)}}
+/* ---------- 選項 ---------- */
+.group-label{font-size:12px;font-weight:800;color:var(--muted);margin:0 0 6px 2px;letter-spacing:.04em;display:flex;justify-content:space-between;align-items:center;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.chip{
+  appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);
+  border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .15s var(--ease);
+}
+.chip:active{transform:scale(.97);}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;}
+.chip.dimmed{opacity:.45;}
+.chip:focus-visible,.btn:focus-visible,.input:focus-visible,.link:focus-visible,.tab:focus-visible,.choice:focus-visible,summary:focus-visible,.switch input:focus-visible{outline:3px solid #C7BEFF;outline-offset:2px;}
+.switches{display:flex;flex-wrap:wrap;gap:6px 18px;margin:2px 2px 16px;}
+.switch{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none;}
+.switch input{accent-color:var(--accent);width:16px;height:16px;margin:0;}
+.switch[hidden]{display:none;}
 
-  .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px;}
-  .badges{display:flex;gap:6px;flex-wrap:wrap;}
-  .badge{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:800;}
-  .badge.t2{background:#FDEBD3;color:#A65F0B;}
-  .badge.old{background:#F9E1EB;color:#A8325F;}
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .badge.t2{background:#3F2D12;color:#F1B25C;}
-    :root:not([data-theme="light"]) .badge.old{background:#43222D;color:#F08CAB;}
-  }
-  :root[data-theme="dark"] .badge.t2{background:#3F2D12;color:#F1B25C;}
-  :root[data-theme="dark"] .badge.old{background:#43222D;color:#F08CAB;}
-  .qcount{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;}
+/* ---------- 題卡 ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:22px 22px 20px;box-shadow:0 10px 30px -18px rgba(38,33,74,.25);
+  transition:box-shadow .35s var(--ease);
+}
+.card.is-ok{box-shadow:0 0 0 4px rgba(34,164,122,.18),0 10px 30px -18px rgba(38,33,74,.25);}
+.card.is-bad{box-shadow:0 0 0 4px rgba(228,87,79,.16),0 10px 30px -18px rgba(38,33,74,.25);}
+.card.shake{animation:shake .38s var(--ease);}
+@keyframes shake{10%{transform:translateX(-6px)}30%{transform:translateX(5px)}50%{transform:translateX(-4px)}70%{transform:translateX(3px)}90%{transform:translateX(-1px)}}
 
-  .readout{
-    background:var(--readout-bg);color:var(--readout-ink);border-radius:var(--radius);
-    padding:22px 20px 20px;font-family:var(--font-mono);font-weight:600;
-    font-size:clamp(22px,5.4vw,34px);line-height:1.3;letter-spacing:.02em;
-    box-shadow:inset 0 2px 10px rgba(0,0,0,.35);overflow-wrap:anywhere;position:relative;min-height:88px;
-  }
-  .readout.word{font-family:var(--font-ui);font-weight:700;letter-spacing:.01em;}
-  .readout sup{font-size:.55em;vertical-align:.7em;margin-left:1px;}
-  .readout sub{font-size:.6em;vertical-align:-.25em;}
-  .readout .dim{color:var(--readout-dim);font-weight:500;margin:0 .25em;}
-  .readout .ch{display:inline-block;}
-  .readout .ch.in{animation:roll .42s var(--ease) both;}
-  @keyframes roll{from{opacity:0;transform:translateY(.55em)}to{opacity:1;transform:translateY(0)}}
-  .readout::after{content:"";position:absolute;left:14px;right:14px;bottom:10px;height:2px;border-radius:2px;background:var(--ok);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease);}
-  .readout.ok::after{transform:scaleX(1);}
-  .readout.bad::after{background:var(--bad);transform:scaleX(1);}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px;}
+.badges{display:flex;gap:6px;flex-wrap:wrap;}
+.badge{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:800;}
+.badge.t2{background:var(--t2-bg);color:var(--t2-ink);}
+.badge.old{background:var(--old-bg);color:var(--old-ink);}
+.badge.t3{background:var(--t3-bg);color:var(--t3-ink);}
+.badge.poly{background:var(--poly-bg);color:var(--poly-ink);}
+.badge.acid{background:var(--acid-bg);color:var(--acid-ink);}
+.badge.cls{background:var(--cls-bg);color:var(--cls-ink);}
+.badge.pair{background:var(--pair-bg);color:var(--pair-ink);}
+.badge.egg{background:var(--egg-bg);color:var(--egg-ink);}
+.badge.adv{background:var(--adv-bg);color:var(--adv-ink);}
+.badge.mode{opacity:.75;}
+.badge.wrongbook{background:var(--bad-soft);color:var(--bad-ink);}
+.qcount{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;}
 
-  .prompt{margin:14px 2px 12px;font-size:16px;font-weight:700;line-height:1.5;}
-  .prompt .sub{display:block;font-size:12.5px;font-weight:500;color:var(--muted);margin-top:4px;}
+.readout{
+  background:var(--readout-bg);color:var(--readout-ink);border-radius:var(--radius);
+  padding:22px 20px 20px;font-family:var(--font-mono);font-weight:600;
+  font-size:clamp(22px,5.4vw,34px);line-height:1.3;letter-spacing:.02em;
+  box-shadow:inset 0 2px 10px rgba(0,0,0,.35);overflow-wrap:anywhere;position:relative;min-height:88px;
+}
+.readout.word{font-family:var(--font-ui);font-weight:700;letter-spacing:.01em;}
+.readout sup{font-size:.55em;vertical-align:.7em;margin-left:1px;}
+.readout sub{font-size:.6em;vertical-align:-.25em;}
+.readout .dim{color:var(--readout-dim);font-weight:500;margin:0 .3em;}
+.readout .small{font-size:.5em;font-weight:500;font-family:var(--font-ui);color:var(--readout-dim);margin-left:.4em;vertical-align:middle;}
+.readout .dim.small{margin-left:.5em;}
+.readout .q{color:#FFD166;}
+.readout .ch{display:inline-block;}
+.readout .ch.in{animation:roll .42s var(--ease) both;}
+@keyframes roll{from{opacity:0;transform:translateY(.55em)}to{opacity:1;transform:translateY(0)}}
+.readout::after{content:"";position:absolute;left:14px;right:14px;bottom:10px;height:2px;border-radius:2px;background:var(--ok);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease);}
+.readout.ok::after{transform:scaleX(1);}
+.readout.bad::after{background:var(--bad);transform:scaleX(1);}
 
-  .row{display:flex;gap:10px;}
-  .input{
-    flex:1;min-width:0;border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;
-    font:inherit;font-family:var(--font-mono);font-size:17px;color:var(--ink);background:var(--input-bg);
-    transition:border-color .2s var(--ease),box-shadow .2s var(--ease);
-  }
-  .input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(108,92,231,.12);outline:none;}
-  .input:disabled{opacity:.7;}
-  .btn{
-    appearance:none;border:none;border-radius:var(--radius-sm);padding:12px 20px;font:inherit;font-size:15px;font-weight:800;
-    cursor:pointer;background:var(--accent);color:#fff;transition:transform .12s var(--ease),filter .2s var(--ease),opacity .2s;white-space:nowrap;
-  }
-  .btn:hover{filter:brightness(1.06);}
-  .btn:active{transform:scale(.97);}
-  .btn:disabled{opacity:.45;cursor:not-allowed;filter:none;transform:none;}
-  .btn.ghost{background:var(--accent-soft);color:var(--accent);}
+.prompt{margin:14px 2px 12px;font-size:16px;font-weight:700;line-height:1.5;}
+.prompt .sub{display:block;font-size:12.5px;font-weight:500;color:var(--muted);margin-top:4px;line-height:1.6;}
 
-  .fb-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease);}
-  .fb-wrap.open{grid-template-rows:1fr;}
-  .fb-wrap > div{overflow:hidden;}
-  .fb{margin-top:14px;border-radius:var(--radius);padding:14px 16px 16px;opacity:0;transform:translateY(6px);
-    transition:opacity .35s var(--ease) .1s,transform .35s var(--ease) .1s;font-size:14.5px;line-height:1.75;}
-  .fb-wrap.open .fb{opacity:1;transform:none;}
-  .fb.ok{background:var(--ok-soft);color:var(--ok-ink);}
-  .fb.bad{background:var(--bad-soft);color:var(--bad-ink);}
-  .fb-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:900;margin-bottom:6px;flex-wrap:wrap;}
-  .mark{width:26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;flex:none;background:var(--ok);}
-  .fb.bad .mark{background:var(--bad);}
-  .mark svg{width:16px;height:16px;}
-  .mark svg path{stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:30;stroke-dashoffset:30;}
-  .fb-wrap.open .mark svg path{animation:draw .45s var(--ease) .25s forwards;}
-  @keyframes draw{to{stroke-dashoffset:0}}
-  .ans{font-family:var(--font-mono);font-weight:600;background:rgba(255,255,255,.65);padding:1px 8px;border-radius:6px;color:inherit;}
-  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ans{background:rgba(255,255,255,.08);} }
-  :root[data-theme="dark"] .ans{background:rgba(255,255,255,.08);}
-  .ans sub{font-size:.75em;}
-  .body{font-weight:500;}
-  .body b{font-weight:800;}
-  .rt{color:var(--root);font-weight:800;}
-  .diff{margin:8px 0 10px;font-family:var(--font-mono);font-size:15px;line-height:1.9;}
-  .diff .lab{font-family:var(--font-ui);font-size:12px;font-weight:700;opacity:.8;display:inline-block;width:5.5em;}
-  .diff .x{background:var(--bad);color:#fff;border-radius:3px;padding:0 1px;}
-  .diff .m{background:var(--ok);color:#fff;border-radius:3px;padding:0 1px;}
+.row{display:flex;gap:10px;}
+.input{
+  flex:1;min-width:0;border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;
+  font:inherit;font-family:var(--font-mono);font-size:17px;color:var(--ink);background:var(--input-bg);
+  transition:border-color .2s var(--ease),box-shadow .2s var(--ease);
+}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(108,92,231,.12);outline:none;}
+.input:disabled{opacity:.7;}
+.btn{
+  appearance:none;border:none;border-radius:var(--radius-sm);padding:12px 20px;font-size:15px;font-weight:800;
+  cursor:pointer;background:var(--accent);color:#fff;transition:transform .12s var(--ease),filter .2s var(--ease),opacity .2s;white-space:nowrap;
+}
+.btn:hover{filter:brightness(1.06);}
+.btn:active{transform:scale(.97);}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none;transform:none;}
+.btn.ghost{background:var(--accent-soft);color:var(--accent-ink);}
+.btn.sm{padding:8px 14px;font-size:13.5px;}
+.format-hint{margin:8px 2px 0;font-size:12.5px;color:var(--warn-ink);background:var(--warn-soft);border-radius:8px;padding:8px 12px;line-height:1.6;}
 
-  .actions{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:12px;}
-  .kbd-hint{font-size:12px;color:var(--muted);}
-  .kbd-hint kbd{font-family:var(--font-mono);font-size:11px;background:var(--kbd);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:var(--ink);}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;}
+.choice{
+  appearance:none;border:1.5px solid var(--line);background:var(--input-bg);color:var(--ink);border-radius:var(--radius-sm);
+  padding:14px 10px;font-size:15px;font-weight:800;cursor:pointer;transition:background .2s var(--ease),border-color .2s var(--ease),transform .12s var(--ease);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.choice kbd{font-family:var(--font-mono);font-size:11px;color:var(--muted);font-weight:500;}
+.choice:hover:not(:disabled){border-color:var(--accent);}
+.choice:active:not(:disabled){transform:scale(.97);}
+.choice:disabled{cursor:default;}
+.choice.is-ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok-ink);}
+.choice.is-bad{background:var(--bad-soft);border-color:var(--bad);color:var(--bad-ink);}
+.choice.faded{opacity:.5;}
 
-  .panel{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 20px 14px;}
-  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-  .panel-head h2{margin:0;font-size:14px;font-weight:800;color:var(--muted);}
-  .link{appearance:none;border:none;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--accent);cursor:pointer;padding:4px 6px;border-radius:6px;}
-  .link:hover{background:var(--accent-soft);}
-  .stat{display:grid;grid-template-columns:110px 1fr 64px;align-items:center;gap:12px;padding:7px 0;font-size:13.5px;}
-  .stat + .stat{border-top:1px dashed var(--line);}
-  .stat .label{font-weight:700;}
-  .stat .bar{height:7px;border-radius:999px;background:var(--track);overflow:hidden;}
-  .stat .bar i{display:block;height:100%;width:0%;background:var(--accent);border-radius:999px;transition:width .5s var(--ease);}
-  .stat .num{font-family:var(--font-mono);font-size:13px;color:var(--muted);text-align:right;}
-  .stat.dim{opacity:.45;}
+.fb-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease);}
+.fb-wrap.open{grid-template-rows:1fr;}
+.fb-wrap > div{overflow:hidden;}
+.fb{margin-top:14px;border-radius:var(--radius);padding:14px 16px 16px;opacity:0;transform:translateY(6px);
+  transition:opacity .35s var(--ease) .1s,transform .35s var(--ease) .1s;font-size:14.5px;line-height:1.75;}
+.fb-wrap.open .fb{opacity:1;transform:none;}
+.fb.ok{background:var(--ok-soft);color:var(--ok-ink);}
+.fb.bad{background:var(--bad-soft);color:var(--bad-ink);}
+.fb-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:900;margin-bottom:6px;flex-wrap:wrap;}
+.mark{width:26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;flex:none;background:var(--ok);}
+.fb.bad .mark{background:var(--bad);}
+.mark svg{width:16px;height:16px;}
+.mark svg path{stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:30;stroke-dashoffset:30;}
+.fb-wrap.open .mark svg path{animation:draw .45s var(--ease) .25s forwards;}
+@keyframes draw{to{stroke-dashoffset:0}}
+.ans{font-family:var(--font-mono);font-weight:600;background:rgba(255,255,255,.65);padding:1px 8px;border-radius:6px;color:inherit;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ans{background:rgba(255,255,255,.08);} }
+:root[data-theme="dark"] .ans{background:rgba(255,255,255,.08);}
+.ans sub{font-size:.75em;}
+.ans sup{font-size:.7em;}
+.body{font-weight:500;}
+.body b{font-weight:800;}
+.body sub,.body sup{font-size:.75em;}
+.rt{color:var(--root);font-weight:800;}
+.hint{margin:0 0 8px;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.55);font-weight:700;border-left:3px solid currentColor;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hint{background:rgba(255,255,255,.07);} }
+:root[data-theme="dark"] .hint{background:rgba(255,255,255,.07);}
+.diff{margin:8px 0 10px;font-family:var(--font-mono);font-size:15px;line-height:1.9;}
+.diff .lab{font-family:var(--font-ui);font-size:12px;font-weight:700;opacity:.8;display:inline-block;width:5.5em;}
+.diff .x{background:var(--bad);color:#fff;border-radius:3px;padding:0 1px;}
+.diff .m{background:var(--ok);color:#fff;border-radius:3px;padding:0 1px;}
+.compare{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.compare .cell{background:rgba(255,255,255,.55);border-radius:10px;padding:10px 12px;min-width:0;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .compare .cell{background:rgba(255,255,255,.07);} }
+:root[data-theme="dark"] .compare .cell{background:rgba(255,255,255,.07);}
+.compare .f{font-family:var(--font-mono);font-weight:700;font-size:18px;}
+.compare .f sub{font-size:.7em;}
+.compare .nm{font-size:13px;font-weight:700;margin-top:2px;overflow-wrap:anywhere;}
+.compare .why{grid-column:1 / -1;font-weight:700;padding-top:4px;}
 
-  details.ref{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:14px 20px;}
-  details.ref summary{cursor:pointer;font-size:14px;font-weight:800;color:var(--muted);list-style:none;display:flex;justify-content:space-between;align-items:center;}
-  details.ref summary::-webkit-details-marker{display:none;}
-  details.ref summary::after{content:"展開";font-size:12.5px;color:var(--accent);}
-  details.ref[open] summary::after{content:"收起";}
-  .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-top:12px;}
-  .ref-block h3{margin:0 0 6px;font-size:13px;font-weight:800;}
-  .ref-wrap{overflow-x:auto;}
-  .ref-block table{width:100%;border-collapse:collapse;font-size:13px;}
-  .ref-block td{padding:4px 6px;border-top:1px solid var(--line);white-space:nowrap;}
-  .ref-block td:first-child{font-family:var(--font-mono);font-weight:600;}
-  .ref-block sup{font-size:.7em;}
-  .ref-block sub{font-size:.7em;}
-  .ref-note{font-size:12px;color:var(--muted);margin:10px 0 0;line-height:1.6;}
+.actions{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:12px;}
+.kbd-hint{font-size:12px;color:var(--muted);line-height:1.6;}
+.kbd-hint kbd{font-family:var(--font-mono);font-size:11px;background:var(--kbd);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:var(--ink);}
 
-  .foot{text-align:center;font-size:12px;color:var(--muted);margin-top:22px;line-height:1.7;}
+/* ---------- 面板 ---------- */
+.panel{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 20px 14px;}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;}
+.panel-head h2{margin:0;font-size:14px;font-weight:800;color:var(--muted);}
+.link{appearance:none;border:none;background:none;font-size:12.5px;font-weight:700;color:var(--accent-ink);cursor:pointer;padding:4px 6px;border-radius:6px;}
+.link:hover{background:var(--accent-soft);}
+.link.danger{color:var(--bad-ink);}
+.stat-cols{display:grid;grid-template-columns:1fr 1fr;gap:4px 22px;}
+.stat-cols h3{grid-column:auto;margin:6px 0 2px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.04em;}
+.stat{display:grid;grid-template-columns:96px 1fr 56px;align-items:center;gap:10px;padding:6px 0;font-size:13px;}
+.stat + .stat{border-top:1px dashed var(--line);}
+.stat .label{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stat .bar{height:7px;border-radius:999px;background:var(--track);overflow:hidden;}
+.stat .bar i{display:block;height:100%;width:0%;background:var(--accent);border-radius:999px;transition:width .5s var(--ease);}
+.stat .num{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;}
+.stat.dim{opacity:.45;}
+.empty{text-align:center;color:var(--muted);padding:26px 10px;font-size:14px;line-height:1.7;}
 
-  @media (max-width:480px){
-    body{padding:18px 12px 40px;}
-    .top h1{font-size:22px;}
-    .card{padding:18px 16px 16px;}
-    .stat{grid-template-columns:96px 1fr 56px;}
-  }
-  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important;}}
+/* ---------- 對照表 ---------- */
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:4px;}
+.ref-block{min-width:0;}
+.ref-block.wide{grid-column:1 / -1;}
+.ref-block h3{margin:0 0 6px;font-size:13px;font-weight:800;display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.ref-block h3 small{font-weight:600;color:var(--muted);font-size:11.5px;}
+.ref-wrap{overflow-x:auto;}
+.ref-block table{width:100%;border-collapse:collapse;font-size:13px;}
+.ref-block td,.ref-block th{padding:4px 6px;border-top:1px solid var(--line);white-space:nowrap;text-align:left;vertical-align:top;}
+.ref-block th{font-size:11.5px;color:var(--muted);font-weight:700;border-top:none;}
+.ref-block td:first-child{font-family:var(--font-mono);font-weight:600;}
+.ref-block td.wrap{white-space:normal;}
+.ref-block sup{font-size:.7em;}
+.ref-block sub{font-size:.7em;}
+.ref-block tr.ext td{opacity:.6;}
+.ref-note{font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.7;}
+.ref-note b{color:var(--ink);}
+.flow{margin:0;padding-left:0;list-style:none;font-size:13.5px;line-height:1.8;}
+.flow li{padding:6px 0;border-top:1px dashed var(--line);}
+.flow li:first-child{border-top:none;}
+.flow b{font-weight:800;}
+.ref-section{margin-top:18px;}
+.ref-section > h2{margin:0 0 10px;font-size:15px;font-weight:900;}
+.ref-section > h2 small{font-weight:600;color:var(--muted);font-size:12px;margin-left:8px;}
+
+/* ---------- 組合表 ---------- */
+.grid-wrap{overflow-x:auto;margin-top:12px;}
+.grid-table{border-collapse:separate;border-spacing:6px;min-width:100%;}
+.grid-table th{font-weight:700;font-size:13px;text-align:center;padding:4px 6px;color:var(--ink);}
+.grid-table th.cat{text-align:left;white-space:nowrap;}
+.grid-table th.cat small,.grid-table th.an small{display:block;font-weight:600;color:var(--muted);font-size:11px;}
+.grid-table th sup{font-size:.7em;}
+.grid-table th sub{font-size:.7em;}
+.grid-table td{padding:0;vertical-align:top;}
+.cell{border:1.5px solid var(--line);border-radius:10px;background:var(--input-bg);padding:0;min-width:110px;transition:border-color .2s var(--ease),background .2s var(--ease);}
+.cell input{width:100%;min-width:0;border:none;background:none;padding:10px 10px;font:inherit;font-family:var(--font-mono);font-size:14.5px;color:var(--ink);border-radius:10px;}
+.cell input:focus{outline:none;}
+.cell:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(108,92,231,.12);}
+.cell.name input{font-family:var(--font-ui);font-size:13.5px;}
+.cell.is-ok{border-color:var(--ok);background:var(--ok-soft);}
+.cell.is-bad{border-color:var(--bad);background:var(--bad-soft);}
+.cell .key{display:none;font-size:12px;padding:0 10px 8px;font-family:var(--font-mono);color:var(--bad-ink);font-weight:700;overflow-wrap:anywhere;}
+.cell.name .key{font-family:var(--font-ui);}
+.cell.is-bad .key{display:block;}
+.grid-sum{margin-top:12px;font-size:14px;font-weight:700;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;}
+.grid-sum .big{font-family:var(--font-mono);color:var(--ink);font-size:18px;}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface);}
+.seg button{appearance:none;border:none;background:none;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff;}
+
+/* ---------- 錯題本 ---------- */
+.wrong-list{display:flex;flex-direction:column;gap:8px;}
+.wrong-item{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--input-bg);}
+.wrong-item .wq{font-family:var(--font-mono);font-weight:700;font-size:16px;overflow-wrap:anywhere;min-width:0;}
+.wrong-item .wq.word{font-family:var(--font-ui);}
+.wrong-item .wq sub{font-size:.7em;}
+.wrong-item .wq sup{font-size:.7em;}
+.wrong-item .wa{font-size:13px;color:var(--muted);overflow-wrap:anywhere;min-width:0;}
+.wrong-item .wa b{color:var(--ink);}
+.wrong-item .wmeta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;grid-row:1 / span 2;}
+.pill{display:inline-block;font-family:var(--font-mono);font-size:12px;font-weight:700;background:var(--bad-soft);color:var(--bad-ink);border-radius:999px;padding:3px 9px;white-space:nowrap;}
+.pill.mode{background:var(--cls-bg);color:var(--cls-ink);font-family:var(--font-ui);font-size:11.5px;}
+
+.foot{text-align:center;font-size:12px;color:var(--muted);margin-top:22px;line-height:1.8;}
+.foot a{color:var(--accent-ink);font-weight:700;text-decoration:none;}
+
+@media (max-width:520px){
+  body{padding-block:18px 40px;padding-inline:16px;}
+  .top h1{font-size:22px;}
+  .card{padding:18px 16px 16px;}
+  .stat-cols{grid-template-columns:1fr;}
+  .stat{grid-template-columns:88px 1fr 52px;}
+  .tab{font-size:12.5px;padding:9px 4px;}
+  .compare{grid-template-columns:1fr;}
+  .wrong-item{grid-template-columns:1fr;}
+  .wrong-item .wmeta{grid-row:auto;justify-content:flex-start;}
+  .actions{flex-direction:column;align-items:stretch;}
+  .actions .btn{width:100%;}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important;}}
+
 </style>
-</head>
-<body>
 <div class="app">
 
   <header class="top">
-    <h1>離子化合物命名<small>Table 5.1 Type I ＋ Table 5.2 Type II</small></h1>
-    <div class="streak" title="連續答對">連對 <span class="n" id="streak">0</span></div>
+    <h1>化學命名練習<small>Ch5 Nomenclature · Type I / II / III · 多原子離子 · 酸</small></h1>
+    <div class="streak" title="連續答對">連對 <span class="n" id="streak">0</span><span class="best" id="best"></span></div>
   </header>
 
-  <div class="progress"><i id="progressBar"></i></div>
-  <div class="progress-meta"><span id="progressLeft">還沒開始作答</span><span id="progressRight"></span></div>
+  <nav class="tabs" role="tablist" aria-label="頁面">
+    <button class="tab" role="tab" id="tab-practice" data-tab="practice" aria-selected="true">練習</button>
+    <button class="tab" role="tab" id="tab-grid" data-tab="grid" aria-selected="false">組合表</button>
+    <button class="tab" role="tab" id="tab-ref" data-tab="ref" aria-selected="false">對照表</button>
+    <button class="tab" role="tab" id="tab-wrong" data-tab="wrong" aria-selected="false">錯題本<span class="cnt" id="wrongCnt" hidden>0</span></button>
+  </nav>
 
-  <p class="group-label">題型</p>
-  <div class="chips" id="modeChips">
-    <button class="chip" data-mode="ionspell" aria-pressed="true">離子拼字</button>
-    <button class="chip" data-mode="ion2name" aria-pressed="true">離子組合 → 名稱</button>
-    <button class="chip" data-mode="name2formula" aria-pressed="true">名稱 → 化學式</button>
-  </div>
+  <!-- ============ 練習 ============ -->
+  <section class="page" id="page-practice">
+    <div class="progress"><i id="progressBar"></i></div>
+    <div class="progress-meta"><span id="progressLeft">還沒開始作答</span><span id="progressRight"></span></div>
 
-  <p class="group-label">陽離子範圍</p>
-  <div class="chips" id="scopeChips">
-    <button class="chip" data-scope="t1" aria-pressed="true">Type I 固定電荷</button>
-    <button class="chip" data-scope="t2" aria-pressed="true">Type II 電荷可變</button>
-  </div>
-
-  <label class="switch"><input type="checkbox" id="strictCase" checked> 化學式大小寫要正確（Co 跟 CO 是不同東西）</label>
-
-  <section class="card" id="card">
-    <div class="card-head">
-      <div class="badges" id="badges"></div>
-      <span class="qcount" id="qcount">第 1 題</span>
+    <p class="group-label"><span>題型</span><button class="link" id="allModes">全選</button></p>
+    <div class="chips" id="modeChips">
+      <button class="chip" data-mode="ionspell" aria-pressed="true">離子拼字</button>
+      <button class="chip" data-mode="ion2name" aria-pressed="true">離子 → 名稱</button>
+      <button class="chip" data-mode="formula2name" aria-pressed="true">化學式 → 名稱</button>
+      <button class="chip" data-mode="name2formula" aria-pressed="true">名稱 → 化學式</button>
+      <button class="chip" data-mode="classify" aria-pressed="true">判斷類型</button>
+      <button class="chip" data-mode="lookalike" aria-pressed="true">相似式對比</button>
     </div>
-    <div class="readout" id="readout" aria-live="polite"></div>
-    <p class="prompt" id="prompt"></p>
-    <div class="row">
-      <input class="input" id="answer" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="輸入答案">
-      <button class="btn" id="submit">送出</button>
+
+    <p class="group-label"><span>範圍</span><button class="link" id="allScopes">全選</button></p>
+    <div class="chips" id="scopeChips">
+      <button class="chip" data-scope="t1" aria-pressed="true">Type I 固定電荷</button>
+      <button class="chip" data-scope="t2" aria-pressed="true">Type II 電荷可變</button>
+      <button class="chip" data-scope="t3" aria-pressed="false">Type III 非金屬</button>
+      <button class="chip" data-scope="poly" aria-pressed="false">多原子離子</button>
+      <button class="chip" data-scope="acid" aria-pressed="false">酸</button>
     </div>
-    <div class="fb-wrap" id="fbWrap">
-      <div>
-        <div class="fb" id="fb">
-          <div class="fb-title"><span class="mark" id="mark"></span><span id="fbTitle"></span></div>
-          <div class="diff" id="diff"></div>
-          <div class="body" id="fbBody"></div>
+
+    <div class="switches">
+      <label class="switch"><input type="checkbox" id="strictCase" checked> 化學式大小寫要正確</label>
+      <label class="switch"><input type="checkbox" id="advToggle"> 進階題（省略母音、hepta-/deca-、俗名）</label>
+      <label class="switch"><input type="checkbox" id="extToggle"> 課本表格外的延伸</label>
+      <label class="switch"><input type="checkbox" id="followToggle" checked> 判斷類型後接著命名</label>
+      <label class="switch" id="wrongOnlyWrap" hidden><input type="checkbox" id="wrongOnly"> 只練錯題本</label>
+    </div>
+
+    <section class="card" id="card">
+      <div class="card-head">
+        <div class="badges" id="badges"></div>
+        <span class="qcount" id="qcount">第 1 題</span>
+      </div>
+      <div class="readout" id="readout" aria-live="polite"></div>
+      <p class="prompt" id="prompt"></p>
+      <div class="row" id="inputRow">
+        <input class="input" id="answer" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="輸入答案" aria-label="答案">
+        <button class="btn" id="submit">送出</button>
+      </div>
+      <div class="choices" id="choices" hidden></div>
+      <div class="format-hint" id="formatHint" hidden></div>
+      <div class="fb-wrap" id="fbWrap">
+        <div>
+          <div class="fb" id="fb">
+            <div class="fb-title"><span class="mark" id="mark"></span><span id="fbTitle"></span></div>
+            <div class="diff" id="diff"></div>
+            <div class="body" id="fbBody"></div>
+            <div id="compare"></div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="actions">
-      <span class="kbd-hint"><kbd>Enter</kbd> 送出，答錯要照正確答案訂正一次</span>
-      <button class="btn ghost" id="next" hidden>下一題</button>
-    </div>
+      <div class="actions">
+        <span class="kbd-hint" id="kbdHint"><kbd>Enter</kbd> 送出，答錯要照正確答案訂正一次</span>
+        <button class="btn ghost" id="next" hidden>下一題</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>正確率</h2>
+        <button class="link" id="reset">重設統計</button>
+      </div>
+      <div class="stat-cols">
+        <div><h3>依題型</h3><div id="statModes"></div></div>
+        <div><h3>依範圍</h3><div id="statScopes"></div></div>
+      </div>
+    </section>
+
+    <p class="foot">名稱題不分大小寫，也不管空格跟括號。化學式直接打數字，例如 Fe2O3、Ca(NO3)2。<br>離子題格式：化學式、空格、電荷，例如 SO4 2-。選擇題可以按數字鍵。</p>
   </section>
 
-  <section class="panel">
-    <div class="panel-head">
-      <h2>各題型正確率</h2>
-      <button class="link" id="reset">重設統計</button>
-    </div>
-    <div id="statList"></div>
+  <!-- ============ 組合表 ============ -->
+  <section class="page" id="page-grid" hidden>
+    <section class="panel" style="margin-top:0">
+      <div class="panel-head">
+        <h2>組合表 · 課本 Table 5.A / 5.B</h2>
+        <div class="toolbar">
+          <div class="seg" id="gridModeSeg">
+            <button data-gm="formula" aria-pressed="true">填化學式</button>
+            <button data-gm="name" aria-pressed="false">填名稱</button>
+          </div>
+          <button class="btn ghost sm" id="gridNew">換一組</button>
+        </div>
+      </div>
+      <p class="ref-note" style="margin:0 0 6px">每一格是左邊陽離子和上面陰離子組成的化合物。範圍跟練習頁的設定一樣（勾了 Type II 才會出現過渡金屬，勾了多原子離子才會出現 NH₄⁺ 和多原子陰離子）。</p>
+      <div class="grid-wrap"><table class="grid-table" id="gridTable"></table></div>
+      <div class="grid-sum">
+        <span id="gridResult">填完按「檢查」</span>
+        <span class="toolbar">
+          <button class="btn ghost sm" id="gridReveal">顯示答案</button>
+          <button class="btn sm" id="gridCheck">檢查</button>
+        </span>
+      </div>
+      <p class="ref-note" id="gridTotal"></p>
+    </section>
   </section>
 
-  <details class="ref" id="ref">
-    <summary>背誦用對照表</summary>
-    <div class="ref-grid" id="refGrid"></div>
-    <p class="ref-note">陰離子的藍色部分是字根，字根加上 -ide 就是陰離子名稱。舊式名稱電荷高的用 -ic，電荷低的用 -ous。Ag⁺ 跟 Zn²⁺ 雖然是過渡金屬，但只會形成一種離子，所以不用加羅馬數字。</p>
-  </details>
+  <!-- ============ 對照表 ============ -->
+  <section class="page" id="page-ref" hidden>
+    <div id="refRoot"></div>
+  </section>
 
-  <p class="foot">名稱題不分大小寫，也不管空格跟括號。<br>化學式直接打數字，例如 Fe2O3。</p>
+  <!-- ============ 錯題本 ============ -->
+  <section class="page" id="page-wrong" hidden>
+    <section class="panel" style="margin-top:0">
+      <div class="panel-head">
+        <h2>錯題本</h2>
+        <div class="toolbar">
+          <button class="btn ghost sm" id="wrongPractice">只練這些</button>
+          <button class="link danger" id="wrongClear">清空</button>
+        </div>
+      </div>
+      <p class="ref-note" style="margin:0 0 12px">答錯的題目會記在這裡（只存在這台裝置的瀏覽器），之後出題時有三成機率再抽到。答對一次扣一分，扣到 0 就移除。</p>
+      <div id="wrongList"></div>
+    </section>
+  </section>
+
 </div>
 
 <script>
-(function(){
+/* =====================================================================
+   Ch5 Nomenclature 資料檔：給 https://firedragontw.github.io/ionic 用
+   內容來源：Introductory Chemistry 9e, Chapter 5（整理成網站資料）
+   ---------------------------------------------------------------------
+   欄位慣例
+   - sym：純文字化學式片段，數字一律是下標，例如 'SO4'、'Hg2'、'C2H3O2'
+   - c  ：電荷「大小」（正整數）；正負由所在陣列決定
+   - src：'T5.1'…'T5.6' = 課本表格；'book' = 課本例題或習題出現過；
+          'ext' = 課本表格外的延伸（出題時可用 src 篩掉）
+   - TYPE1 / ANIONS / TYPE2 的欄位跟現在網站裡的同名陣列相容，
+     可以直接替換；多出來的欄位（group、src、note）網站不用也沒關係。
+   使用方式
+   - 瀏覽器：<script src="nomenclature-data.js"><\/script> 之後用 window.NOMEN
+   - Node   ：const NOMEN = require('./nomenclature-data.js')
+   ===================================================================== */
+(function (root) {
   'use strict';
 
-  /* ---------- 資料 Table 5.1 / 5.2 ---------- */
-  const TYPE1 = [
-    {sym:'H',  c:1, name:'hydrogen',  inCompound:false},
-    {sym:'Li', c:1, name:'lithium',   hydride:true},
-    {sym:'Na', c:1, name:'sodium',    hydride:true},
-    {sym:'K',  c:1, name:'potassium', hydride:true},
-    {sym:'Cs', c:1, name:'cesium',    hydride:true},
-    {sym:'Be', c:2, name:'beryllium'},
-    {sym:'Mg', c:2, name:'magnesium', hydride:true},
-    {sym:'Ca', c:2, name:'calcium',   hydride:true},
-    {sym:'Ba', c:2, name:'barium',    hydride:true},
-    {sym:'Al', c:3, name:'aluminum'},
-    {sym:'Ag', c:1, name:'silver', alt:'silver(I)'},
-    {sym:'Zn', c:2, name:'zinc',   alt:'zinc(II)'}
-  ].map(o => Object.assign({type:1, inCompound:true}, o));
+  const ROMAN = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V', 6: 'VI', 7: 'VII' };
 
+  /* ---------- Type I 陽離子（Table 5.1 + 延伸）---------- */
+  const TYPE1 = [
+    { sym: 'H',  c: 1, name: 'hydrogen',  inCompound: false, group: 1, src: 'T5.1', note: 'H 是非金屬，不會跟非金屬組成離子化合物' },
+    { sym: 'Li', c: 1, name: 'lithium',   hydride: true, group: 1, src: 'T5.1' },
+    { sym: 'Na', c: 1, name: 'sodium',    hydride: true, group: 1, src: 'T5.1' },
+    { sym: 'K',  c: 1, name: 'potassium', hydride: true, group: 1, src: 'T5.1' },
+    { sym: 'Rb', c: 1, name: 'rubidium',  hydride: true, group: 1, src: 'ext' },
+    { sym: 'Cs', c: 1, name: 'cesium',    hydride: true, group: 1, src: 'T5.1' },
+    { sym: 'Be', c: 2, name: 'beryllium', group: 2, src: 'T5.1' },
+    { sym: 'Mg', c: 2, name: 'magnesium', hydride: true, group: 2, src: 'T5.1' },
+    { sym: 'Ca', c: 2, name: 'calcium',   hydride: true, group: 2, src: 'T5.1' },
+    { sym: 'Sr', c: 2, name: 'strontium', hydride: true, group: 2, src: 'ext' },
+    { sym: 'Ba', c: 2, name: 'barium',    hydride: true, group: 2, src: 'T5.1' },
+    { sym: 'Al', c: 3, name: 'aluminum',  group: 3, src: 'T5.1' },
+    { sym: 'Ga', c: 3, name: 'gallium',   group: 3, src: 'ext' },
+    { sym: 'Ag', c: 1, name: 'silver',  alt: 'silver(I)',  group: 'TM', src: 'T5.1', note: '過渡金屬但只有 +1' },
+    { sym: 'Zn', c: 2, name: 'zinc',    alt: 'zinc(II)',   group: 'TM', src: 'T5.1', note: '過渡金屬但只有 +2' },
+    { sym: 'Cd', c: 2, name: 'cadmium', alt: 'cadmium(II)', group: 'TM', src: 'ext', note: '過渡金屬但只有 +2' }
+  ].map(o => Object.assign({ type: 1, inCompound: true }, o));
+
+  /* ---------- 單原子陰離子（Table 5.1 + 延伸）---------- */
   const ANIONS = [
-    {sym:'H',  c:1, root:'hydr',  name:'hydride'},
-    {sym:'F',  c:1, root:'fluor', name:'fluoride'},
-    {sym:'Cl', c:1, root:'chlor', name:'chloride'},
-    {sym:'Br', c:1, root:'brom',  name:'bromide'},
-    {sym:'I',  c:1, root:'iod',   name:'iodide'},
-    {sym:'O',  c:2, root:'ox',    name:'oxide'},
-    {sym:'S',  c:2, root:'sulf',  name:'sulfide'}
+    { sym: 'H',  c: 1, root: 'hydr',   name: 'hydride',  src: 'T5.1', note: '只跟 1、2 族金屬組成 hydride' },
+    { sym: 'F',  c: 1, root: 'fluor',  name: 'fluoride', src: 'T5.1' },
+    { sym: 'Cl', c: 1, root: 'chlor',  name: 'chloride', src: 'T5.1' },
+    { sym: 'Br', c: 1, root: 'brom',   name: 'bromide',  src: 'T5.1' },
+    { sym: 'I',  c: 1, root: 'iod',    name: 'iodide',   src: 'T5.1' },
+    { sym: 'O',  c: 2, root: 'ox',     name: 'oxide',    src: 'T5.1' },
+    { sym: 'S',  c: 2, root: 'sulf',   name: 'sulfide',  src: 'T5.1' },
+    { sym: 'Se', c: 2, root: 'selen',  name: 'selenide', src: 'ext' },
+    { sym: 'N',  c: 3, root: 'nitr',   name: 'nitride',  src: 'ext' },
+    { sym: 'P',  c: 3, root: 'phosph', name: 'phosphide', src: 'ext' }
   ];
 
+  /* ---------- Type II 陽離子（Table 5.2 + 延伸）----------
+     level：'high' / 'low' 表示同元素兩種離子中電荷較高 / 較低（舊式 -ic / -ous）
+     old 為 null 的離子不考舊式名稱 */
   const TYPE2 = [
-    {sym:'Fe',  c:3, el:'iron',    name:'iron(III)',     old:'ferric',     level:'high', latin:'ferrum',  oroot:'ferr'},
-    {sym:'Fe',  c:2, el:'iron',    name:'iron(II)',      old:'ferrous',    level:'low',  latin:'ferrum',  oroot:'ferr'},
-    {sym:'Cu',  c:2, el:'copper',  name:'copper(II)',    old:'cupric',     level:'high', latin:'cuprum',  oroot:'cupr'},
-    {sym:'Cu',  c:1, el:'copper',  name:'copper(I)',     old:'cuprous',    level:'low',  latin:'cuprum',  oroot:'cupr'},
-    {sym:'Co',  c:3, el:'cobalt',  name:'cobalt(III)',   old:'cobaltic',   level:'high', latin:null,      oroot:'cobalt'},
-    {sym:'Co',  c:2, el:'cobalt',  name:'cobalt(II)',    old:'cobaltous',  level:'low',  latin:null,      oroot:'cobalt'},
-    {sym:'Sn',  c:4, el:'tin',     name:'tin(IV)',       old:'stannic',    level:'high', latin:'stannum', oroot:'stann'},
-    {sym:'Sn',  c:2, el:'tin',     name:'tin(II)',       old:'stannous',   level:'low',  latin:'stannum', oroot:'stann'},
-    {sym:'Pb',  c:4, el:'lead',    name:'lead(IV)',      old:'plumbic',    level:'high', latin:'plumbum', oroot:'plumb'},
-    {sym:'Pb',  c:2, el:'lead',    name:'lead(II)',      old:'plumbous',   level:'low',  latin:'plumbum', oroot:'plumb'},
-    {sym:'Hg',  c:2, el:'mercury', name:'mercury(II)',   old:'mercuric',   level:'high', latin:null,      oroot:'mercur'},
-    {sym:'Hg2', c:2, el:'mercury', name:'mercury(I)',    old:'mercurous',  level:'low',  latin:null,      oroot:'mercur', pair:true}
-  ].map(o => Object.assign({type:2}, o));
+    { sym: 'Fe',  c: 3, el: 'iron',     name: 'iron(III)',     old: 'ferric',     level: 'high', latin: 'ferrum',  oroot: 'ferr',   src: 'T5.2' },
+    { sym: 'Fe',  c: 2, el: 'iron',     name: 'iron(II)',      old: 'ferrous',    level: 'low',  latin: 'ferrum',  oroot: 'ferr',   src: 'T5.2' },
+    { sym: 'Cu',  c: 2, el: 'copper',   name: 'copper(II)',    old: 'cupric',     level: 'high', latin: 'cuprum',  oroot: 'cupr',   src: 'T5.2' },
+    { sym: 'Cu',  c: 1, el: 'copper',   name: 'copper(I)',     old: 'cuprous',    level: 'low',  latin: 'cuprum',  oroot: 'cupr',   src: 'T5.2' },
+    { sym: 'Co',  c: 3, el: 'cobalt',   name: 'cobalt(III)',   old: 'cobaltic',   level: 'high', latin: null,      oroot: 'cobalt', src: 'T5.2' },
+    { sym: 'Co',  c: 2, el: 'cobalt',   name: 'cobalt(II)',    old: 'cobaltous',  level: 'low',  latin: null,      oroot: 'cobalt', src: 'T5.2' },
+    { sym: 'Sn',  c: 4, el: 'tin',      name: 'tin(IV)',       old: 'stannic',    level: 'high', latin: 'stannum', oroot: 'stann',  src: 'T5.2' },
+    { sym: 'Sn',  c: 2, el: 'tin',      name: 'tin(II)',       old: 'stannous',   level: 'low',  latin: 'stannum', oroot: 'stann',  src: 'T5.2' },
+    { sym: 'Pb',  c: 4, el: 'lead',     name: 'lead(IV)',      old: 'plumbic',    level: 'high', latin: 'plumbum', oroot: 'plumb',  src: 'T5.2' },
+    { sym: 'Pb',  c: 2, el: 'lead',     name: 'lead(II)',      old: 'plumbous',   level: 'low',  latin: 'plumbum', oroot: 'plumb',  src: 'T5.2' },
+    { sym: 'Hg',  c: 2, el: 'mercury',  name: 'mercury(II)',   old: 'mercuric',   level: 'high', latin: null,      oroot: 'mercur', src: 'T5.2' },
+    { sym: 'Hg2', c: 2, el: 'mercury',  name: 'mercury(I)',    old: 'mercurous',  level: 'low',  latin: null,      oroot: 'mercur', src: 'T5.2', pair: true, note: 'Hg₂²⁺ 兩個汞一組，每個 +1，化學式不能約分' },
+    { sym: 'Cr',  c: 3, el: 'chromium', name: 'chromium(III)', old: 'chromic',    level: 'high', latin: null,      oroot: 'chrom',  src: 'book' },
+    { sym: 'Cr',  c: 2, el: 'chromium', name: 'chromium(II)',  old: 'chromous',   level: 'low',  latin: null,      oroot: 'chrom',  src: 'ext' },
+    { sym: 'Ni',  c: 2, el: 'nickel',   name: 'nickel(II)',    old: 'nickelous',  level: 'low',  latin: null,      oroot: 'nickel', src: 'book' },
+    { sym: 'Ni',  c: 3, el: 'nickel',   name: 'nickel(III)',   old: 'nickelic',   level: 'high', latin: null,      oroot: 'nickel', src: 'ext' },
+    { sym: 'Au',  c: 3, el: 'gold',     name: 'gold(III)',     old: 'auric',      level: 'high', latin: 'aurum',   oroot: 'aur',    src: 'book' },
+    { sym: 'Au',  c: 1, el: 'gold',     name: 'gold(I)',       old: 'aurous',     level: 'low',  latin: 'aurum',   oroot: 'aur',    src: 'book' },
+    { sym: 'Mn',  c: 2, el: 'manganese', name: 'manganese(II)', old: null, level: null, src: 'book' },
+    { sym: 'Mn',  c: 4, el: 'manganese', name: 'manganese(IV)', old: null, level: null, src: 'book' },
+    { sym: 'Ti',  c: 4, el: 'titanium', name: 'titanium(IV)',  old: null, level: null, src: 'book' },
+    { sym: 'V',   c: 5, el: 'vanadium', name: 'vanadium(V)',   old: null, level: null, src: 'book' },
+    { sym: 'Pt',  c: 2, el: 'platinum', name: 'platinum(II)',  old: null, level: null, src: 'ext' },
+    { sym: 'Pt',  c: 4, el: 'platinum', name: 'platinum(IV)',  old: null, level: null, src: 'book' }
+  ].map(o => Object.assign({ type: 2 }, o));
 
-  const ROMAN = {1:'I',2:'II',3:'III',4:'IV'};
+  /* ---------- 字首（Table 5.3 + 延伸）---------- */
+  const PREFIXES = { 1: 'mono', 2: 'di', 3: 'tri', 4: 'tetra', 5: 'penta', 6: 'hexa', 7: 'hepta', 8: 'octa', 9: 'nona', 10: 'deca' };
+  const PREFIX_SRC = { 9: 'ext', 10: 'ext' }; // 其餘是 T5.3
 
-  /* ---------- 工具 ---------- */
-  const rand = arr => arr[Math.floor(Math.random()*arr.length)];
-  const gcd = (a,b) => b ? gcd(b, a%b) : a;
-  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  /* ---------- 非金屬名稱（Type III 用）----------
+     name：當第一個元素時的全名；ide：當第二個元素時的名稱 */
+  const NONMETALS = {
+    H:  { name: 'hydrogen',   ide: 'hydride' },
+    B:  { name: 'boron',      ide: 'boride' },
+    C:  { name: 'carbon',     ide: 'carbide' },
+    N:  { name: 'nitrogen',   ide: 'nitride' },
+    O:  { name: 'oxygen',     ide: 'oxide' },
+    F:  { name: 'fluorine',   ide: 'fluoride' },
+    Si: { name: 'silicon',    ide: 'silicide' },
+    P:  { name: 'phosphorus', ide: 'phosphide' },
+    S:  { name: 'sulfur',     ide: 'sulfide' },
+    Cl: { name: 'chlorine',   ide: 'chloride' },
+    As: { name: 'arsenic',    ide: 'arsenide' },
+    Se: { name: 'selenium',   ide: 'selenide' },
+    Br: { name: 'bromine',    ide: 'bromide' },
+    Te: { name: 'tellurium',  ide: 'telluride' },
+    I:  { name: 'iodine',     ide: 'iodide' },
+    Kr: { name: 'krypton',    ide: null },
+    Xe: { name: 'xenon',      ide: null }
+  };
 
-  function symHTML(sym){ return esc(sym).replace(/(\d+)/g,'<sub>$1</sub>'); }
-  function chargeStr(c, sign){ return (c>1 ? c : '') + (sign>0 ? '+' : '−'); }
-  function ionHTML(sym, c, sign){ return symHTML(sym) + '<sup>' + chargeStr(c, sign) + '</sup>'; }
-  function ionText(sym, c, sign){
-    const supMap = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','+':'⁺','−':'⁻'};
-    const subMap = {'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄'};
-    const s = sym.replace(/\d/g, d => subMap[d]);
-    return s + chargeStr(c, sign).split('').map(ch => supMap[ch] || ch).join('');
+  /* ---------- Type III 分子清單（只用真實存在的分子出題）----------
+     parts：照化學式順序 [[元素, 個數], [元素, 個數]]
+     name ：課本寫法（oxide 前省略母音）
+     alt  ：也接受的答案（俗名等）
+     only ：'common' = 只接受俗名（H₂O、NH₃，課本說系統名稱從來不用）
+     level：1 = 基本，2 = 進階（hepta/deca、省略母音、mono 在第二個元素、俗名） */
+  const TYPE3 = [
+    { parts: [['C', 1], ['O', 1]],  name: 'carbon monoxide', level: 1, src: 'book' },
+    { parts: [['C', 1], ['O', 2]],  name: 'carbon dioxide', level: 1, src: 'book' },
+    { parts: [['N', 1], ['O', 1]],  name: 'nitrogen monoxide', alt: ['nitric oxide'], level: 1, src: 'book' },
+    { parts: [['N', 1], ['O', 2]],  name: 'nitrogen dioxide', level: 1, src: 'book' },
+    { parts: [['N', 2], ['O', 1]],  name: 'dinitrogen monoxide', alt: ['nitrous oxide'], level: 1, src: 'book' },
+    { parts: [['N', 2], ['O', 3]],  name: 'dinitrogen trioxide', level: 1, src: 'book' },
+    { parts: [['N', 2], ['O', 4]],  name: 'dinitrogen tetroxide', level: 2, src: 'book' },
+    { parts: [['N', 2], ['O', 5]],  name: 'dinitrogen pentoxide', level: 2, src: 'book' },
+    { parts: [['S', 1], ['O', 2]],  name: 'sulfur dioxide', level: 1, src: 'book' },
+    { parts: [['S', 1], ['O', 3]],  name: 'sulfur trioxide', level: 1, src: 'book' },
+    { parts: [['Si', 1], ['O', 2]], name: 'silicon dioxide', level: 1, src: 'book' },
+    { parts: [['B', 2], ['O', 3]],  name: 'diboron trioxide', level: 1, src: 'book' },
+    { parts: [['P', 4], ['O', 6]],  name: 'tetraphosphorus hexoxide', level: 2, src: 'book' },
+    { parts: [['P', 4], ['O', 10]], name: 'tetraphosphorus decoxide', level: 2, src: 'book' },
+    { parts: [['P', 2], ['O', 5]],  name: 'diphosphorus pentoxide', level: 2, src: 'book' },
+    { parts: [['P', 2], ['O', 1]],  name: 'diphosphorus monoxide', level: 2, src: 'book' },
+    { parts: [['Cl', 2], ['O', 1]], name: 'dichlorine monoxide', level: 2, src: 'book' },
+    { parts: [['Cl', 1], ['O', 2]], name: 'chlorine dioxide', level: 1, src: 'ext' },
+    { parts: [['Cl', 2], ['O', 7]], name: 'dichlorine heptoxide', level: 2, src: 'book' },
+    { parts: [['I', 2], ['O', 5]],  name: 'diiodine pentoxide', level: 2, src: 'ext', note: 'diiodine 的 i 不省略，省略只用在 oxide 前' },
+    { parts: [['Se', 1], ['O', 2]], name: 'selenium dioxide', level: 1, src: 'book' },
+    { parts: [['Xe', 1], ['O', 3]], name: 'xenon trioxide', level: 1, src: 'ext' },
+    { parts: [['Xe', 1], ['O', 4]], name: 'xenon tetroxide', level: 2, src: 'book' },
+    { parts: [['O', 1], ['F', 2]],  name: 'oxygen difluoride', level: 2, src: 'book', note: '遇到 F 時 O 排前面' },
+    { parts: [['O', 2], ['F', 2]],  name: 'dioxygen difluoride', level: 2, src: 'book' },
+    { parts: [['C', 1], ['Cl', 4]], name: 'carbon tetrachloride', level: 1, src: 'book' },
+    { parts: [['C', 1], ['Br', 4]], name: 'carbon tetrabromide', level: 1, src: 'book' },
+    { parts: [['C', 1], ['S', 2]],  name: 'carbon disulfide', level: 1, src: 'book', note: '跟 Cs₂S（cesium sulfide）分清楚' },
+    { parts: [['P', 1], ['Cl', 3]], name: 'phosphorus trichloride', level: 1, src: 'book' },
+    { parts: [['P', 1], ['Cl', 5]], name: 'phosphorus pentachloride', level: 1, src: 'book' },
+    { parts: [['P', 1], ['Br', 3]], name: 'phosphorus tribromide', level: 1, src: 'ext' },
+    { parts: [['P', 1], ['F', 5]],  name: 'phosphorus pentafluoride', level: 1, src: 'ext' },
+    { parts: [['P', 2], ['S', 5]],  name: 'diphosphorus pentasulfide', level: 2, src: 'book' },
+    { parts: [['P', 4], ['S', 3]],  name: 'tetraphosphorus trisulfide', level: 2, src: 'ext' },
+    { parts: [['S', 1], ['F', 6]],  name: 'sulfur hexafluoride', level: 1, src: 'book' },
+    { parts: [['S', 1], ['F', 4]],  name: 'sulfur tetrafluoride', level: 1, src: 'ext' },
+    { parts: [['S', 1], ['Cl', 2]], name: 'sulfur dichloride', level: 1, src: 'book' },
+    { parts: [['S', 2], ['Cl', 2]], name: 'disulfur dichloride', level: 1, src: 'book' },
+    { parts: [['S', 2], ['F', 10]], name: 'disulfur decafluoride', level: 2, src: 'book' },
+    { parts: [['B', 1], ['F', 3]],  name: 'boron trifluoride', level: 1, src: 'book' },
+    { parts: [['B', 1], ['Cl', 3]], name: 'boron trichloride', level: 1, src: 'ext' },
+    { parts: [['Si', 1], ['F', 4]], name: 'silicon tetrafluoride', level: 1, src: 'book' },
+    { parts: [['Si', 1], ['Cl', 4]], name: 'silicon tetrachloride', level: 1, src: 'ext' },
+    { parts: [['Si', 1], ['Br', 4]], name: 'silicon tetrabromide', level: 1, src: 'book' },
+    { parts: [['N', 1], ['F', 3]],  name: 'nitrogen trifluoride', level: 1, src: 'ext' },
+    { parts: [['N', 1], ['Cl', 3]], name: 'nitrogen trichloride', level: 1, src: 'ext' },
+    { parts: [['N', 1], ['Br', 3]], name: 'nitrogen tribromide', level: 1, src: 'book' },
+    { parts: [['Cl', 1], ['F', 1]], name: 'chlorine monofluoride', level: 2, src: 'ext' },
+    { parts: [['Cl', 1], ['F', 3]], name: 'chlorine trifluoride', level: 1, src: 'book' },
+    { parts: [['Cl', 1], ['F', 5]], name: 'chlorine pentafluoride', level: 1, src: 'book' },
+    { parts: [['Br', 1], ['F', 1]], name: 'bromine monofluoride', level: 2, src: 'book' },
+    { parts: [['Br', 1], ['F', 3]], name: 'bromine trifluoride', level: 1, src: 'book' },
+    { parts: [['Br', 1], ['F', 5]], name: 'bromine pentafluoride', level: 1, src: 'book' },
+    { parts: [['Br', 1], ['Cl', 1]], name: 'bromine monochloride', level: 2, src: 'ext' },
+    { parts: [['I', 1], ['Cl', 1]], name: 'iodine monochloride', level: 2, src: 'ext' },
+    { parts: [['I', 1], ['Cl', 3]], name: 'iodine trichloride', level: 1, src: 'ext' },
+    { parts: [['I', 1], ['F', 5]],  name: 'iodine pentafluoride', level: 1, src: 'book' },
+    { parts: [['I', 1], ['F', 7]],  name: 'iodine heptafluoride', level: 2, src: 'ext' },
+    { parts: [['Xe', 1], ['F', 2]], name: 'xenon difluoride', level: 1, src: 'ext' },
+    { parts: [['Xe', 1], ['F', 4]], name: 'xenon tetrafluoride', level: 1, src: 'book' },
+    { parts: [['Xe', 1], ['F', 6]], name: 'xenon hexafluoride', level: 1, src: 'book' },
+    { parts: [['Kr', 1], ['F', 2]], name: 'krypton difluoride', level: 1, src: 'book' },
+    { parts: [['Se', 1], ['F', 6]], name: 'selenium hexafluoride', level: 1, src: 'ext' },
+    { parts: [['As', 1], ['F', 5]], name: 'arsenic pentafluoride', level: 1, src: 'book' },
+    { parts: [['As', 1], ['Cl', 3]], name: 'arsenic trichloride', level: 1, src: 'ext' },
+    { parts: [['P', 1], ['H', 3]],  name: 'phosphorus trihydride', alt: ['phosphine'], level: 2, src: 'book' },
+    { parts: [['As', 1], ['H', 3]], name: 'arsenic trihydride', alt: ['arsine'], level: 2, src: 'book' },
+    { parts: [['B', 2], ['H', 6]],  name: 'diboron hexahydride', alt: ['diborane'], level: 2, src: 'book' },
+    { parts: [['H', 2], ['O', 1]],  name: 'water', only: 'common', systematic: 'dihydrogen monoxide', level: 1, src: 'book' },
+    { parts: [['N', 1], ['H', 3]],  name: 'ammonia', only: 'common', systematic: 'nitrogen trihydride', level: 1, src: 'book' }
+  ];
+
+  /* ---------- 多原子離子（Table 5.4 + 延伸）----------
+     family：同組離子（出題、對照表分組用）
+     oxy   ：是不是含氧陰離子（酸的命名用）
+     noAcid：不當作酸的陰離子出題
+     poly  ：一律 true，寫化學式時個數 > 1 要加括號 */
+  const POLY_CATIONS = [
+    { sym: 'NH4', c: 1, name: 'ammonium', family: 'N', src: 'T5.4' }
+  ].map(o => Object.assign({ type: 'poly', poly: true }, o));
+
+  const POLY_ANIONS = [
+    { sym: 'NO2',    c: 1, name: 'nitrite',   family: 'N',  oxy: true, src: 'T5.4' },
+    { sym: 'NO3',    c: 1, name: 'nitrate',   family: 'N',  oxy: true, src: 'T5.4' },
+    { sym: 'SO3',    c: 2, name: 'sulfite',   family: 'S',  oxy: true, src: 'T5.4' },
+    { sym: 'SO4',    c: 2, name: 'sulfate',   family: 'S',  oxy: true, src: 'T5.4' },
+    { sym: 'HSO4',   c: 1, name: 'hydrogen sulfate', alt: ['bisulfate'], family: 'S', oxy: true, hasH: true, noAcid: true, src: 'T5.4' },
+    { sym: 'HSO3',   c: 1, name: 'hydrogen sulfite', alt: ['bisulfite'], family: 'S', oxy: true, hasH: true, noAcid: true, src: 'ext' },
+    { sym: 'PO4',    c: 3, name: 'phosphate', family: 'P',  oxy: true, src: 'T5.4' },
+    { sym: 'HPO4',   c: 2, name: 'hydrogen phosphate',   family: 'P', oxy: true, hasH: true, noAcid: true, src: 'T5.4' },
+    { sym: 'H2PO4',  c: 1, name: 'dihydrogen phosphate', family: 'P', oxy: true, hasH: true, noAcid: true, src: 'T5.4' },
+    { sym: 'PO3',    c: 3, name: 'phosphite', family: 'P',  oxy: true, src: 'ext' },
+    { sym: 'CO3',    c: 2, name: 'carbonate', family: 'C',  oxy: true, src: 'T5.4' },
+    { sym: 'HCO3',   c: 1, name: 'hydrogen carbonate', alt: ['bicarbonate'], family: 'C', oxy: true, hasH: true, noAcid: true, src: 'T5.4' },
+    { sym: 'C2H3O2', c: 1, name: 'acetate',   family: 'C',  oxy: true, src: 'T5.4', altSym: ['CH3COO'] },
+    { sym: 'CN',     c: 1, name: 'cyanide',   family: 'C',  oxy: false, src: 'T5.4', note: '字尾 -ide 的多原子離子' },
+    { sym: 'OH',     c: 1, name: 'hydroxide', family: 'O',  oxy: true, noAcid: true, src: 'T5.4', note: '字尾 -ide 的多原子離子；H⁺ + OH⁻ 是水，不當酸命名' },
+    { sym: 'O2',     c: 2, name: 'peroxide',  family: 'O',  oxy: true, noAcid: true, src: 'T5.4', note: '字尾 -ide 的多原子離子；化學式不能約分' },
+    { sym: 'ClO',    c: 1, name: 'hypochlorite', family: 'Cl', oxy: true, src: 'T5.4' },
+    { sym: 'ClO2',   c: 1, name: 'chlorite',     family: 'Cl', oxy: true, src: 'T5.4' },
+    { sym: 'ClO3',   c: 1, name: 'chlorate',     family: 'Cl', oxy: true, src: 'T5.4' },
+    { sym: 'ClO4',   c: 1, name: 'perchlorate',  family: 'Cl', oxy: true, src: 'T5.4' },
+    { sym: 'BrO',    c: 1, name: 'hypobromite',  family: 'Br', oxy: true, src: 'ext' },
+    { sym: 'BrO2',   c: 1, name: 'bromite',      family: 'Br', oxy: true, src: 'ext' },
+    { sym: 'BrO3',   c: 1, name: 'bromate',      family: 'Br', oxy: true, src: 'ext' },
+    { sym: 'BrO4',   c: 1, name: 'perbromate',   family: 'Br', oxy: true, src: 'ext' },
+    { sym: 'IO',     c: 1, name: 'hypoiodite',   family: 'I',  oxy: true, src: 'ext' },
+    { sym: 'IO2',    c: 1, name: 'iodite',       family: 'I',  oxy: true, src: 'ext' },
+    { sym: 'IO3',    c: 1, name: 'iodate',       family: 'I',  oxy: true, src: 'ext' },
+    { sym: 'IO4',    c: 1, name: 'periodate',    family: 'I',  oxy: true, src: 'ext' },
+    { sym: 'MnO4',   c: 1, name: 'permanganate', family: 'metal', oxy: true, src: 'T5.4' },
+    { sym: 'CrO4',   c: 2, name: 'chromate',     family: 'metal', oxy: true, src: 'T5.4' },
+    { sym: 'Cr2O7',  c: 2, name: 'dichromate',   family: 'metal', oxy: true, src: 'T5.4' }
+  ].map(o => Object.assign({ type: 'poly', poly: true }, o));
+
+  /* ---------- 酸（Table 5.5、5.6 + 延伸）----------
+     anion：對應陰離子的 sym；name 應該跟 acidName(陰離子名稱) 一致（測試會檢查）
+     gas  ：純物質（氣體）時的名稱 */
+  const ACIDS = [
+    { anion: 'F',      name: 'hydrofluoric acid', src: 'T5.5' },
+    { anion: 'Cl',     name: 'hydrochloric acid', src: 'T5.5', gas: 'hydrogen chloride' },
+    { anion: 'Br',     name: 'hydrobromic acid',  src: 'T5.5' },
+    { anion: 'I',      name: 'hydroiodic acid',   src: 'T5.5' },
+    { anion: 'CN',     name: 'hydrocyanic acid',  src: 'T5.5', gas: 'hydrogen cyanide' },
+    { anion: 'S',      name: 'hydrosulfuric acid', src: 'T5.5', gas: 'dihydrogen sulfide' },
+    { anion: 'Se',     name: 'hydroselenic acid', src: 'ext' },
+    { anion: 'NO3',    name: 'nitric acid',       src: 'T5.6' },
+    { anion: 'NO2',    name: 'nitrous acid',      src: 'T5.6' },
+    { anion: 'SO4',    name: 'sulfuric acid',     src: 'T5.6' },
+    { anion: 'SO3',    name: 'sulfurous acid',    src: 'T5.6' },
+    { anion: 'PO4',    name: 'phosphoric acid',   src: 'T5.6' },
+    { anion: 'C2H3O2', name: 'acetic acid',       src: 'T5.6' },
+    { anion: 'ClO4',   name: 'perchloric acid',   src: 'T5.6' },
+    { anion: 'ClO3',   name: 'chloric acid',      src: 'T5.6' },
+    { anion: 'ClO2',   name: 'chlorous acid',     src: 'T5.6' },
+    { anion: 'ClO',    name: 'hypochlorous acid', src: 'T5.6' },
+    { anion: 'CO3',    name: 'carbonic acid',     src: 'ext' },
+    { anion: 'PO3',    name: 'phosphorous acid',  src: 'ext', note: '酸是 phosphorous（-ous），元素是 phosphorus' },
+    { anion: 'BrO4',   name: 'perbromic acid',    src: 'ext' },
+    { anion: 'BrO3',   name: 'bromic acid',       src: 'ext' },
+    { anion: 'BrO2',   name: 'bromous acid',      src: 'ext' },
+    { anion: 'BrO',    name: 'hypobromous acid',  src: 'ext' },
+    { anion: 'IO4',    name: 'periodic acid',     src: 'ext' },
+    { anion: 'IO3',    name: 'iodic acid',        src: 'ext' },
+    { anion: 'IO',     name: 'hypoiodous acid',   src: 'ext' },
+    { anion: 'CrO4',   name: 'chromic acid',      src: 'ext' }
+  ];
+
+  /* ---------- 相似式對比（成對出題用）---------- */
+  const LOOKALIKES = [
+    { a: 'CaCl2',  b: 'CoCl2',   why: 'Ca 是 Type I；Co 是過渡金屬（Type II）要加羅馬數字' },
+    { a: 'MgO',    b: 'CO',      why: 'Mg 是金屬，離子化合物不用字首；C 是非金屬，Type III 要用字首' },
+    { a: 'Na2O',   b: 'N2O',     why: 'Na 金屬 vs N 非金屬' },
+    { a: 'Cs2S',   b: 'CS2',     why: '大小寫：Cs 是銫；C 和 S 是兩個元素' },
+    { a: 'CuO',    b: 'Cu2O',    why: '同元素不同電荷：Cu²⁺ vs Cu⁺' },
+    { a: 'PbO',    b: 'PbO2',    why: 'Pb²⁺ vs Pb⁴⁺，羅馬數字不等於下標' },
+    { a: 'NO2',    b: 'N2O4',    why: 'Type III 不能約分，兩個是不同物質' },
+    { a: 'NaNO2',  b: 'NaNO3',   why: 'nitrite（氧少）vs nitrate（氧多）' },
+    { a: 'Na2S',   b: 'Na2SO3',  why: 'sulfide vs sulfite' },
+    { a: 'Na2SO3', b: 'Na2SO4',  why: 'sulfite vs sulfate' },
+    { a: 'Na2O',   b: 'Na2O2',   why: 'oxide vs peroxide' },
+    { a: 'K2CrO4', b: 'K2Cr2O7', why: 'chromate vs dichromate' },
+    { a: 'H2S',    b: 'H2SO4',   why: 'hydrosulfuric acid（不含氧）vs sulfuric acid' },
+    { a: 'HClO2',  b: 'HClO3',   why: 'chlorous（-ite）vs chloric（-ate）' },
+    { a: 'PCl3',   b: 'PbCl2',   why: 'P 非金屬 vs Pb 金屬' }
+  ];
+
+  /* ---------- 俗名（5.1 章首）---------- */
+  const COMMON_NAMES = [
+    { common: 'sugar of lead',    formula: 'Pb(C2H3O2)2', name: 'lead(II) acetate' },
+    { common: 'quicklime',        formula: 'CaO',         name: 'calcium oxide' },
+    { common: 'milk of magnesia', formula: 'Mg(OH)2',     name: 'magnesium hydroxide' },
+    { common: 'laughing gas',     formula: 'N2O',         name: 'dinitrogen monoxide' },
+    { common: 'baking soda',      formula: 'NaHCO3',      name: 'sodium hydrogen carbonate' },
+    { common: 'table salt',       formula: 'NaCl',        name: 'sodium chloride' }
+  ];
+
+  /* =================== 工具函式 =================== */
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+  const SUB = { 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉' };
+  const SUP = { 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹', '+': '⁺', '-': '⁻' };
+
+  /** 'Fe2O3' → 'Fe₂O₃' */
+  function toSub(plain) { return String(plain).replace(/\d/g, d => SUB[d]); }
+
+  /** ('SO4', 2, -1) → 'SO₄²⁻' */
+  function ionText(sym, c, sign) {
+    const charge = (c > 1 ? String(c) : '') + (sign > 0 ? '+' : '-');
+    return toSub(sym) + charge.split('').map(ch => SUP[ch]).join('');
   }
-  function formulaOf(cat, an){
+
+  /** Type III：parts → 化學式純文字，例如 [['N',2],['O',5]] → 'N2O5' */
+  function type3Formula(parts) {
+    return parts.map(([s, n]) => s + (n > 1 ? n : '')).join('');
+  }
+
+  /** Type III 名稱的兩個部分（給說明文字用） */
+  function type3Pieces(parts) {
+    const [[s1, n1], [s2, n2]] = parts;
+    const firstPrefix = n1 > 1 ? PREFIXES[n1] : '';
+    const ide = NONMETALS[s2].ide;
+    const fullPrefix = PREFIXES[n2];
+    const elided = ide === 'oxide' && /[ao]$/.test(fullPrefix);
+    const secondPrefix = elided ? fullPrefix.slice(0, -1) : fullPrefix;
+    return {
+      first: firstPrefix + NONMETALS[s1].name, firstPrefix, firstName: NONMETALS[s1].name, n1,
+      second: secondPrefix + ide, secondPrefix, fullPrefix, ide, n2, elided
+    };
+  }
+
+  /** Type III：照課本規則產生名稱（第一個元素不寫 mono-；接 oxide 時省略字首結尾的 a/o） */
+  function type3Name(parts) {
+    const p = type3Pieces(parts);
+    return p.first + ' ' + p.second;
+  }
+
+  /** Type III：可接受的答案（課本寫法 + 俗名）。課本明說不接受 tetraoxide、monooxide */
+  function type3Answers(item) {
+    if (item.only === 'common') return [item.name];
+    return [item.name].concat(item.alt || []);
+  }
+
+  /** Type III：常見的「差一點」寫法，答錯時可以給針對性的提示 */
+  function type3NearMisses(item) {
+    const out = [];
+    const p = type3Pieces(item.parts);
+    if (item.only === 'common') {
+      out.push({ text: item.systematic, hint: '課本規定這個化合物只用俗名' });
+      return out;
+    }
+    if (p.elided) out.push({ text: p.first + ' ' + p.fullPrefix + p.ide, hint: 'oxide 前面的字首要省略最後的 a 或 o' });
+    if (p.n1 === 1) out.push({ text: 'mono' + p.firstName + ' ' + p.second, hint: '第一個元素只有 1 個時不寫 mono-' });
+    if (p.n2 === 1) out.push({ text: p.first + ' ' + p.ide, hint: '第二個元素只有 1 個也要寫 mono-' });
+    return out;
+  }
+
+  /** 離子化合物化學式：多原子離子個數 > 1 時加括號；Hg2 不是多原子離子，不加括號 */
+  function ionicFormula(cat, an) {
     const L = cat.c * an.c / gcd(cat.c, an.c);
     const nc = L / cat.c, na = L / an.c;
-    return { plain: cat.sym + (nc>1?nc:'') + an.sym + (na>1?na:''), nc, na, L };
-  }
-  function formulaHTML(plain){ return esc(plain).replace(/(\d+)/g,'<sub>$1</sub>'); }
-  function rootHTML(an){ return `<span class="rt">${an.root}</span>ide`; }
-
-  /* ---------- 抽題範圍 ---------- */
-  function scopes(){
-    return Array.from(document.querySelectorAll('#scopeChips .chip'))
-      .filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.scope);
-  }
-  // Type II 抽法：鐵佔一半，其他平分另一半
-  function pickType2(){
-    const fe = TYPE2.filter(x => x.sym === 'Fe');
-    const others = TYPE2.filter(x => x.sym !== 'Fe');
-    return Math.random() < 0.5 ? rand(fe) : rand(others);
-  }
-  function pickCation(sc, forCompound){
-    const useT2 = sc.includes('t2') && (!sc.includes('t1') || Math.random() < 0.5);
-    if(useT2) return pickType2();
-    const pool = forCompound ? TYPE1.filter(x => x.inCompound) : TYPE1;
-    return rand(pool);
-  }
-  function pickAnionFor(cat){
-    const pool = ANIONS.filter(a => a.sym !== 'H' || (cat.type === 1 && cat.hydride));
-    return rand(pool);
-  }
-  // 要不要考舊式名稱：鐵比例高，其他偶爾出現
-  function wantOld(cat, boost){
-    if(cat.type !== 2) return false;
-    const p = cat.sym === 'Fe' ? 0.45 : (boost ? 0.22 : 0.12);
-    return Math.random() < p;
+    const part = (ion, n) => (n === 1 ? ion.sym : (ion.poly ? '(' + ion.sym + ')' + n : ion.sym + n));
+    return { plain: part(cat, nc) + part(an, na), nc, na, L };
   }
 
-  /* ---------- 說明文字 ---------- */
-  function cationExplain(cat, useOld){
-    const ion = ionText(cat.sym, cat.c, 1);
-    if(cat.type === 1){
-      if(cat.alt) return `${ion} 只會形成一種離子，不用加羅馬數字，直接用元素名稱 <b>${cat.name}</b>（寫成 ${cat.alt} 也不算錯）`;
-      return `${ion} 是 Type I，電荷固定，直接用元素名稱 <b>${cat.name}</b>`;
+  /** 從個數反推陽離子電荷：nc 個陽離子、na 個電荷大小為 anC 的陰離子 */
+  function cationCharge(nc, na, anC) { return na * anC / nc; }
+
+  /** 陰離子名稱 → 酸名稱（-ide → hydro…ic、-ate → …ic、-ite → …ous；S、P 用長字根） */
+  function acidName(anionName) {
+    const fix = r => r.replace(/sulf$/, 'sulfur').replace(/phosph$/, 'phosphor');
+    const m = anionName.match(/^(.*)(ide|ate|ite)$/);
+    if (!m) return null;
+    const r = fix(m[1]);
+    if (m[2] === 'ide') return 'hydro' + r + 'ic acid';
+    if (m[2] === 'ate') return r + 'ic acid';
+    return r + 'ous acid';
+  }
+
+  /** 酸的化學式：H 的個數 = 陰離子電荷，不加括號 */
+  function acidFormula(an) { return 'H' + (an.c > 1 ? an.c : '') + an.sym; }
+
+  /** 用符號找陰離子（先找單原子，再找多原子） */
+  function findAnion(sym) {
+    return ANIONS.find(a => a.sym === sym) || POLY_ANIONS.find(a => a.sym === sym) || null;
+  }
+
+  /** 判斷二元化合物類型（Figure 5.1）：傳入元素符號陣列，例如 ['Fe','O'] */
+  const TYPE1_METALS = new Set(TYPE1.filter(x => x.sym !== 'H').map(x => x.sym));
+  const TYPE2_METALS = new Set(TYPE2.map(x => x.sym.replace(/\d+$/, '')));
+  function classifyBinary(syms) {
+    if (syms.some(s => TYPE1_METALS.has(s))) return 'I';
+    if (syms.some(s => TYPE2_METALS.has(s))) return 'II';
+    if (syms.every(s => NONMETALS[s])) return 'III';
+    return null;
+  }
+
+  const NOMEN = {
+    ROMAN, TYPE1, ANIONS, TYPE2, PREFIXES, PREFIX_SRC, NONMETALS, TYPE3,
+    POLY_CATIONS, POLY_ANIONS, ACIDS, LOOKALIKES, COMMON_NAMES,
+    toSub, ionText, type3Formula, type3Pieces, type3Name, type3Answers, type3NearMisses,
+    ionicFormula, cationCharge, acidName, acidFormula, findAnion, classifyBinary
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NOMEN;
+  else root.NOMEN = NOMEN;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* =====================================================================
+   core.js：出題、說明文字、答案比對、化學式解析
+   - 需要先載入 nomenclature-data.js（window.NOMEN 或 require）
+   - 題目物件：{ mode, scope, kind, badges, readout, word, prompt, sub,
+                 answers, display, explanation, nearMisses, choices, recipe }
+     kind：name（名稱）、formula（化學式）、ion（化學式＋電荷）、number、choice
+   - recipe：可序列化的出題參數，build(recipe) 可以重建同一題（錯題本用）
+   ===================================================================== */
+(function (root) {
+  'use strict';
+  const N = (typeof module !== 'undefined' && module.exports) ? require('./data.js') : root.NOMEN;
+
+  /* ---------- 小工具 ---------- */
+  const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+  const chance = p => Math.random() < p;
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const fHTML = plain => esc(plain).replace(/(\d+)/g, '<sub>$1</sub>');
+  const chargeStr = (c, sign) => (c > 1 ? c : '') + (sign > 0 ? '+' : '−');
+  const ionHTML = (sym, c, sign) => fHTML(sym) + '<sup>' + chargeStr(c, sign) + '</sup>';
+  const ionTxt = (sym, c, sign) => N.ionText(sym, c, sign > 0 ? 1 : -1);
+  const ROMAN = N.ROMAN;
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+  const baseSym = s => String(s).replace(/\d+$/, '');
+  const countO = sym => { const m = String(sym).match(/O(\d*)(?![a-z])/); return m ? (m[1] ? +m[1] : 1) : 0; };
+  const rt = s => `<span class="rt">${s}</span>`;
+
+  /* ---------- 查找 ---------- */
+  const catKey = c => c.sym + ':' + c.c;
+  const ALL_CATS = N.TYPE1.concat(N.TYPE2, N.POLY_CATIONS);
+  const findCat = key => ALL_CATS.find(c => catKey(c) === key) || null;
+  const findAn = sym => N.findAnion(sym);
+  const findT3 = f => N.TYPE3.find(t => N.type3Formula(t.parts) === f) || null;
+  const findAcid = anSym => N.ACIDS.find(a => a.anion === anSym) || null;
+
+  /* ---------- 題庫範圍（依設定篩選）---------- */
+  const inBook = x => !x.src || x.src !== 'ext';
+  function pools(set) {
+    set = set || {};
+    const keep = x => !!set.ext || inBook(x);
+    const t3 = N.TYPE3.filter(t => keep(t) && (set.adv || t.level <= 1));
+    return {
+      t1All: N.TYPE1.filter(keep),
+      t1: N.TYPE1.filter(x => x.inCompound && keep(x)),
+      an: N.ANIONS.filter(keep),
+      t2: N.TYPE2.filter(keep),
+      t3,
+      polyC: N.POLY_CATIONS.filter(keep),
+      polyA: N.POLY_ANIONS.filter(keep),
+      acids: N.ACIDS.filter(keep),
+      prefixMax: (set.adv || set.ext) ? 10 : 8
+    };
+  }
+
+  /* ---------- 相容表：哪些題型 × 範圍會出題 ---------- */
+  const SCOPES = ['t1', 't2', 't3', 'poly', 'acid'];
+  const MODES = ['ionspell', 'ion2name', 'formula2name', 'name2formula', 'classify', 'lookalike'];
+  const COMPAT = {
+    ionspell:     ['t1', 't2', 't3', 'poly', 'acid'],
+    ion2name:     ['t1', 't2', 'poly', 'acid'],
+    formula2name: ['t1', 't2', 't3', 'poly', 'acid'],
+    name2formula: ['t1', 't2', 't3', 'poly', 'acid'],
+    classify:     ['t1', 't2', 't3', 'poly', 'acid'],
+    lookalike:    ['t1', 't2', 't3', 'poly', 'acid']
+  };
+  const MODE_NAMES = { ionspell: '離子拼字', ion2name: '離子 → 名稱', formula2name: '化學式 → 名稱', name2formula: '名稱 → 化學式', classify: '判斷類型', lookalike: '相似式對比' };
+  const SCOPE_NAMES = { t1: 'Type I', t2: 'Type II', t3: 'Type III', poly: '多原子離子', acid: '酸' };
+  const SCOPE_BADGE = { t1: ['Type I', ''], t2: ['Type II', 't2'], t3: ['Type III', 't3'], poly: ['多原子離子', 'poly'], acid: ['酸', 'acid'] };
+
+  /* ---------- 離子組合的規則 ---------- */
+  function ionicScope(cat, an) {
+    if (cat.type === 'poly' || an.poly) return 'poly';
+    return cat.type === 1 ? 't1' : 't2';
+  }
+  function anionOK(cat, an) {
+    if (an.sym === 'H') return cat.type === 1 && !!cat.hydride;   // hydride 只配 1、2 族
+    if (an.sym === 'O2') return cat.type === 1;                   // peroxide 只配 Type I
+    if (cat.pair) return an.c <= 2;                               // Hg₂²⁺ 不配 −3（化學式會壞）
+    return true;
+  }
+  function pickType2(pool) {
+    const fe = pool.filter(x => x.sym === 'Fe'), others = pool.filter(x => x.sym !== 'Fe');
+    if (!fe.length) return rand(others);
+    if (!others.length) return rand(fe);
+    return chance(0.5) ? rand(fe) : rand(others);
+  }
+  function pickCation(P, sc, forCompound) {
+    const useT2 = sc.includes('t2') && (!sc.includes('t1') || chance(0.5));
+    if (useT2) return pickType2(P.t2);
+    return rand(forCompound ? P.t1 : P.t1All);
+  }
+  function pickAnionFor(P, cat, allowPoly) {
+    let pool = P.an.filter(a => anionOK(cat, a));
+    if (allowPoly) pool = pool.concat(P.polyA.filter(a => anionOK(cat, a)));
+    return rand(pool);
+  }
+  // 多原子離子範圍：至少一邊是多原子
+  function pickPolyPair(P, sc) {
+    if (P.polyC.length && chance(0.25)) {
+      const cat = rand(P.polyC);
+      return [cat, pickAnionFor(P, cat, true)];
     }
-    if(useOld){
-      const sib = TYPE2.find(x => x.el === cat.el && x !== cat);
-      const sibIon = ionText(sib.sym, sib.c, 1);
-      const latin = cat.latin ? `${cat.el} 的拉丁文是 ${cat.latin}，字根取 <span class="rt">${cat.oroot}</span>。` : `字根是 <span class="rt">${cat.oroot}</span>。`;
+    const cat = (sc.includes('t2') && P.t2.length && chance(0.5)) ? pickType2(P.t2) : rand(P.t1);
+    const pool = P.polyA.filter(a => anionOK(cat, a));
+    return [cat, rand(pool)];
+  }
+  function wantOld(cat, boost) {
+    if (cat.type !== 2 || !cat.old) return false;
+    const p = cat.sym === 'Fe' ? 0.45 : (boost ? 0.22 : 0.12);
+    return chance(p);
+  }
+
+  /* ---------- 化學式產生 ---------- */
+  function part(ion, n) { return n === 1 ? ion.sym : (ion.poly ? '(' + ion.sym + ')' + n : ion.sym + n); }
+  function formulaParts(cat, an) {
+    const fm = N.ionicFormula(cat, an);
+    return Object.assign(fm, { catPart: part(cat, fm.nc), anPart: part(an, fm.na) });
+  }
+  function formulaAnswers(cat, an) {
+    const fm = formulaParts(cat, an);
+    const out = [fm.plain];
+    (an.altSym || []).forEach(s => out.push(N.ionicFormula(cat, Object.assign({}, an, { sym: s })).plain));
+    return out;
+  }
+  function compoundName(cat, an, old) { return (old ? cat.old : cat.name) + ' ' + an.name; }
+  function compoundAnswers(cat, an, old) {
+    const cats = [old ? cat.old : cat.name];
+    if (!old && cat.alt) cats.push(cat.alt);
+    const ans = [an.name].concat(an.alt || []);
+    const out = [];
+    cats.forEach(c => ans.forEach(a => out.push(c + ' ' + a)));
+    return out;
+  }
+
+  /* ---------- 說明文字的零件 ---------- */
+  function catWhere(cat) {
+    const ion = ionTxt(cat.sym, cat.c, 1);
+    if (cat.group === 'TM') return `${cat.sym} 雖然是過渡金屬，但只會形成 ${ion}`;
+    return `${cat.sym} 在第 ${cat.group} 族，只會形成 ${ion}`;
+  }
+  function cationExplain(cat, useOld) {
+    const ion = ionTxt(cat.sym, cat.c, 1);
+    if (cat.type === 'poly') return `${ion} 是多原子陽離子 <b>${cat.name}</b>；全部是非金屬，但有 NH₄⁺ 就是離子化合物，不用字首`;
+    if (cat.type === 1) {
+      if (cat.alt) return `${catWhere(cat)}（Type I），不用加羅馬數字，直接用元素名稱 <b>${cat.name}</b>（寫成 ${cat.alt} 也不算錯）`;
+      return `${catWhere(cat)}（Type I），電荷固定，直接用元素名稱 <b>${cat.name}</b>`;
+    }
+    if (useOld && cat.old) {
+      const sib = N.TYPE2.find(x => x.el === cat.el && x !== cat && x.old);
+      const sibIon = sib ? ionTxt(sib.sym, sib.c, 1) : '';
+      const latin = cat.latin ? `${cat.el} 的拉丁文是 ${cat.latin}，字根取 ${rt(cat.oroot)}。` : `字根是 ${rt(cat.oroot)}。`;
       const hi = cat.level === 'high';
       const pairNote = cat.pair ? 'Hg₂²⁺ 是兩個汞成對，每個汞只有 +1，比 Hg²⁺ 低，' : '';
-      return `舊式命名，${latin}${pairNote}${ion} 跟 ${sibIon} 比起來電荷${hi?'比較高，用 -ic':'比較低，用 -ous'}，所以是 <b>${cat.old}</b>`;
+      return `舊式命名，${latin}${pairNote}${ion} 跟 ${sibIon} 比起來電荷${hi ? '比較高，用 -ic' : '比較低，用 -ous'}，所以是 <b>${cat.old}</b>`;
     }
     const pairNote = cat.pair ? '，Hg₂²⁺ 是兩個汞成對，每個汞 +1，所以是 (I)' : '';
     return `${ion} 是 Type II，電荷可變，要在元素名稱後面用羅馬數字標出電荷 <b>${cat.name}</b>${pairNote}`;
   }
-
-  /* ---------- 題目產生 ---------- */
-  function genIonSpell(sc){
-    if(Math.random() < 0.35){
-      const an = rand(ANIONS);
-      return {
-        mode:'ionspell', kind:'name', badges:[['陰離子','']],
-        readout: ionHTML(an.sym, an.c, -1), word:false,
-        prompt:'寫出這個陰離子的英文名稱', sub:'',
-        answers:[an.name], display: an.name,
-        explanation:`陰離子名稱是字根加上 -ide，${an.sym} 的字根是 <span class="rt">${an.root}</span>，所以是 ${rootHTML(an)}。`
-      };
+  function anionExplain(an) {
+    const ion = ionTxt(an.sym, an.c, -1);
+    if (an.poly) return `${ion} 是多原子離子 <b>${an.name}</b>（電荷 −${an.c}，名稱和電荷都要背）${an.alt ? `，俗名 ${an.alt.join('、')}` : ''}`;
+    return `${an.sym} 是 ${ion}，字根 ${rt(an.root)} 加 -ide → <b>${an.name}</b>`;
+  }
+  // Type II 反推電荷那一段
+  function reverseStep(cat, an, fm) {
+    const anIon = ionHTML(an.sym, an.c, -1), catIon = ionHTML(cat.sym, cat.c, 1);
+    const total = fm.na * an.c, M = baseSym(cat.sym);
+    const anLabel = an.poly ? an.name : an.sym;
+    if (cat.pair) return `${anLabel} 是 ${anIon}，${fm.na} 個共 −${total}，Hg 要抵銷 +${total}。汞(I) 永遠兩個一組（Hg<sub>2</sub><sup>2+</sup>），每個 Hg 是 +1，所以是 <b>mercury(I)</b>`;
+    const x = N.cationCharge(fm.nc, fm.na, an.c);
+    let s = `${anLabel} 是 ${anIon}，${fm.na} 個共 −${total}；${fm.nc} 個 ${M} 要抵銷 +${total}，每個是 +${x}，所以是 ${catIon}，寫成 <b>${cat.name}</b>`;
+    if (fm.na !== x && fm.nc === 1) s += `。注意下標是 ${fm.na}，但羅馬數字是電荷 ${ROMAN[x]}，兩個不一樣`;
+    if (fm.nc > 1) s += `。注意 ${M} 的下標 ${fm.nc} 不是電荷`;
+    return s;
+  }
+  // 含氧陰離子系列（同 family、oxy、沒有 H、同電荷）
+  function oxyFamily(an) {
+    if (!an.oxy || an.hasH || an.family === 'metal' || an.family === 'O') return [];
+    return N.POLY_ANIONS.filter(a => a.family === an.family && a.oxy && !a.hasH && a.c === an.c).sort((a, b) => countO(a.sym) - countO(b.sym));
+  }
+  const MNEMONIC = { NO3: 'Nick', CO3: 'Camel', ClO3: 'Clam', SO4: 'Supper', PO4: 'Phoenix' };
+  function polyExplain(an) {
+    const ion = ionTxt(an.sym, an.c, -1);
+    if (an.type === 'poly' && an.sym === 'NH4') return `NH₄⁺ 是 Table 5.4 唯一的多原子<b>陽</b>離子 <b>ammonium</b>（NH₃ 是 ammonia，兩個要分清楚）。`;
+    if (an.hasH) {
+      const baseSymStr = an.sym.replace(/^H\d?/, '');
+      const base = findAn(baseSymStr);
+      const nH = an.sym.startsWith('H2') ? 2 : 1;
+      return `${base ? ionTxt(base.sym, base.c, -1) + ' ' + base.name : ''} 加上 ${nH} 個 H⁺，負電荷少 ${nH} → ${ion} <b>${an.name}</b>${an.alt ? `（俗名 ${an.alt.join('、')}）` : ''}。hydrogen 是陰離子名稱的一部分。`;
     }
-    const cat = pickCation(sc, false);
-    if(cat.type === 1){
+    if (!an.oxy || an.family === 'O') {
+      if (an.sym === 'O2') return `${ion} 是 <b>peroxide</b>，兩個 O 共帶 −2（oxide O²⁻ 是一個 O 帶 −2）。字尾是 -ide 但它是多原子離子，化學式不能約分。`;
+      return `${ion} 是 <b>${an.name}</b>。字尾是 -ide 但它是多原子離子，hydroxide、cyanide、peroxide 這三個要記。`;
+    }
+    if (an.family === 'metal') {
+      const extra = an.sym === 'Cr2O7' ? '，di- 表示 2 個 Cr，跟 chromate 是兩種不同離子' : (an.sym === 'MnO4' ? '，per- 表示氧很多' : '');
+      return `${ion} 是 <b>${an.name}</b>，含過渡金屬的含氧陰離子，直接背${extra}。`;
+    }
+    if (an.sym === 'C2H3O2') return `${ion} 是 <b>acetate</b>（醋酸根），也寫成 CH₃COO⁻，電荷 −1。`;
+    const fam = oxyFamily(an);
+    const el = N.NONMETALS[an.family] ? N.NONMETALS[an.family].name : an.family;
+    let s = `${ion} 是 <b>${an.name}</b>。`;
+    if (fam.length >= 2) {
+      const list = fam.map(a => `${ionTxt(a.sym, a.c, -1)} ${a === an ? '<b>' + a.name + '</b>' : a.name}`).join('、');
+      s += `${el} 的含氧陰離子系列電荷都是 −${an.c}：${list}。氧少的 -ite、氧多的 -ate`;
+      if (fam.length > 2) s += '；比 -ite 更少一個氧 → hypo-…-ite，比 -ate 更多一個氧 → per-…-ate';
+      s += '。';
+    }
+    if (MNEMONIC[an.sym]) s += `口訣「Nick the Camel ate a Clam for Supper in Phoenix」：<b>${MNEMONIC[an.sym]}</b> 的子音數 = O 的個數（${countO(an.sym)}），母音數 = 負電荷（${an.c}）。`;
+    return s;
+  }
+  function acidRoot(an) {
+    const m = an.name.match(/^(.*)(ide|ate|ite)$/);
+    const r = m[1].replace(/sulf$/, 'sulfur').replace(/phosph$/, 'phosphor');
+    return { root: r, suffix: m[2], longRoot: r !== m[1] };
+  }
+
+  /* ================= 題目建構器 ================= */
+  const B = {};
+
+  /* ---- 離子拼字：Table 5.1 / 5.2 ---- */
+  B.spellCation = r => {
+    const cat = findCat(r.cat);
+    if (cat.type === 1) {
       return {
-        mode:'ionspell', kind:'name', badges:[['Type I','']],
-        readout: ionHTML(cat.sym, cat.c, 1), word:false,
-        prompt:'寫出這個陽離子的英文名稱', sub:'',
+        mode: 'ionspell', scope: 't1', kind: 'name', badges: [['Type I', '']],
+        readout: ionHTML(cat.sym, cat.c, 1), word: false,
+        prompt: '寫出這個陽離子的英文名稱', sub: '',
         answers: cat.alt ? [cat.name, cat.alt] : [cat.name], display: cat.name,
         explanation: cationExplain(cat, false) + '。'
       };
     }
-    const old = wantOld(cat, true);
+    const old = !!r.old && !!cat.old;
     return {
-      mode:'ionspell', kind:'name', badges: old ? [['Type II','t2'],['舊式名稱','old']] : [['Type II','t2']],
-      readout: ionHTML(cat.sym, cat.c, 1), word:false,
+      mode: 'ionspell', scope: 't2', kind: 'name', badges: old ? [['Type II', 't2'], ['舊式名稱', 'old']] : [['Type II', 't2']],
+      readout: ionHTML(cat.sym, cat.c, 1), word: false,
       prompt: old ? '用舊式名稱寫出（-ous / -ic）' : '用羅馬數字系統寫出名稱',
       sub: old ? '' : '例如 iron(III)，括號可以省略',
-      answers:[old ? cat.old : cat.name], display: old ? cat.old : cat.name,
+      answers: [old ? cat.old : cat.name], display: old ? cat.old : cat.name,
+      nearMisses: old ? [{ text: cat.name, hint: '這是羅馬數字系統，這題要用舊式名稱（-ous / -ic）' }]
+                      : (cat.old ? [{ text: cat.old, hint: '這是舊式名稱，這題要用羅馬數字系統' }, { text: cat.el, hint: '這個金屬電荷可變，要加羅馬數字' }] : [{ text: cat.el, hint: '這個金屬電荷可變，要加羅馬數字' }]),
       explanation: cationExplain(cat, old) + '。'
     };
-  }
-
-  function compoundName(cat, an, old){
-    return (old ? cat.old : cat.name) + ' ' + an.name;
-  }
-  function compoundAnswers(cat, an, old){
-    const list = [compoundName(cat, an, old)];
-    if(cat.alt) list.push(cat.alt + ' ' + an.name);
-    return list;
-  }
-  function typeBadges(cat, old){
-    const b = [[cat.type === 1 ? 'Type I' : 'Type II', cat.type === 1 ? '' : 't2']];
-    if(old) b.push(['舊式名稱','old']);
-    return b;
-  }
-
-  function genIon2Name(sc){
-    const cat = pickCation(sc, true), an = pickAnionFor(cat), old = wantOld(cat, false);
-    const name = compoundName(cat, an, old);
+  };
+  B.spellAnion = r => {
+    const an = findAn(r.an);
     return {
-      mode:'ion2name', kind:'name', badges: typeBadges(cat, old),
-      readout: ionHTML(cat.sym, cat.c, 1) + '<span class="dim">+</span>' + ionHTML(an.sym, an.c, -1), word:false,
-      prompt: old ? '用舊式名稱寫出化合物名稱' : '寫出化合物的英文名稱', sub:'陽離子在前，陰離子在後',
+      mode: 'ionspell', scope: 't1', kind: 'name', badges: [['陰離子', '']],
+      readout: ionHTML(an.sym, an.c, -1), word: false,
+      prompt: '寫出這個陰離子的英文名稱', sub: '',
+      answers: [an.name], display: an.name,
+      explanation: `陰離子名稱是字根加上 -ide，${an.sym} 的字根是 ${rt(an.root)}，所以是 ${rt(an.root)}ide。`
+    };
+  };
+
+  /* ---- 離子拼字：Type III 字首與非金屬 ---- */
+  B.spellPrefix = r => {
+    const n = r.n, p = N.PREFIXES[n];
+    if (r.dir === 'p2n') {
+      return {
+        mode: 'ionspell', scope: 't3', kind: 'number', badges: [['Type III', 't3'], ['字首', '']],
+        readout: esc(p + '-'), word: true,
+        prompt: '這個字首代表幾個原子？', sub: '輸入阿拉伯數字',
+        answers: [String(n)], display: String(n),
+        explanation: `<b>${p}-</b> = ${n}。` + (n >= 9 ? '課本 Table 5.3 只列到 octa-（8），但習題會用到 nona-、deca-。' : '')
+      };
+    }
+    return {
+      mode: 'ionspell', scope: 't3', kind: 'name', badges: [['Type III', 't3'], ['字首', '']],
+      readout: String(n), word: false,
+      prompt: '寫出代表這個數字的字首', sub: '不用打連字號，例如 tri',
+      answers: [p], display: p + '-',
+      explanation: `${n} 個原子用 <b>${p}-</b>。` +
+        (n === 1 ? '提醒：第一個元素只有 1 個時不寫 mono-，第二個元素要寫。' : '') +
+        (n >= 9 ? '課本 Table 5.3 只列到 octa-（8），但習題會用到 nona-、deca-。' : '')
+    };
+  };
+  B.spellNonmetal = r => {
+    const sym = r.sym, v = N.NONMETALS[sym], asFirst = !!r.first;
+    return {
+      mode: 'ionspell', scope: 't3', kind: 'name', badges: [['Type III', 't3'], [asFirst ? '第一個元素' : '第二個元素', '']],
+      readout: esc(sym), word: false,
+      prompt: asFirst ? '這個元素寫在化學式前面時，名稱怎麼念？' : '這個元素寫在化學式後面時，名稱怎麼念？',
+      sub: asFirst ? '用完整元素名稱' : '當作陰離子：字根 + -ide',
+      answers: [asFirst ? v.name : v.ide], display: asFirst ? v.name : v.ide,
+      nearMisses: asFirst ? [{ text: v.ide, hint: '-ide 是當第二個元素時的念法，第一個元素用完整元素名稱' }].concat(sym === 'P' ? [{ text: 'phosphorous', hint: '元素是 phosphorus（-us）；phosphorous（-ous）是酸的字尾' }] : [])
+                          : [{ text: v.name, hint: '完整元素名稱是當第一個元素時的念法，第二個元素要用字根 + -ide' }],
+      explanation: asFirst
+        ? `Type III 的第一個元素用<b>完整元素名稱</b>：${sym} → <b>${v.name}</b>。` + (sym === 'P' ? '注意拼法是 phosphorus，不是 phosphorous。' : '')
+        : `Type III 的第二個元素當作陰離子念，字根加 -ide：${sym} → <b>${v.ide}</b>。`
+    };
+  };
+
+  /* ---- 離子拼字：多原子離子 ---- */
+  function polyIon(sym) { return N.POLY_CATIONS.find(c => c.sym === sym) || N.POLY_ANIONS.find(a => a.sym === sym); }
+  B.spellPolyName = r => {
+    const ion = polyIon(r.sym), sign = ion.type === 'poly' && N.POLY_CATIONS.includes(ion) ? 1 : -1;
+    return {
+      mode: 'ionspell', scope: 'poly', kind: 'name', badges: [['多原子離子', 'poly']],
+      readout: ionHTML(ion.sym, ion.c, sign), word: false,
+      prompt: '寫出這個多原子離子的名稱', sub: '',
+      answers: [ion.name].concat(ion.alt || []), display: ion.name,
+      nearMisses: polyNearMisses(ion),
+      explanation: polyExplain(ion)
+    };
+  };
+  function polyNearMisses(ion) {
+    const out = [];
+    const fam = oxyFamily(ion);
+    fam.filter(a => a !== ion).forEach(a => out.push({ text: a.name, hint: `${a.name} 是 ${ionTxt(a.sym, a.c, -1)}，氧的個數不一樣` }));
+    if (ion.sym === 'SO3' || ion.sym === 'SO4') out.push({ text: 'sulfide', hint: 'sulfide 是單原子的 S²⁻，含氧的是 sulfite / sulfate' });
+    if (ion.sym === 'NO2' || ion.sym === 'NO3') out.push({ text: 'nitride', hint: 'nitride 是單原子的 N³⁻，含氧的是 nitrite / nitrate' });
+    if (ion.sym === 'O2') out.push({ text: 'oxide', hint: 'oxide 是 O²⁻；O₂²⁻ 兩個氧一組才是 peroxide' });
+    if (ion.sym === 'NH4') out.push({ text: 'ammonia', hint: 'ammonia 是 NH₃ 分子；帶電的 NH₄⁺ 是 ammonium' });
+    if (ion.sym === 'CrO4') out.push({ text: 'dichromate', hint: 'dichromate 是 Cr₂O₇²⁻' });
+    if (ion.sym === 'Cr2O7') out.push({ text: 'chromate', hint: 'chromate 是 CrO₄²⁻' });
+    return out;
+  }
+  B.spellPolyIon = r => {
+    const ion = polyIon(r.sym), isCat = N.POLY_CATIONS.includes(ion), sign = isCat ? '+' : '-';
+    const canon = [ion.sym + ' ' + ion.c + sign].concat((ion.altSym || []).map(s => s + ' ' + ion.c + sign));
+    return {
+      mode: 'ionspell', scope: 'poly', kind: 'ion', badges: [['多原子離子', 'poly'], ['組成＋電荷', '']],
+      readout: esc(ion.name), word: true,
+      prompt: '寫出這個離子的化學式和電荷', sub: '格式：化學式、空格、電荷，例如 SO4 2-',
+      answers: canon, display: ionTxt(ion.sym, ion.c, isCat ? 1 : -1),
+      explanation: polyExplain(ion)
+    };
+  };
+  B.spellOxyRule = r => {
+    const known = findAn(r.known), ask = findAn(r.ask);
+    const fam = oxyFamily(ask);
+    const el = N.NONMETALS[ask.family] ? N.NONMETALS[ask.family].name : ask.family;
+    const kO = countO(known.sym), aO = countO(ask.sym);
+    const kSuffix = /ate$/.test(known.name) ? '-ate' : '-ite';
+    const rule = fam.length > 2
+      ? '少 1 個 O → -ite，少 2 個 O → hypo-…-ite，多 1 個 O → per-…-ate'
+      : '系列只有兩個成員：氧少的 -ite、氧多的 -ate';
+    return {
+      mode: 'ionspell', scope: 'poly', kind: 'name', badges: [['多原子離子', 'poly'], ['含氧陰離子規則', '']],
+      readout: `${ionHTML(known.sym, known.c, -1)}<span class="dim">=</span><span class="small">${esc(known.name)}</span><span class="dim">→</span>${ionHTML(ask.sym, ask.c, -1)}<span class="dim">=</span><span class="q">?</span>`, word: false,
+      prompt: `已知 ${ionTxt(known.sym, known.c, -1)} 是 ${known.name}，那 ${ionTxt(ask.sym, ask.c, -1)} 叫什麼？`, sub: '用 -ite / -ate、hypo- / per- 的規則推',
+      answers: [ask.name], display: ask.name,
+      nearMisses: polyNearMisses(ask),
+      explanation: `${el} 的含氧陰離子系列電荷都是 −${ask.c}。${known.name} 是 ${kSuffix}（${kO} 個 O）。${rule}。${ionTxt(ask.sym, ask.c, -1)} 有 ${aO} 個 O，${aO > kO ? '多' : '少'} ${Math.abs(aO - kO)} 個，所以是 <b>${ask.name}</b>。`
+    };
+  };
+
+  /* ---- 離子拼字：酸的字尾轉換 ---- */
+  B.spellAcidSuffix = r => {
+    const an = findAn(r.an), acid = findAcid(r.an);
+    const ar = acidRoot(an);
+    const anIon = ionTxt(an.sym, an.c, -1);
+    const rule = ar.suffix === 'ide' ? `不含氧（-ide）→ <b>hydro-</b> + ${rt(ar.root)} + <b>-ic acid</b>`
+               : ar.suffix === 'ate' ? `含氧，字尾 <b>-ate</b> → 酸用 <b>-ic</b>，不加 hydro-`
+               : `含氧，字尾 <b>-ite</b> → 酸用 <b>-ous</b>，不加 hydro-`;
+    const longNote = ar.longRoot ? `字根要用長的 ${rt(ar.root)}，不是 ${an.name.replace(/(ide|ate|ite)$/, '')}。` : '';
+    if (r.dir === 'acid2an') {
+      return {
+        mode: 'ionspell', scope: 'acid', kind: 'name', badges: [['酸', 'acid'], ['字尾轉換', '']],
+        readout: esc(acid.name), word: true,
+        prompt: '這個酸的陰離子叫什麼？', sub: '倒推：hydro-…-ic → -ide；-ic → -ate；-ous → -ite',
+        answers: [an.name].concat(an.alt || []), display: an.name,
+        explanation: `${acid.name}：${/^hydro/.test(acid.name) ? 'hydro-…-ic 代表不含氧的 -ide 陰離子' : /ous acid$/.test(acid.name) ? '-ous 代表 -ite 陰離子' : '-ic 而且沒有 hydro-，代表 -ate 陰離子'} → ${anIon} <b>${an.name}</b>。${longNote}`
+      };
+    }
+    return {
+      mode: 'ionspell', scope: 'acid', kind: 'name', badges: [['酸', 'acid'], ['字尾轉換', '']],
+      readout: `${esc(an.name)}<span class="dim small">${esc(anIon)}</span>`, word: true,
+      prompt: '這個陰離子加上 H⁺ 變成酸，酸叫什麼？', sub: '答案要含 acid',
+      answers: [acid.name], display: acid.name,
+      nearMisses: acidNearMisses(an, acid),
+      explanation: `${an.name}（${anIon}）${rule} → <b>${acid.name}</b>。${longNote}`
+    };
+  };
+  function acidNearMisses(an, acid) {
+    const out = [];
+    const ar = acidRoot(an);
+    if (acid.gas) out.push({ text: acid.gas, hint: `這是 ${N.acidFormula(an)} 純物質（氣體）的名稱，溶在水裡才叫 ${acid.name}` });
+    if (ar.suffix !== 'ide') {
+      out.push({ text: 'hydro' + acid.name.replace(/^per|^hypo/, m => m), hint: '含氧酸不加 hydro-；hydro- 只用在不含氧的酸' });
+      const swapped = ar.suffix === 'ate' ? acid.name.replace(/ic acid$/, 'ous acid') : acid.name.replace(/ous acid$/, 'ic acid');
+      out.push({ text: swapped, hint: '-ate → -ic、-ite → -ous，對反了' });
+    } else {
+      out.push({ text: acid.name.replace(/^hydro/, ''), hint: '不含氧的酸要加 hydro-' });
+    }
+    if (ar.longRoot) {
+      const short = an.name.replace(/(ide|ate|ite)$/, '');
+      out.push({ text: (ar.suffix === 'ide' ? 'hydro' : '') + short + (ar.suffix === 'ite' ? 'ous' : 'ic') + ' acid', hint: `S、P 的字根要用長的：${ar.root}` });
+    }
+    if (an.sym === 'I') out.push({ text: 'hydriodic acid', hint: '課本用 hydroiodic acid' });
+    return out;
+  }
+
+  /* ---- 離子 → 名稱（Type I / II / 多原子）---- */
+  B.ion2name = r => {
+    const cat = findCat(r.cat), an = findAn(r.an), old = !!r.old && !!cat.old;
+    const name = compoundName(cat, an, old), sc = ionicScope(cat, an);
+    const badges = [SCOPE_BADGE[sc]].concat(old ? [['舊式名稱', 'old']] : []);
+    if (sc === 'poly' && cat.type === 2) badges.push(['Type II', 't2']);
+    return {
+      mode: 'ion2name', scope: sc, kind: 'name', badges,
+      readout: ionHTML(cat.sym, cat.c, 1) + '<span class="dim">+</span>' + ionHTML(an.sym, an.c, -1), word: false,
+      prompt: old ? '用舊式名稱寫出化合物名稱' : '寫出化合物的英文名稱', sub: '陽離子在前，陰離子在後，不加字首',
       answers: compoundAnswers(cat, an, old), display: name,
-      explanation: `陽離子先寫，${cationExplain(cat, old)}。陰離子後寫，${an.sym} 字根 <span class="rt">${an.root}</span> 加 -ide 變成 ${rootHTML(an)}。合起來就是 <b>${name}</b>。`
+      nearMisses: ionicNameNearMisses(cat, an, old),
+      explanation: `陽離子先寫，${cationExplain(cat, old)}。陰離子後寫，${anionExplain(an)}。合起來就是 <b>${name}</b>。`
     };
+  };
+  function ionicNameNearMisses(cat, an, old) {
+    const out = [], fm = N.ionicFormula(cat, an);
+    if (cat.type === 2) {
+      out.push({ text: cat.el + ' ' + an.name, hint: '這個金屬電荷可變，要加羅馬數字' });
+      if (!old && cat.old) out.push({ text: cat.old + ' ' + an.name, hint: '這是舊式名稱，這題要用羅馬數字系統' });
+      if (old) out.push({ text: cat.name + ' ' + an.name, hint: '這是羅馬數字系統，這題要用舊式名稱' });
+      const sib = N.TYPE2.find(x => x.el === cat.el && x !== cat);
+      if (sib) out.push({ text: sib.name + ' ' + an.name, hint: `電荷算錯了：要用陰離子總電荷除以 ${baseSym(cat.sym)} 的個數` });
+    }
+    if (fm.nc > 1) out.push({ text: N.PREFIXES[fm.nc] + cat.name + ' ' + an.name, hint: '有金屬（或 NH₄⁺）就是離子化合物，不用字首，個數由電荷決定' });
+    if (fm.na > 1) out.push({ text: cat.name + ' ' + N.PREFIXES[fm.na] + an.name, hint: '離子化合物不加字首，個數由電荷決定' });
+    if (!an.poly && an.sym === 'O') out.push({ text: cat.name + ' peroxide', hint: 'O²⁻ 是 oxide；peroxide 是 O₂²⁻' });
+    if (an.sym === 'O2') out.push({ text: cat.name + ' oxide', hint: 'O₂²⁻ 是 peroxide，不是 oxide' });
+    if (an.poly) polyNearMisses(an).forEach(m => out.push({ text: cat.name + ' ' + m.text, hint: m.hint }));
+    return out;
   }
 
-  function genName2Formula(sc){
-    const cat = pickCation(sc, true), an = pickAnionFor(cat), old = wantOld(cat, false);
-    const name = compoundName(cat, an, old);
-    const f = formulaOf(cat, an);
-    const catIon = ionText(cat.sym, cat.c, 1), anIon = ionText(an.sym, an.c, -1);
-    let chargeSrc;
-    if(cat.type === 1) chargeSrc = `${cat.name} 是 Type I，電荷固定是 ${catIon}`;
-    else if(old) chargeSrc = `${cat.old} 是舊式名稱，-${cat.level === 'high' ? 'ic 代表電荷高的那個' : 'ous 代表電荷低的那個'}，也就是 ${catIon}`;
-    else chargeSrc = `${cat.name} 的羅馬數字 ${ROMAN[cat.pair ? 1 : cat.c]} 代表電荷，所以是 ${catIon}`;
-    let balance;
-    if(cat.c === an.c) balance = `兩邊電荷一樣大，1 比 1 就抵銷了`;
-    else balance = `正負電荷要抵銷，${cat.c} 跟 ${an.c} 的最小公倍數是 ${f.L}，所以需要 ${f.nc} 個陽離子、${f.na} 個陰離子`;
-    const pairNote = cat.pair ? '。Hg₂ 是一整組，寫化學式時要保留下標 2' : '';
-    const romanNote = (cat.type === 2 && !old && ROMAN[cat.c] && f.na !== cat.c && !cat.pair)
-      ? `。注意羅馬數字是電荷不是個數，這題下標跟羅馬數字不一樣` : '';
+  /* ---- 化學式 → 名稱（Type I / II / 多原子）---- */
+  B.formula2name = r => {
+    const cat = findCat(r.cat), an = findAn(r.an);
+    const fm = formulaParts(cat, an), sc = ionicScope(cat, an);
+    const name = compoundName(cat, an, false);
+    const badges = [SCOPE_BADGE[sc]];
+    if (sc === 'poly' && cat.type === 2) badges.push(['Type II', 't2']);
+    const split = sc === 'poly' ? `先把化學式切成兩塊：${fHTML(fm.catPart)} ｜ ${fHTML(fm.anPart)}。` : '';
+    let exp;
+    if (cat.type === 'poly') exp = `${split}${cationExplain(cat)}。${anionExplain(an)}。離子化合物的名稱不寫個數，所以是 <b>${name}</b>。`;
+    else if (cat.type === 1) exp = `${split}${catWhere(cat)}（Type I），直接用元素名稱 <b>${cat.name}</b>${cat.alt ? `（${cat.alt} 也可以）` : ''}。${anionExplain(an)}。離子化合物的名稱不寫個數，所以是 <b>${name}</b>。`;
+    else exp = `${split}${baseSym(cat.sym)} 的電荷可變（Type II），要用陰離子反推。${reverseStep(cat, an, fm)}。${an.poly ? anionExplain(an) + '。' : ''}合起來是 <b>${name}</b>。`;
     return {
-      mode:'name2formula', kind:'formula', badges: typeBadges(cat, old),
-      readout: esc(name), word:true,
-      prompt:'寫出化學式', sub:'數字直接打，例如 Fe2O3',
-      answers:[f.plain], display: f.plain,
-      explanation: `${chargeSrc}，${an.name} 是 ${anIon}。${balance}，得到 <b>${f.plain}</b>${pairNote}${romanNote}。`
+      mode: 'formula2name', scope: sc, kind: 'name', badges,
+      readout: fHTML(fm.plain), word: false,
+      prompt: '寫出化合物的英文名稱',
+      sub: cat.type === 2 ? '電荷可變的金屬要加羅馬數字，例如 iron(III)' : (sc === 'poly' ? '先把化學式切成陽離子、陰離子兩塊' : '陽離子在前，陰離子在後'),
+      answers: compoundAnswers(cat, an, false), display: name,
+      nearMisses: ionicNameNearMisses(cat, an, false),
+      explanation: exp
     };
-  }
+  };
 
-  const generators = { ionspell: genIonSpell, ion2name: genIon2Name, name2formula: genName2Formula };
-  const modeNames = { ionspell:'離子拼字', ion2name:'離子 → 名稱', name2formula:'名稱 → 化學式' };
-  const modeOrder = ['ionspell','ion2name','name2formula'];
-
-  /* ---------- 比對 ---------- */
-  const normName = s => s.toLowerCase().replace(/[\s()\-（）]/g,'').replace(/ion$/,'');
-  function normFormula(s, strict){
-    const subs = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
-    let t = s.replace(/[₀-₉]/g, d => subs[d]).replace(/\s/g,'');
-    return strict ? t : t.toLowerCase();
-  }
-  function isMatch(raw){
-    if(current.kind === 'formula'){
-      const strict = document.getElementById('strictCase').checked;
-      return current.answers.some(a => normFormula(raw, strict) === normFormula(a, strict));
+  /* ---- 名稱 → 化學式（Type I / II / 多原子）---- */
+  B.name2formula = r => {
+    const cat = findCat(r.cat), an = findAn(r.an), old = !!r.old && !!cat.old;
+    const name = compoundName(cat, an, old), sc = ionicScope(cat, an);
+    const fm = formulaParts(cat, an);
+    const catIon = ionTxt(cat.sym, cat.c, 1), anIon = ionTxt(an.sym, an.c, -1);
+    let chargeSrc;
+    if (cat.type === 'poly') chargeSrc = `${cat.name} 是多原子陽離子 ${catIon}`;
+    else if (cat.type === 1) chargeSrc = `${cat.name} 是 Type I，電荷固定是 ${catIon}`;
+    else if (old) chargeSrc = `${cat.old} 是舊式名稱，-${cat.level === 'high' ? 'ic 代表電荷高的那個' : 'ous 代表電荷低的那個'}，也就是 ${catIon}`;
+    else chargeSrc = `${cat.name} 的羅馬數字 ${ROMAN[cat.pair ? 1 : cat.c]} 代表電荷，所以是 ${catIon}`;
+    const anSrc = `${an.name} 是 ${anIon}${an.poly ? '（多原子離子，當成一個整體）' : ''}`;
+    const balance = cat.c === an.c ? '兩邊電荷一樣大，1 比 1 就抵銷了'
+      : `正負電荷要抵銷，${cat.c} 跟 ${an.c} 的最小公倍數是 ${fm.L}，所以需要 ${fm.nc} 個陽離子、${fm.na} 個陰離子`;
+    let paren = '';
+    if (an.poly && fm.na > 1) paren += `。${an.name} 是多原子離子，需要 ${fm.na} 個時要用括號包起來，寫成 (${N.toSub(an.sym)})<sub>${fm.na}</sub>`;
+    else if (an.poly) paren += `。只需要 1 個 ${an.name}，不加括號`;
+    if (cat.type === 'poly' && fm.nc > 1) paren += `，${fm.nc} 個 NH₄⁺ 也要括號 (NH<sub>4</sub>)<sub>${fm.nc}</sub>`;
+    const pairNote = cat.pair ? '。Hg₂ 是一整組，寫化學式時要保留下標 2，不能約分' : '';
+    const peroxNote = an.sym === 'O2' ? '。O₂²⁻ 是一整個離子，不能約分' : '';
+    const romanNote = (cat.type === 2 && !old && !cat.pair && fm.na !== cat.c) ? '。注意羅馬數字是電荷不是個數，這題下標跟羅馬數字不一樣' : '';
+    const badges = [SCOPE_BADGE[sc]].concat(old ? [['舊式名稱', 'old']] : []);
+    if (sc === 'poly' && cat.type === 2) badges.push(['Type II', 't2']);
+    return {
+      mode: 'name2formula', scope: sc, kind: 'formula', badges,
+      readout: esc(name), word: true,
+      prompt: '寫出化學式', sub: an.poly || cat.type === 'poly' ? '數字直接打，多原子離子超過 1 個要加括號，例如 Ca(NO3)2' : '數字直接打，例如 Fe2O3',
+      answers: formulaAnswers(cat, an), display: fm.plain,
+      nearMisses: ionicFormulaNearMisses(cat, an, fm),
+      explanation: `${chargeSrc}，${anSrc}。${balance}${paren}，得到 <b>${fHTML(fm.plain)}</b>${pairNote}${peroxNote}${romanNote}。`
+    };
+  };
+  function ionicFormulaNearMisses(cat, an, fm) {
+    const out = [];
+    if (an.poly && fm.na > 1) out.push({ text: fm.catPart + an.sym + fm.na, hint: '多原子離子超過 1 個要用括號包起來，下標寫在括號外' });
+    if (an.poly && fm.na === 1) out.push({ text: fm.catPart + '(' + an.sym + ')', hint: '只有 1 個多原子離子時不加括號' });
+    if (cat.type === 'poly' && fm.nc > 1) out.push({ text: cat.sym + fm.nc + fm.anPart, hint: 'NH₄⁺ 超過 1 個也要用括號' });
+    if (an.sym === 'O2') out.push({ text: cat.sym + (fm.nc / 2 > 1 ? fm.nc / 2 : '') + 'O', hint: 'O₂²⁻ peroxide 是一整個離子，不能約分；約分後就變成 oxide 了' });
+    if (cat.type === 2 && !cat.pair) {
+      const wrong = cat.sym + part(an, cat.c);
+      if (wrong !== fm.plain) out.push({ text: wrong, hint: '羅馬數字是電荷不是個數，要用電荷平衡算下標' });
     }
-    return current.answers.some(a => normName(raw) === normName(a));
-  }
-
-  // 拼字差異標示：只比對字母跟數字，空格括號不算
-  function diffHTML(user, target){
-    const sig = s => { const out=[]; for(let i=0;i<s.length;i++){ if(/[a-z0-9]/i.test(s[i])) out.push(i); } return out; };
-    const ui = sig(user), ti = sig(target);
-    const u = ui.map(i => user[i].toLowerCase()), t = ti.map(i => target[i].toLowerCase());
-    const n=u.length, m=t.length, dp = Array.from({length:n+1}, () => new Array(m+1).fill(0));
-    for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--) dp[i][j] = u[i]===t[j] ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j], dp[i][j+1]);
-    const uKeep = new Set(), tKeep = new Set();
-    let i=0,j=0;
-    while(i<n && j<m){
-      if(u[i]===t[j]){ uKeep.add(ui[i]); tKeep.add(ti[j]); i++; j++; }
-      else if(dp[i+1][j] >= dp[i][j+1]) i++; else j++;
+    if (cat.pair) out.push({ text: 'Hg' + part(an, 1), hint: '汞(I) 永遠是 Hg₂²⁺，化學式要寫 Hg₂' });
+    if (!an.poly && !cat.pair && cat.type !== 'poly' && gcd(fm.nc, fm.na) === 1 && fm.nc !== fm.na) {
+      // 常見：忘記電荷平衡，直接 1 比 1
+      out.push({ text: cat.sym + an.sym, hint: '正負電荷要抵銷，不是直接 1 比 1' });
     }
-    const render = (s, keep, cls) => Array.from(s).map((ch,k) => {
-      if(!/[a-z0-9]/i.test(ch) || keep.has(k)) return esc(ch);
-      return `<span class="${cls}">${esc(ch)}</span>`;
-    }).join('');
-    return `<div><span class="lab">你的拼法</span>${render(user, uKeep, 'x')}</div>`
-         + `<div><span class="lab">正確拼法</span>${render(target, tKeep, 'm')}</div>`;
+    return out;
   }
 
-  /* ---------- 狀態與 DOM ---------- */
-  const stats = {}; modeOrder.forEach(k => stats[k] = {correct:0,total:0});
-  let current = null, answered = false, needsCorrection = false, streak = 0, qIndex = 0;
+  /* ---- Type III ---- */
+  function t3Explain(item) {
+    const f = N.type3Formula(item.parts);
+    if (item.only === 'common') return `${fHTML(f)} 是 Type III，但課本規定永遠用俗名 <b>${item.name}</b>，系統名稱（${item.systematic}）從來不用。`;
+    const p = N.type3Pieces(item.parts);
+    const [[s1], [s2]] = item.parts;
+    const firstTxt = p.n1 === 1
+      ? `第一個元素 ${s1} 只有 1 個，<b>不寫 mono-</b>，直接用全名 ${p.firstName}`
+      : `第一個元素 ${s1} 有 ${p.n1} 個 → ${p.firstPrefix} + ${p.firstName} = <b>${p.first}</b>`;
+    let secondTxt = `第二個元素 ${s2} 有 ${p.n2} 個 → ${p.fullPrefix} + ${p.ide}`;
+    if (p.elided) secondTxt += `；接 oxide 時 ${p.fullPrefix} 最後的 ${p.fullPrefix.slice(-1)} 要省略 → <b>${p.second}</b>`;
+    else secondTxt += ` = <b>${p.second}</b>`;
+    if (p.n2 === 1) secondTxt += '（第二個元素就算只有 1 個也要寫 mono-）';
+    let extra = '';
+    if (item.alt && item.alt.length) extra += `也可以用俗名 ${item.alt.join('、')}。`;
+    if (item.note) extra += item.note + '。';
+    return `兩個都是非金屬，是 Type III，用字首表示原子數。${firstTxt}。${secondTxt}。合起來是 <b>${item.name}</b>。${extra}`;
+  }
+  B.t3f2n = r => {
+    const item = findT3(r.f), f = r.f;
+    const nm = N.type3NearMisses(item).slice();
+    if (item.only !== 'common') {
+      const p = N.type3Pieces(item.parts);
+      const plain = p.firstName + ' ' + p.ide;
+      if (!nm.some(m => m.text === plain)) nm.push({ text: plain, hint: 'Type III 兩個都是非金屬，要用字首寫出每種原子的個數' });
+      if (p.elided) nm.push({ text: p.first + ' ' + p.fullPrefix + p.ide, hint: 'oxide 前面的字首要省略最後的 a 或 o' });
+    }
+    return {
+      mode: 'formula2name', scope: 't3', kind: 'name', badges: [['Type III', 't3']].concat(item.level === 2 ? [['進階', 'adv']] : []),
+      readout: fHTML(f), word: false,
+      prompt: '寫出化合物的英文名稱', sub: '兩個都是非金屬：用字首',
+      answers: N.type3Answers(item), display: item.name,
+      nearMisses: nm,
+      explanation: t3Explain(item)
+    };
+  };
+  B.t3n2f = r => {
+    const item = findT3(r.f), f = r.f;
+    const p = N.type3Pieces(item.parts);
+    const [[s1, n1], [s2, n2]] = item.parts;
+    const exp = item.only === 'common'
+      ? `<b>${item.name}</b> 是 ${fHTML(f)} 的俗名，要直接背。`
+      : `Type III 不看電荷，字首直接就是下標：${p.firstPrefix ? p.firstPrefix + '-' : '沒有字首（= 1）'} → ${s1}${n1 > 1 ? '<sub>' + n1 + '</sub>' : ''}，${p.fullPrefix}- → ${s2}${n2 > 1 ? '<sub>' + n2 + '</sub>' : ''}，所以是 <b>${fHTML(f)}</b>。不要約分，下標就是分子裡真正的原子數。`;
+    const nm = [];
+    const g = gcd(n1, n2);
+    if (g > 1) nm.push({ text: N.type3Formula([[s1, n1 / g], [s2, n2 / g]]), hint: 'Type III 不能約分，字首就是真正的原子數' });
+    return {
+      mode: 'name2formula', scope: 't3', kind: 'formula', badges: [['Type III', 't3']].concat(item.level === 2 ? [['進階', 'adv']] : []),
+      readout: esc(item.name), word: true,
+      prompt: '寫出化學式', sub: '數字直接打，例如 N2O5',
+      answers: [f], display: f,
+      nearMisses: nm,
+      explanation: exp
+    };
+  };
+
+  /* ---- 酸 ---- */
+  function acidExplainF2N(an, acid) {
+    const f = N.acidFormula(an), anIon = ionTxt(an.sym, an.c, -1), ar = acidRoot(an);
+    const longNote = ar.longRoot ? `${an.family === 'S' || an.sym === 'S' ? 'S' : 'P'} 的字根要用長的 ${rt(ar.root)}。` : '';
+    const hNote = `H 的個數 ${an.c} = 陰離子電荷 ${an.c}，所以陰離子是 ${anIon}。`;
+    if (ar.suffix === 'ide') return `${fHTML(f)} 是 H⁺ 接在陰離子上的酸。${hNote}${anIon} 是 ${an.name}，<b>不含氧</b> → hydro- + ${rt(ar.root)} + -ic acid → <b>${acid.name}</b>。${longNote}${acid.gas ? `純物質（氣體）時叫 ${acid.gas}，溶在水裡才叫 ${acid.name}。` : ''}`;
+    const pre = /^(hypo|per)/.exec(an.name);
+    return `${fHTML(f)} 是 H⁺ 接在陰離子上的酸。${hNote}${anIon} 是 ${an.name}（<b>-${ar.suffix}</b>）→ 含氧酸不加 hydro-，-${ar.suffix} 變 <b>-${ar.suffix === 'ate' ? 'ic' : 'ous'}</b>${pre ? `，字首 ${pre[1]}- 保留` : ''} → <b>${acid.name}</b>。${longNote}`;
+  }
+  B.acidF2n = r => {
+    const an = findAn(r.an), acid = findAcid(r.an), f = N.acidFormula(an);
+    const nm = acidNearMisses(an, acid);
+    if (acid.name !== acid.name.replace(/ acid$/, '')) nm.push({ text: acid.name.replace(/ acid$/, ''), hint: '酸的名稱要包含 acid' });
+    return {
+      mode: 'formula2name', scope: 'acid', kind: 'name', badges: [['酸', 'acid']],
+      readout: fHTML(f), word: false,
+      prompt: '寫出這個酸的名稱', sub: '先找出陰離子，看它有沒有氧、字尾是什麼',
+      answers: [acid.name], display: acid.name,
+      nearMisses: nm,
+      explanation: acidExplainF2N(an, acid)
+    };
+  };
+  B.acidN2f = r => {
+    const an = findAn(r.an), acid = findAcid(r.an), f = N.acidFormula(an), anIon = ionTxt(an.sym, an.c, -1);
+    const rule = /^hydro/.test(acid.name) ? 'hydro-…-ic acid → 不含氧的 -ide 陰離子'
+               : /ous acid$/.test(acid.name) ? '-ous acid → -ite 陰離子'
+               : '-ic acid 而且沒有 hydro- → -ate 陰離子';
+    const nm = [];
+    if (an.c > 1) nm.push({ text: 'H' + an.sym, hint: `H 的個數要等於陰離子的電荷（${an.c}）` });
+    const fam = oxyFamily(an);
+    fam.filter(a => a !== an).forEach(a => nm.push({ text: N.acidFormula(a), hint: `那是 ${findAcid(a.sym) ? findAcid(a.sym).name : a.name + ' 的酸'}，氧的個數不一樣` }));
+    if (an.sym === 'SO4' || an.sym === 'SO3') nm.push({ text: 'H2S', hint: 'H₂S 是 hydrosulfuric acid（不含氧）' });
+    if (an.sym === 'S') nm.push({ text: 'H2SO4', hint: 'H₂SO₄ 是 sulfuric acid（含氧）；hydro- 開頭的酸不含氧' });
+    return {
+      mode: 'name2formula', scope: 'acid', kind: 'formula', badges: [['酸', 'acid']],
+      readout: esc(acid.name), word: true,
+      prompt: '寫出這個酸的化學式', sub: 'H 寫在最前面，H 的個數 = 陰離子電荷',
+      answers: [f].concat((an.altSym || []).map(s => 'H' + (an.c > 1 ? an.c : '') + s)), display: f,
+      nearMisses: nm,
+      explanation: `${acid.name}：${rule} → 陰離子是 ${anIon}（${an.name}），電荷 −${an.c} → 需要 ${an.c} 個 H⁺，H 寫在最前面，不加括號 → <b>${fHTML(f)}</b>。`
+    };
+  };
+
+  /* ---- 判斷類型（Figure 5.1 ＋ 5.2 ＋ 酸）---- */
+  const CLASS_LABEL = { I: 'Type I', II: 'Type II', III: 'Type III', poly: '多原子離子', acid: '酸' };
+  function recipeOf(formula) { return resolveFormula(formula); }
+  B.classify = r => {
+    let formula, ans, path, follow;
+    const flow0 = '是酸嗎？<b>不是</b> → ';
+    if (r.k === 't3') {
+      const item = findT3(r.f);
+      formula = r.f; ans = 'III';
+      const syms = item.parts.map(p => p[0]);
+      path = `${flow0}二元化合物嗎？<b>是</b> → 有金屬嗎？<b>沒有</b>（${syms.join('、')} 都是非金屬）→ <b>Type III</b>，用字首。`;
+      if (syms.includes('H') && syms[0] === 'H') path += 'H 在第 1 族，但它是非金屬。';
+      follow = { b: 't3f2n', f: r.f };
+    } else if (r.k === 'acid') {
+      const an = findAn(r.an), acid = findAcid(r.an);
+      formula = N.acidFormula(an); ans = 'acid';
+      path = `是酸嗎？<b>是</b>：H 寫在最前面，${an.c} 個 H⁺ 接在 ${ionTxt(an.sym, an.c, -1)} 上 → 用酸的命名法，看陰離子${an.oxy === false || !an.poly ? '不含氧 → hydro-…-ic acid' : '含氧 → -ate 變 -ic、-ite 變 -ous'}（${acid.name}）。`;
+      if (!an.poly) path += `純氣體時它是 Type III（${acid.gas || 'hydrogen ' + an.name}），溶在水裡才當酸命名。`;
+      follow = { b: 'acidF2n', an: r.an };
+    } else {
+      const cat = findCat(r.cat), an = findAn(r.an), fm = formulaParts(cat, an);
+      formula = fm.plain;
+      const sc = ionicScope(cat, an), M = baseSym(cat.sym);
+      if (sc === 'poly') {
+        ans = 'poly';
+        const ions = [];
+        if (cat.type === 'poly') ions.push(`${ionTxt(cat.sym, cat.c, 1)} ${cat.name}`);
+        if (an.poly) ions.push(`${ionTxt(an.sym, an.c, -1)} ${an.name}`);
+        const elems = new Set((cat.sym + an.sym).match(/[A-Z][a-z]?/g)).size;
+        path = `${flow0}二元化合物嗎？<b>不是</b>（含 ${elems} 種元素）→ 有多原子離子嗎？<b>有</b>（${ions.join('、')}）→ 用離子化合物的方式命名：陽離子 + 陰離子，不加字首${cat.type === 2 ? `；${M} 是 Type II，要反推電荷加羅馬數字` : ''}${cat.type === 'poly' ? '；全部是非金屬，但有 NH₄⁺ 就是離子化合物' : ''}。`;
+      } else if (cat.type === 1) {
+        ans = 'I';
+        path = `${flow0}二元化合物嗎？<b>是</b> → 有金屬嗎？<b>有</b>（${M}）→ 會形成一種以上的陽離子嗎？<b>不會</b>，${M} 只有 ${ionTxt(cat.sym, cat.c, 1)} → <b>Type I</b>，直接用元素名稱。${cat.group === 'TM' ? `${M} 雖然是過渡金屬，但只形成一種離子。` : ''}`;
+      } else {
+        ans = 'II';
+        path = `${flow0}二元化合物嗎？<b>是</b> → 有金屬嗎？<b>有</b>（${M}）→ 會形成一種以上的陽離子嗎？<b>會</b> → <b>Type II</b>，要反推電荷加羅馬數字。${['Sn', 'Pb'].includes(M) ? `${M} 是主族金屬，但有兩種電荷，一樣算 Type II。` : ''}`;
+      }
+      follow = { b: 'formula2name', cat: r.cat, an: r.an };
+    }
+    const choices = (r.choices || ['I', 'II', 'III']).map(k => ({ v: k, label: CLASS_LABEL[k] }));
+    return {
+      mode: 'classify', scope: r.k === 't3' ? 't3' : r.k === 'acid' ? 'acid' : ionicScope(findCat(r.cat), findAn(r.an)), kind: 'choice',
+      badges: [['判斷類型', 'cls']],
+      readout: fHTML(formula), word: false,
+      prompt: '這是哪一類化合物？', sub: '照流程圖：是酸嗎？→ 二元嗎？→ 有金屬嗎？→ 金屬有幾種電荷？→ 有多原子離子嗎？',
+      choices, answers: [ans], display: CLASS_LABEL[ans],
+      explanation: path,
+      followUp: follow
+    };
+  };
+
+  /* ---- 俗名彩蛋 ---- */
+  B.common = r => {
+    const c = N.COMMON_NAMES[r.i];
+    const base = build(resolveFormula(c.formula));
+    const intro = `<b>${c.common}</b> 是 ${fHTML(c.formula)} 的俗名。俗名看不出組成，所以才需要系統命名法（5.1 節）。`;
+    if (r.dir === 'formula') {
+      return {
+        mode: 'name2formula', scope: base.scope, kind: 'formula', badges: [['俗名彩蛋', 'egg'], SCOPE_BADGE[base.scope]],
+        readout: esc(c.common), word: true,
+        prompt: '這個日常俗名的化學式是？', sub: `提示：系統名稱是 ${c.name}`,
+        answers: [c.formula], display: c.formula,
+        explanation: intro + `系統名稱 ${c.name} → ${fHTML(c.formula)}。`
+      };
+    }
+    return {
+      mode: 'formula2name', scope: base.scope, kind: 'name', badges: [['俗名彩蛋', 'egg'], SCOPE_BADGE[base.scope]],
+      readout: `${fHTML(c.formula)}<span class="dim small">${esc(c.common)}</span>`, word: false,
+      prompt: `${c.common} 的系統名稱是？`, sub: '照一般規則命名',
+      answers: base.answers, display: c.name,
+      nearMisses: base.nearMisses,
+      explanation: intro + base.explanation
+    };
+  };
+
+  /* ---------- 建構 ---------- */
+  function build(recipe) {
+    const q = B[recipe.b](recipe);
+    q.recipe = recipe;
+    q.nearMisses = q.nearMisses || [];
+    return q;
+  }
+
+  /* ---------- 化學式解析（相似式、俗名、組合表用）---------- */
+  const CAT_CANDIDATES = N.TYPE1.filter(c => c.inCompound).concat(N.TYPE2, N.POLY_CATIONS)
+    .slice().sort((a, b) => b.sym.length - a.sym.length);
+  const AN_CANDIDATES = N.POLY_ANIONS.concat(N.ANIONS).slice().sort((a, b) => b.sym.length - a.sym.length);
+  function resolveFormula(plain) {
+    const f = String(plain).replace(/\s/g, '');
+    if (findT3(f)) return { b: 't3f2n', f };
+    // 酸：H 開頭、H 個數 = 陰離子電荷
+    const hm = f.match(/^H(\d?)(.+)$/);
+    if (hm) {
+      const n = hm[1] ? +hm[1] : 1, an = findAn(hm[2]);
+      if (an && an.c === n && findAcid(an.sym)) return { b: 'acidF2n', an: an.sym };
+    }
+    // 離子化合物：陽離子 + 陰離子
+    for (const cat of CAT_CANDIDATES) {
+      let rest = null, nc = 1;
+      if (cat.poly) {
+        let m = f.match(new RegExp('^\\(' + cat.sym + '\\)(\\d+)(.*)$'));
+        if (m) { nc = +m[1]; rest = m[2]; }
+        else if (f.startsWith(cat.sym)) rest = f.slice(cat.sym.length);
+      } else {
+        const m = f.match(new RegExp('^' + cat.sym + '(\\d*)(?![a-z])(.*)$'));
+        if (m) { nc = m[1] ? +m[1] : 1; rest = m[2]; }
+      }
+      if (rest === null || !rest) continue;
+      for (const an of AN_CANDIDATES) {
+        let na = null;
+        if (an.poly) {
+          let m = rest.match(new RegExp('^\\(' + an.sym + '\\)(\\d+)$'));
+          if (m) na = +m[1]; else if (rest === an.sym) na = 1;
+          (an.altSym || []).forEach(s => { if (na === null) { const m2 = rest.match(new RegExp('^\\(' + s + '\\)(\\d+)$')); if (m2) na = +m2[1]; else if (rest === s) na = 1; } });
+        } else {
+          const m = rest.match(new RegExp('^' + an.sym + '(\\d*)$'));
+          if (m) na = m[1] ? +m[1] : 1;
+        }
+        if (na === null) continue;
+        if (!anionOK(cat, an)) continue;                     // 例如 MnO₂ 不是 Mn²⁺ + O₂²⁻
+        if ((na * an.c) % nc !== 0) continue;
+        const x = na * an.c / nc;
+        if (x !== cat.c) continue;
+        if (gcd(nc, na) !== 1 && !(cat.pair || an.sym === 'O2')) continue; // 可約分的不是離子化合物的寫法
+        if (N.ionicFormula(cat, an).plain !== f && !(an.altSym || []).length) continue;
+        return { b: 'formula2name', cat: catKey(cat), an: an.sym };
+      }
+    }
+    return null;
+  }
+  function recipeScope(rc) {
+    if (!rc) return null;
+    if (rc.b === 't3f2n' || rc.b === 't3n2f') return 't3';
+    if (rc.b === 'acidF2n' || rc.b === 'acidN2f') return 'acid';
+    const cat = findCat(rc.cat), an = findAn(rc.an);
+    return cat && an ? ionicScope(cat, an) : null;
+  }
+  function recipeClass(rc) {
+    const sc = recipeScope(rc);
+    return { t1: 'I', t2: 'II', t3: 'III', poly: 'poly', acid: 'acid' }[sc] || null;
+  }
+
+  /* ---------- 隨機出題 ---------- */
+  function gen(mode, scopes, set) {
+    const P = pools(set);
+    const sc = (scopes || []).filter(s => COMPAT[mode] && COMPAT[mode].includes(s));
+    if (!sc.length) return null;
+    let r = null;
+    const s = rand(sc);
+    switch (mode) {
+      case 'ionspell': {
+        if (s === 't1' || s === 't2') {
+          if (s === 't1' && chance(0.4)) r = { b: 'spellAnion', an: rand(P.an).sym };
+          else if (s === 't1') r = { b: 'spellCation', cat: catKey(rand(P.t1All)) };
+          else { const cat = pickType2(P.t2); r = { b: 'spellCation', cat: catKey(cat), old: wantOld(cat, true) }; }
+        } else if (s === 't3') {
+          const u = Math.random();
+          if (u < 0.4) r = { b: 'spellPrefix', n: 1 + Math.floor(Math.random() * P.prefixMax), dir: 'n2p' };
+          else if (u < 0.6) r = { b: 'spellPrefix', n: 2 + Math.floor(Math.random() * (P.prefixMax - 1)), dir: 'p2n' };
+          else { const pool = Object.entries(N.NONMETALS).filter(([, v]) => v.ide); r = { b: 'spellNonmetal', sym: rand(pool)[0], first: chance(0.4) }; }
+        } else if (s === 'poly') {
+          const ions = P.polyC.concat(P.polyA);
+          const u = Math.random();
+          if (u < 0.4) r = { b: 'spellPolyName', sym: rand(ions).sym };
+          else if (u < 0.75) r = { b: 'spellPolyIon', sym: rand(ions).sym };
+          else {
+            const cands = P.polyA.filter(a => oxyFamily(a).filter(x => P.polyA.includes(x)).length >= 2);
+            if (!cands.length) r = { b: 'spellPolyName', sym: rand(ions).sym };
+            else {
+              const ask = rand(cands);
+              const fam = oxyFamily(ask).filter(x => P.polyA.includes(x) && x !== ask);
+              const known = fam.find(a => /ate$/.test(a.name) && !/^per/.test(a.name)) || rand(fam);
+              r = { b: 'spellOxyRule', known: known.sym, ask: ask.sym };
+            }
+          }
+        } else { // acid
+          r = { b: 'spellAcidSuffix', an: rand(P.acids).anion, dir: chance(0.65) ? 'an2acid' : 'acid2an' };
+        }
+        break;
+      }
+      case 'ion2name': {
+        if (s === 'acid') { const an = findAn(rand(P.acids).anion); r = { b: 'acidIon2name', an: an.sym }; }
+        else if (s === 'poly') { const [cat, an] = pickPolyPair(P, sc); r = { b: 'ion2name', cat: catKey(cat), an: an.sym, old: wantOld(cat, false) }; }
+        else { const cat = pickCation(P, [s], true), an = pickAnionFor(P, cat, false); r = { b: 'ion2name', cat: catKey(cat), an: an.sym, old: wantOld(cat, false) }; }
+        break;
+      }
+      case 'formula2name': {
+        if (chance(0.04)) { const eg = pickCommon(sc); if (eg !== null) { r = { b: 'common', i: eg, dir: 'name' }; break; } }
+        if (s === 't3') r = { b: 't3f2n', f: N.type3Formula(rand(P.t3).parts) };
+        else if (s === 'acid') r = { b: 'acidF2n', an: rand(P.acids).anion };
+        else if (s === 'poly') { const [cat, an] = pickPolyPair(P, sc); r = { b: 'formula2name', cat: catKey(cat), an: an.sym }; }
+        else { const cat = pickCation(P, [s], true), an = pickAnionFor(P, cat, false); r = { b: 'formula2name', cat: catKey(cat), an: an.sym }; }
+        break;
+      }
+      case 'name2formula': {
+        if (chance(0.04)) { const eg = pickCommon(sc); if (eg !== null) { r = { b: 'common', i: eg, dir: 'formula' }; break; } }
+        if (s === 't3') r = { b: 't3n2f', f: N.type3Formula(rand(P.t3).parts) };
+        else if (s === 'acid') r = { b: 'acidN2f', an: rand(P.acids).anion };
+        else if (s === 'poly') { const [cat, an] = pickPolyPair(P, sc); r = { b: 'name2formula', cat: catKey(cat), an: an.sym, old: wantOld(cat, false) }; }
+        else { const cat = pickCation(P, [s], true), an = pickAnionFor(P, cat, false); r = { b: 'name2formula', cat: catKey(cat), an: an.sym, old: wantOld(cat, false) }; }
+        break;
+      }
+      case 'classify': {
+        const choices = ['I', 'II', 'III'].concat(sc.includes('poly') ? ['poly'] : [], sc.includes('acid') ? ['acid'] : []);
+        if (s === 't3') { const pool = P.t3.filter(t => t.only !== 'common'); r = { b: 'classify', k: 't3', f: N.type3Formula(rand(pool).parts), choices }; }
+        else if (s === 'acid') r = { b: 'classify', k: 'acid', an: rand(P.acids).anion, choices };
+        else if (s === 'poly') { let cat, an; do { [cat, an] = pickPolyPair(P, sc); } while (an.sym === 'O2'); r = { b: 'classify', k: 'ionic', cat: catKey(cat), an: an.sym, choices }; }
+        else { const cat = pickCation(P, [s], true); let an = pickAnionFor(P, cat, false); if (an.sym === 'O2') an = findAn('O'); r = { b: 'classify', k: 'ionic', cat: catKey(cat), an: an.sym, choices }; }
+        break;
+      }
+      case 'lookalike': {
+        const pairs = lookalikePairs(sc);
+        if (!pairs.length) return null;
+        return buildPair(rand(pairs));
+      }
+    }
+    return r ? build(r) : null;
+  }
+  function pickCommon(sc) {
+    const ok = N.COMMON_NAMES.map((c, i) => [i, recipeScope(resolveFormula(c.formula))]).filter(([, s]) => s && sc.includes(s));
+    return ok.length ? rand(ok)[0] : null;
+  }
+
+  /* ---- 酸：離子 → 名稱（H⁺ + 陰離子）---- */
+  B.acidIon2name = r => {
+    const an = findAn(r.an), acid = findAcid(r.an);
+    const q = B.acidF2n(r);
+    q.mode = 'ion2name';
+    q.readout = ionHTML('H', 1, 1) + '<span class="dim">+</span>' + ionHTML(an.sym, an.c, -1);
+    q.prompt = 'H⁺ 接在這個陰離子上，酸叫什麼？';
+    q.sub = '看陰離子有沒有氧、字尾是什麼';
+    return q;
+  };
+
+  /* ---- 相似式對比 ---- */
+  function lookalikePairs(sc) {
+    return N.LOOKALIKES.map((p, i) => {
+      const ra = resolveFormula(p.a), rb = resolveFormula(p.b);
+      if (!ra || !rb) return null;
+      const sa = recipeScope(ra), sb = recipeScope(rb);
+      if (!sc.includes(sa) || !sc.includes(sb)) return null;
+      return i;
+    }).filter(i => i !== null);
+  }
+  function buildPair(i) {
+    const p = N.LOOKALIKES[i];
+    const qa = build(resolveFormula(p.a)), qb = build(resolveFormula(p.b));
+    [qa, qb].forEach((q, k) => { q.mode = 'lookalike'; q.badges = [['相似式 ' + (k + 1) + '/2', 'pair']].concat(q.badges); });
+    qb.pairWhy = { a: p.a, aName: qa.display, b: p.b, bName: qb.display, why: p.why };
+    qa.pairNext = qb;
+    qa.sub = '這一組有兩題，長得很像，但命名方式不同';
+    qb.sub = '跟上一題比較看看';
+    return qa;
+  }
+
+  /* ---------- 答案比對 ---------- */
+  const SUBS = '₀₁₂₃₄₅₆₇₈₉', SUPS = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+  const deUni = s => String(s).replace(/[₀-₉]/g, d => SUBS.indexOf(d)).replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, d => SUPS.indexOf(d)).replace(/⁺/g, '+').replace(/[⁻−–]/g, '-');
+  const normName = s => String(s).toLowerCase().replace(/[\s()\-（）]/g, '').replace(/ion$/, '');
+  function normFormula(s, strict) { const t = deUni(s).replace(/\s/g, '').replace(/[（]/g, '(').replace(/[）]/g, ')'); return strict ? t : t.toLowerCase(); }
+  const normNumber = s => String(parseInt(String(s).trim(), 10));
+  /** 解析「化學式 電荷」輸入；回傳可能的標準形式陣列（例如 'SO4 2-'），格式不對回傳 [] */
+  function parseIon(s) {
+    const t = deUni(s).trim().replace(/[（]/g, '(').replace(/[）]/g, ')');
+    const canon = (sym, ch) => {
+      ch = ch.replace(/\s/g, '');
+      if (!/^(\d?[+-]|[+-]\d?)$/.test(ch)) return null;
+      const sign = ch.includes('-') ? '-' : '+';
+      const num = parseInt(ch.replace(/[+-]/g, '') || '1', 10);
+      return sym + ' ' + num + sign;
+    };
+    let m = t.match(/^([A-Za-z0-9()]+?)\s*(?:\s|\^)\s*([+\-\d\s]+)$/);
+    if (m) { const c = canon(m[1], m[2]); return c ? [c] : []; }
+    m = t.match(/^([A-Za-z0-9()]+?)([+-])(\d*)$/);          // SO4-2、NO3-、SO42-（有歧義）
+    if (m) {
+      const out = [];
+      if (m[3]) { const c = canon(m[1], m[2] + m[3]); if (c) out.push(c); }
+      else {
+        const c1 = canon(m[1], m[2]); if (c1) out.push(c1);           // 整個是化學式，電荷 1
+        const m2 = m[1].match(/^(.+?)(\d)$/);                           // 最後一個數字是電荷
+        if (m2) { const c2 = canon(m2[1], m2[2] + m[2]); if (c2) out.push(c2); }
+      }
+      return out;
+    }
+    return [];
+  }
+  function isMatch(q, raw, strict) {
+    if (q.kind === 'formula') return q.answers.some(a => normFormula(raw, strict) === normFormula(a, strict));
+    if (q.kind === 'number') return q.answers.some(a => normNumber(raw) === normNumber(a));
+    if (q.kind === 'ion') {
+      const cands = parseIon(raw).map(c => strict ? c : c.toLowerCase());
+      return q.answers.some(a => cands.includes(strict ? a : a.toLowerCase()));
+    }
+    if (q.kind === 'choice') return q.answers.includes(raw);
+    return q.answers.some(a => normName(raw) === normName(a));
+  }
+  function findNearMiss(q, raw) {
+    const nm = q.nearMisses || [];
+    if (q.kind === 'formula') return nm.find(m => normFormula(m.text, false) === normFormula(raw, false)) || null;
+    if (q.kind === 'name') {
+      const hit = nm.find(m => normName(m.text) === normName(raw));
+      if (hit) return hit;
+      if (q.scope === 'acid' && q.answers.some(a => normName(a) === normName(raw) + 'acid')) return { hint: '酸的名稱要包含 acid' };
+      return null;
+    }
+    return null;
+  }
+
+  const CORE = {
+    N, SCOPES, MODES, COMPAT, MODE_NAMES, SCOPE_NAMES, SCOPE_BADGE, CLASS_LABEL,
+    pools, gen, build, B, resolveFormula, recipeScope, recipeClass, lookalikePairs, buildPair,
+    normName, normFormula, parseIon, isMatch, findNearMiss,
+    esc, fHTML, ionHTML, ionTxt, catKey, findCat, findAn, findT3, findAcid, formulaParts, compoundName, compoundAnswers, formulaAnswers,
+    ionicScope, anionOK, oxyFamily, polyExplain, t3Explain, inBook
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = CORE;
+  else root.CORE = CORE;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function () {
+  'use strict';
+  const C = window.CORE, N = C.N;
   const $ = id => document.getElementById(id);
-  const card=$('card'), readoutEl=$('readout'), promptEl=$('prompt'), badgesEl=$('badges'), qcount=$('qcount');
-  const input=$('answer'), submitBtn=$('submit'), nextBtn=$('next');
-  const fbWrap=$('fbWrap'), fb=$('fb'), fbTitle=$('fbTitle'), fbBody=$('fbBody'), mark=$('mark'), diffEl=$('diff');
-  const statList=$('statList'), progressBar=$('progressBar'), progressLeft=$('progressLeft'), progressRight=$('progressRight'), streakEl=$('streak');
+  const esc = C.esc, fHTML = C.fHTML, ionHTML = C.ionHTML;
+  const rand = arr => arr[Math.floor(Math.random() * arr.length)];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function enabledModes(){
-    return Array.from(document.querySelectorAll('#modeChips .chip'))
-      .filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.mode);
-  }
+  /* ================= 儲存 ================= */
+  const KEY = 'ionic.v2';
+  const DEF_SET = { modes: ['ionspell', 'ion2name', 'formula2name', 'name2formula', 'classify', 'lookalike'], scopes: ['t1', 't2'], strict: true, adv: false, ext: false, follow: true, wrongOnly: false, gridMode: 'formula' };
+  const fresh = () => ({ set: Object.assign({}, DEF_SET), stats: {}, scopeStats: {}, wrong: {}, best: 0, grid: { c: 0, t: 0 } });
+  let S = fresh();
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const d = JSON.parse(raw);
+      S = { set: Object.assign({}, DEF_SET, d.set || {}), stats: d.stats || {}, scopeStats: d.scopeStats || {}, wrong: d.wrong || {}, best: d.best || 0, grid: d.grid || { c: 0, t: 0 } };
+      S.set.modes = S.set.modes.filter(m => C.MODES.includes(m));
+      S.set.scopes = S.set.scopes.filter(s => C.SCOPES.includes(s));
+    }
+  } catch (e) { S = fresh(); }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* 無法儲存就算了 */ } }
+  const setOf = () => ({ adv: S.set.adv, ext: S.set.ext });
 
-  function renderReadout(html, word){
-    readoutEl.classList.remove('ok','bad');
+  /* ================= DOM ================= */
+  const card = $('card'), readoutEl = $('readout'), promptEl = $('prompt'), badgesEl = $('badges'), qcount = $('qcount');
+  const input = $('answer'), submitBtn = $('submit'), nextBtn = $('next'), inputRow = $('inputRow'), choicesEl = $('choices'), formatHint = $('formatHint');
+  const fbWrap = $('fbWrap'), fb = $('fb'), fbTitle = $('fbTitle'), fbBody = $('fbBody'), mark = $('mark'), diffEl = $('diff'), compareEl = $('compare');
+  const progressBar = $('progressBar'), progressLeft = $('progressLeft'), progressRight = $('progressRight'), streakEl = $('streak'), bestEl = $('best'), kbdHint = $('kbdHint');
+
+  /* ================= 分頁 ================= */
+  const TABS = ['practice', 'grid', 'ref', 'wrong'];
+  let tab = 'practice';
+  function showTab(t, fromHash) {
+    if (!TABS.includes(t)) t = 'practice';
+    tab = t;
+    TABS.forEach(k => { $('page-' + k).hidden = k !== t; $('tab-' + k).setAttribute('aria-selected', String(k === t)); });
+    if (!fromHash) { try { history.replaceState(null, '', t === 'practice' ? location.pathname + location.search : '#' + t); } catch (e) { /* ignore */ } }
+    if (t === 'ref') buildRef();
+    if (t === 'wrong') renderWrong();
+    if (t === 'grid' && !grid) newGrid();
+    if (t === 'practice') input.focus();
+  }
+  document.querySelector('.tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (b) showTab(b.dataset.tab); });
+  window.addEventListener('hashchange', () => showTab(location.hash.replace('#', '') || 'practice', true));
+
+  /* ================= 設定 UI ================= */
+  function syncChips() {
+    document.querySelectorAll('#modeChips .chip').forEach(b => b.setAttribute('aria-pressed', String(S.set.modes.includes(b.dataset.mode))));
+    document.querySelectorAll('#scopeChips .chip').forEach(b => b.setAttribute('aria-pressed', String(S.set.scopes.includes(b.dataset.scope))));
+    // 題型跟目前範圍都不相容時變淡
+    document.querySelectorAll('#modeChips .chip').forEach(b => b.classList.toggle('dimmed', !S.set.scopes.some(s => C.COMPAT[b.dataset.mode].includes(s))));
+    $('strictCase').checked = S.set.strict; $('advToggle').checked = S.set.adv; $('extToggle').checked = S.set.ext; $('followToggle').checked = S.set.follow; $('wrongOnly').checked = S.set.wrongOnly;
+    $('allModes').textContent = S.set.modes.length === C.MODES.length ? '全部取消' : '全選';
+    $('allScopes').textContent = S.set.scopes.length === C.SCOPES.length ? '全部取消' : '全選';
+  }
+  $('modeChips').addEventListener('click', e => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    const m = b.dataset.mode; S.set.modes = S.set.modes.includes(m) ? S.set.modes.filter(x => x !== m) : S.set.modes.concat(m);
+    save(); syncChips(); newQuestion(true);
+  });
+  $('scopeChips').addEventListener('click', e => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    const s = b.dataset.scope; S.set.scopes = S.set.scopes.includes(s) ? S.set.scopes.filter(x => x !== s) : S.set.scopes.concat(s);
+    save(); syncChips(); newQuestion(true); grid = null;
+  });
+  $('allModes').addEventListener('click', () => { S.set.modes = S.set.modes.length === C.MODES.length ? [] : C.MODES.slice(); save(); syncChips(); newQuestion(true); });
+  $('allScopes').addEventListener('click', () => { S.set.scopes = S.set.scopes.length === C.SCOPES.length ? [] : C.SCOPES.slice(); save(); syncChips(); newQuestion(true); grid = null; });
+  $('strictCase').addEventListener('change', e => { S.set.strict = e.target.checked; save(); });
+  $('advToggle').addEventListener('change', e => { S.set.adv = e.target.checked; save(); newQuestion(true); });
+  $('extToggle').addEventListener('change', e => { S.set.ext = e.target.checked; save(); newQuestion(true); grid = null; refBuilt = false; });
+  $('followToggle').addEventListener('change', e => { S.set.follow = e.target.checked; save(); });
+  $('wrongOnly').addEventListener('change', e => { S.set.wrongOnly = e.target.checked; save(); newQuestion(true); });
+
+  /* ================= 統計 ================= */
+  function bump(key, store, ok) { const s = store[key] || (store[key] = { c: 0, t: 0 }); s.t++; if (ok) s.c++; }
+  function statRows(el, keys, names, store) {
+    let html = '';
+    for (const k of keys) {
+      const s = store[k] || { c: 0, t: 0 };
+      const pct = s.t ? Math.round(100 * s.c / s.t) : 0;
+      html += `<div class="stat ${s.t ? '' : 'dim'}"><span class="label">${esc(names[k])}</span><span class="bar"><i style="width:${pct}%"></i></span><span class="num">${s.c}/${s.t}</span></div>`;
+    }
+    el.innerHTML = html;
+  }
+  function renderStats() {
+    statRows($('statModes'), C.MODES, C.MODE_NAMES, S.stats);
+    statRows($('statScopes'), C.SCOPES, C.SCOPE_NAMES, S.scopeStats);
+    let tc = 0, tt = 0;
+    for (const k of C.MODES) { const s = S.stats[k]; if (s) { tc += s.c; tt += s.t; } }
+    const overall = tt ? Math.round(100 * tc / tt) : 0;
+    progressBar.style.width = overall + '%';
+    progressLeft.textContent = tt ? `總正確率 ${overall}%` : '還沒開始作答';
+    progressRight.textContent = tt ? `${tc} / ${tt} 題` : '';
+    bestEl.textContent = S.best ? ` · 最佳 ${S.best}` : '';
+    const n = Object.keys(S.wrong).length;
+    $('wrongCnt').hidden = !n; $('wrongCnt').textContent = n;
+    $('wrongOnlyWrap').hidden = !n;
+    if (!n && S.set.wrongOnly) { S.set.wrongOnly = false; $('wrongOnly').checked = false; }
+  }
+  $('reset').addEventListener('click', () => {
+    S.stats = {}; S.scopeStats = {}; S.best = 0; streak = 0; qIndex = 0; S.grid = { c: 0, t: 0 };
+    streakEl.textContent = '0'; save(); renderStats(); newQuestion(true);
+  });
+
+  /* ================= 錯題本 ================= */
+  const wkey = r => JSON.stringify(r);
+  function wrongAdd(q) {
+    const k = wkey(q.recipe);
+    const w = S.wrong[k] || (S.wrong[k] = { r: q.recipe, n: 0, d: q.display, m: q.mode === 'lookalike' ? 'formula2name' : q.mode, s: q.scope, q: q.readout, word: !!q.word, t: 0 });
+    w.n = Math.min(w.n + 1, 5); w.t = Date.now(); w.d = q.display; w.q = q.readout;
+    save();
+  }
+  function wrongHit(q) {
+    const k = wkey(q.recipe), w = S.wrong[k]; if (!w) return;
+    w.n -= 1; if (w.n <= 0) delete S.wrong[k];
+    save();
+  }
+  function wrongCandidates() {
+    return Object.values(S.wrong).filter(w => S.set.modes.includes(w.m) && S.set.scopes.includes(w.s));
+  }
+  function renderWrong() {
+    const list = Object.values(S.wrong).sort((a, b) => b.n - a.n || b.t - a.t);
+    const el = $('wrongList');
+    if (!list.length) { el.innerHTML = '<div class="empty">目前沒有錯題。<br>答錯的題目會自動記在這裡。</div>'; return; }
+    el.innerHTML = '<div class="wrong-list">' + list.map((w, i) => `
+      <div class="wrong-item">
+        <div class="wq ${w.word ? 'word' : ''}">${w.q}</div>
+        <div class="wa">→ <b>${w.m === 'name2formula' ? fHTML(w.d) : esc(w.d)}</b></div>
+        <div class="wmeta">
+          <span class="pill mode">${esc(C.MODE_NAMES[w.m] || w.m)}</span>
+          <span class="pill" title="再錯幾次就會變多；答對一次扣 1">錯 ${w.n}</span>
+          <button class="btn ghost sm" data-practice="${i}">練這題</button>
+          <button class="link danger" data-remove="${i}">移除</button>
+        </div>
+      </div>`).join('') + '</div>';
+    el.querySelectorAll('[data-practice]').forEach(b => b.addEventListener('click', () => { loadQuestion(C.build(list[+b.dataset.practice].r), true); showTab('practice'); }));
+    el.querySelectorAll('[data-remove]').forEach(b => b.addEventListener('click', () => { delete S.wrong[wkey(list[+b.dataset.remove].r)]; save(); renderStats(); renderWrong(); }));
+  }
+  $('wrongClear').addEventListener('click', () => {
+    const btn = $('wrongClear');
+    if (btn.dataset.armed) { S.wrong = {}; delete btn.dataset.armed; btn.textContent = '清空'; save(); renderStats(); renderWrong(); return; }
+    btn.dataset.armed = '1'; btn.textContent = '確定清空？再按一次'; setTimeout(() => { delete btn.dataset.armed; btn.textContent = '清空'; }, 4000);
+  });
+  $('wrongPractice').addEventListener('click', () => { if (!Object.keys(S.wrong).length) return; S.set.wrongOnly = true; save(); syncChips(); showTab('practice'); newQuestion(true); });
+
+  /* ================= 出題流程 ================= */
+  let current = null, answered = false, needsCorrection = false, streak = 0, qIndex = 0, fromWrongBook = false;
+
+  function renderReadout(html, word) {
+    readoutEl.classList.remove('ok', 'bad');
     readoutEl.classList.toggle('word', !!word);
-    if(reduceMotion){ readoutEl.innerHTML = html; return; }
+    if (reduceMotion) { readoutEl.innerHTML = html; return; }
     const tmp = document.createElement('div'); tmp.innerHTML = html;
     let idx = 0;
     const build = node => {
-      if(node.nodeType === 3){
+      if (node.nodeType === 3) {
         const f = document.createDocumentFragment();
-        for(const ch of node.textContent){
-          if(ch === ' '){ f.appendChild(document.createTextNode(' ')); continue; }
-          const s = document.createElement('span');
-          s.className = 'ch in'; s.textContent = ch;
-          s.style.animationDelay = (Math.min(idx, 28) * 24) + 'ms';
-          f.appendChild(s); idx++;
+        for (const ch of node.textContent) {
+          if (ch === ' ') { f.appendChild(document.createTextNode(' ')); continue; }
+          const s = document.createElement('span'); s.className = 'ch in'; s.textContent = ch;
+          s.style.animationDelay = (Math.min(idx, 28) * 24) + 'ms'; f.appendChild(s); idx++;
         }
         return f;
       }
@@ -563,96 +1989,164 @@
     readoutEl.innerHTML = ''; readoutEl.appendChild(frag);
   }
 
-  function renderStats(){
-    let html = '', tc = 0, tt = 0;
-    for(const k of modeOrder){
-      const s = stats[k]; tc += s.correct; tt += s.total;
-      const pct = s.total ? Math.round(100*s.correct/s.total) : 0;
-      html += `<div class="stat ${s.total?'':'dim'}"><span class="label">${modeNames[k]}</span><span class="bar"><i style="width:${pct}%"></i></span><span class="num">${s.correct}/${s.total}</span></div>`;
-    }
-    statList.innerHTML = html;
-    const overall = tt ? Math.round(100*tc/tt) : 0;
-    progressBar.style.width = overall + '%';
-    progressLeft.textContent = tt ? `總正確率 ${overall}%` : '還沒開始作答';
-    progressRight.textContent = tt ? `${tc} / ${tt} 題` : '';
+  function showMessage(msg) {
+    current = null;
+    readoutEl.classList.add('word'); readoutEl.classList.remove('ok', 'bad');
+    readoutEl.innerHTML = `<span class="dim">${esc(msg)}</span>`;
+    badgesEl.innerHTML = ''; promptEl.textContent = '';
+    inputRow.hidden = false; choicesEl.hidden = true; formatHint.hidden = true;
+    input.disabled = true; submitBtn.disabled = true; nextBtn.hidden = true;
+    fbWrap.classList.remove('open'); card.classList.remove('is-ok', 'is-bad');
   }
 
-  function newQuestion(){
-    const modes = enabledModes(), sc = scopes();
+  function pickQuestion() {
+    const modes = S.set.modes.filter(m => S.set.scopes.some(s => C.COMPAT[m].includes(s)));
+    if (!S.set.modes.length) return { msg: '請至少選一種題型' };
+    if (!S.set.scopes.length) return { msg: '請至少選一種範圍' };
+    if (!modes.length) return { msg: '這個題型跟範圍的組合沒有題目，換一個試試' };
+    // 錯題本
+    const wc = wrongCandidates();
+    if (wc.length && (S.set.wrongOnly || Math.random() < 0.3)) {
+      const w = wc[Math.floor(Math.random() * wc.length)];
+      try { return { q: C.build(w.r), wrong: true }; } catch (e) { delete S.wrong[wkey(w.r)]; save(); }
+    }
+    if (S.set.wrongOnly && !wc.length) return { msg: '錯題本裡沒有符合目前題型／範圍的題目' };
+    const order = modes.slice().sort(() => Math.random() - 0.5);
+    for (const m of order) { const q = C.gen(m, S.set.scopes, setOf()); if (q) return { q }; }
+    return { msg: '這個組合目前沒有題目（相似式對比需要兩個化學式都在範圍內）' };
+  }
+
+  function newQuestion(reset) {
+    if (!reset && current && current.pairNext) { loadQuestion(current.pairNext, false); return; }
+    const pick = pickQuestion();
+    if (pick.msg) { showMessage(pick.msg); return; }
+    loadQuestion(pick.q, !!pick.wrong);
+  }
+
+  function loadQuestion(q, isWrong) {
+    current = q; fromWrongBook = !!isWrong;
     answered = false; needsCorrection = false;
-    submitBtn.textContent = '送出'; input.placeholder = '輸入答案';
-    card.classList.remove('is-ok','is-bad','shake');
-    fbWrap.classList.remove('open');
-    nextBtn.hidden = true;
-    if(!modes.length || !sc.length){
-      readoutEl.classList.add('word');
-      readoutEl.innerHTML = `<span class="dim">${!modes.length ? '請至少選一種題型' : '請至少選一種陽離子範圍'}</span>`;
-      badgesEl.innerHTML = ''; promptEl.textContent = '';
-      input.disabled = true; submitBtn.disabled = true; current = null;
-      return;
-    }
     qIndex++;
-    current = generators[rand(modes)](sc);
-    badgesEl.innerHTML = current.badges.map(([t,c]) => `<span class="badge ${c}">${esc(t)}</span>`).join('')
-      + `<span class="badge" style="opacity:.75">${modeNames[current.mode]}</span>`;
+    submitBtn.textContent = '送出'; input.placeholder = q.kind === 'ion' ? '例如 SO4 2-' : q.kind === 'formula' ? '例如 Fe2O3' : q.kind === 'number' ? '數字' : '輸入答案';
+    input.setAttribute('inputmode', q.kind === 'number' ? 'numeric' : 'text');
+    card.classList.remove('is-ok', 'is-bad', 'shake');
+    fbWrap.classList.remove('open'); compareEl.innerHTML = ''; formatHint.hidden = true;
+    nextBtn.hidden = true; nextBtn.textContent = '下一題';
+    const badges = q.badges.map(([t, c]) => `<span class="badge ${c}">${esc(t)}</span>`);
+    if (q.fromFollow) badges.unshift('<span class="badge cls">判斷 → 命名</span>');
+    badges.push(`<span class="badge mode">${esc(C.MODE_NAMES[q.mode] || q.mode)}</span>`);
+    if (isWrong) badges.push('<span class="badge wrongbook">錯題本</span>');
+    badgesEl.innerHTML = badges.join('');
     qcount.textContent = `第 ${qIndex} 題`;
-    renderReadout(current.readout, current.word);
-    promptEl.innerHTML = esc(current.prompt) + (current.sub ? `<span class="sub">${esc(current.sub)}</span>` : '');
-    input.value = ''; input.disabled = false; submitBtn.disabled = false;
-    input.focus();
+    renderReadout(q.readout, q.word);
+    promptEl.innerHTML = esc(q.prompt) + (q.sub ? `<span class="sub">${esc(q.sub)}</span>` : '');
+    if (q.kind === 'choice') {
+      inputRow.hidden = true; choicesEl.hidden = false;
+      choicesEl.innerHTML = q.choices.map((c, i) => `<button class="choice" data-v="${esc(c.v)}">${esc(c.label)}<kbd>${i + 1}</kbd></button>`).join('');
+      kbdHint.innerHTML = '按數字鍵或點選';
+      choicesEl.querySelector('.choice').focus();
+    } else {
+      inputRow.hidden = false; choicesEl.hidden = true;
+      kbdHint.innerHTML = '<kbd>Enter</kbd> 送出，答錯要照正確答案訂正一次';
+      input.value = ''; input.disabled = false; submitBtn.disabled = false;
+      input.focus();
+    }
   }
 
-  function shake(){
-    if(reduceMotion) return;
-    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+  function shake() { if (reduceMotion) return; card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); }
+
+  function diffHTML(user, target) {
+    const sig = s => { const out = []; for (let i = 0; i < s.length; i++) { if (/[a-z0-9]/i.test(s[i])) out.push(i); } return out; };
+    const ui = sig(user), ti = sig(target);
+    const u = ui.map(i => user[i].toLowerCase()), t = ti.map(i => target[i].toLowerCase());
+    const n = u.length, m = t.length, dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) dp[i][j] = u[i] === t[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    const uKeep = new Set(), tKeep = new Set();
+    let i = 0, j = 0;
+    while (i < n && j < m) {
+      if (u[i] === t[j]) { uKeep.add(ui[i]); tKeep.add(ti[j]); i++; j++; }
+      else if (dp[i + 1][j] >= dp[i][j + 1]) i++; else j++;
+    }
+    const render = (s, keep, cls) => Array.from(s).map((ch, k) => (!/[a-z0-9]/i.test(ch) || keep.has(k)) ? esc(ch) : `<span class="${cls}">${esc(ch)}</span>`).join('');
+    return `<div><span class="lab">你的寫法</span>${render(user, uKeep, 'x')}</div><div><span class="lab">正確寫法</span>${render(target, tKeep, 'm')}</div>`;
   }
 
-  function checkAnswer(){
-    if(!current) return;
+  function shownAnswer(q) {
+    if (q.kind === 'formula') return fHTML(q.display);
+    if (q.kind === 'ion') return esc(q.display);
+    return esc(q.display);
+  }
+  function diffTarget(q) {
+    if (q.kind === 'ion') return q.answers[0];
+    return q.display;
+  }
+
+  function record(ok) {
+    bump(current.mode, S.stats, ok);
+    bump(current.scope, S.scopeStats, ok);
+    if (ok) { streak++; if (streak > S.best) S.best = streak; streakEl.classList.remove('bump'); void streakEl.offsetWidth; streakEl.classList.add('bump'); }
+    else streak = 0;
+    streakEl.textContent = streak;
+    if (ok) wrongHit(current); else wrongAdd(current);
+    save(); renderStats();
+  }
+
+  function showFeedback(ok, raw) {
+    card.classList.toggle('is-ok', ok); card.classList.toggle('is-bad', !ok);
+    readoutEl.classList.toggle('ok', ok); readoutEl.classList.toggle('bad', !ok);
+    if (!ok) shake();
+    fb.className = 'fb ' + (ok ? 'ok' : 'bad');
+    mark.innerHTML = ok ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>' : '<svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg>';
+    fbTitle.innerHTML = ok ? `答對了 <span class="ans">${shownAnswer(current)}</span>` : `答錯了，正確答案是 <span class="ans">${shownAnswer(current)}</span>`;
+    const showDiff = !ok && current.kind !== 'choice' && raw;
+    diffEl.innerHTML = showDiff ? diffHTML(raw.trim(), diffTarget(current)) : '';
+    diffEl.style.display = showDiff ? 'block' : 'none';
+    let body = '';
+    if (!ok && raw) { const nm = C.findNearMiss(current, raw); if (nm) body += `<p class="hint">${esc(nm.hint)}</p>`; }
+    body += current.explanation;
+    fbBody.innerHTML = body;
+    compareEl.innerHTML = '';
+    if (current.pairWhy) {
+      const p = current.pairWhy;
+      compareEl.innerHTML = `<div class="compare"><div class="cell"><div class="f">${fHTML(p.a)}</div><div class="nm">${esc(p.aName)}</div></div><div class="cell"><div class="f">${fHTML(p.b)}</div><div class="nm">${esc(p.bName)}</div></div><div class="why">兩者差別：${esc(p.why)}</div></div>`;
+    }
+    fbWrap.classList.add('open');
+  }
+
+  function finishQuestion() {
+    input.disabled = true; submitBtn.disabled = true; submitBtn.textContent = '送出';
+    if (current.followUp && S.set.follow) nextBtn.textContent = '接著寫名稱 →';
+    else if (current.pairNext) nextBtn.textContent = '第二題 →';
+    else nextBtn.textContent = '下一題';
+    nextBtn.hidden = false; nextBtn.focus();
+  }
+
+  function checkAnswer() {
+    if (!current || current.kind === 'choice') return;
     const raw = input.value;
-    if(!raw.trim()){ input.focus(); return; }
-
-    if(needsCorrection){
-      if(isMatch(raw)){
+    if (!raw.trim()) { input.focus(); return; }
+    if (current.kind === 'ion' && !C.parseIon(raw).length) {
+      formatHint.hidden = false; formatHint.textContent = '格式看不懂。請寫成「化學式 空格 電荷」，例如 SO4 2-、NO3 -、NH4 +';
+      input.select(); return;
+    }
+    formatHint.hidden = true;
+    if (needsCorrection) {
+      if (C.isMatch(current, raw, S.set.strict)) {
         needsCorrection = false;
         card.classList.remove('is-bad'); card.classList.add('is-ok');
         readoutEl.classList.remove('bad'); readoutEl.classList.add('ok');
-        fbTitle.innerHTML = '訂正完成，記住這個拼法';
-        input.disabled = true; submitBtn.disabled = true; submitBtn.textContent = '送出';
-        nextBtn.hidden = false; nextBtn.focus();
+        fbTitle.innerHTML = '訂正完成，記住這個寫法';
+        finishQuestion();
       } else { shake(); input.select(); }
       return;
     }
-    if(answered) return;
-
-    const ok = isMatch(raw);
+    if (answered) return;
+    const ok = C.isMatch(current, raw, S.set.strict);
     answered = true;
-    const s = stats[current.mode]; s.total++; if(ok) s.correct++;
-    renderStats();
-
-    if(ok){ streak++; streakEl.classList.remove('bump'); void streakEl.offsetWidth; streakEl.classList.add('bump'); }
-    else streak = 0;
-    streakEl.textContent = streak;
-
-    card.classList.toggle('is-ok', ok); card.classList.toggle('is-bad', !ok);
-    readoutEl.classList.toggle('ok', ok); readoutEl.classList.toggle('bad', !ok);
-    if(!ok) shake();
-
-    const shownAns = current.kind === 'formula' ? formulaHTML(current.display) : esc(current.display);
-    fb.className = 'fb ' + (ok ? 'ok' : 'bad');
-    mark.innerHTML = ok
-      ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>'
-      : '<svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg>';
-    fbTitle.innerHTML = ok ? `答對了 <span class="ans">${shownAns}</span>` : `答錯了，正確答案是 <span class="ans">${shownAns}</span>`;
-    diffEl.innerHTML = ok ? '' : diffHTML(raw.trim(), current.display);
-    diffEl.style.display = ok ? 'none' : 'block';
-    fbBody.innerHTML = current.explanation;
-    fbWrap.classList.add('open');
-
-    if(ok){
-      input.disabled = true; submitBtn.disabled = true;
-      nextBtn.hidden = false; nextBtn.focus();
-    } else {
+    record(ok);
+    showFeedback(ok, raw);
+    if (ok) finishQuestion();
+    else {
       needsCorrection = true;
       input.value = ''; input.placeholder = '照正確答案再打一次才能繼續';
       submitBtn.textContent = '訂正';
@@ -660,46 +2154,227 @@
     }
   }
 
-  /* ---------- 對照表 ---------- */
-  function buildRef(){
-    const t1 = TYPE1.map(x => `<tr><td>${ionHTML(x.sym,x.c,1)}</td><td>${x.name}</td></tr>`).join('');
-    const an = ANIONS.map(x => `<tr><td>${ionHTML(x.sym,x.c,-1)}</td><td>${rootHTML(x)}</td></tr>`).join('');
-    const t2 = TYPE2.map(x => `<tr><td>${ionHTML(x.sym,x.c,1)}</td><td>${x.name}</td><td>${x.old}</td></tr>`).join('');
-    $('refGrid').innerHTML =
-      `<div class="ref-block"><h3>Type I 陽離子</h3><div class="ref-wrap"><table>${t1}</table></div></div>`+
-      `<div class="ref-block"><h3>陰離子</h3><div class="ref-wrap"><table>${an}</table></div></div>`+
-      `<div class="ref-block" style="grid-column:1 / -1;min-width:0"><h3>Type II 陽離子</h3><div class="ref-wrap"><table>${t2}</table></div></div>`;
+  function chooseAnswer(v) {
+    if (!current || current.kind !== 'choice' || answered) return;
+    answered = true;
+    const ok = C.isMatch(current, v, true);
+    record(ok);
+    choicesEl.querySelectorAll('.choice').forEach(b => {
+      b.disabled = true;
+      if (b.dataset.v === current.answers[0]) b.classList.add('is-ok');
+      else if (b.dataset.v === v) b.classList.add('is-bad');
+      else b.classList.add('faded');
+    });
+    showFeedback(ok, null);
+    finishQuestion();
+  }
+
+  function goNext() {
+    if (current && current.followUp && S.set.follow && !current.fromFollow) {
+      const f = C.build(current.followUp);
+      f.fromFollow = true;
+      f.badges = f.badges.filter(b => b[1] !== 'cls');
+      loadQuestion(f, fromWrongBook);
+      return;
+    }
+    newQuestion(false);
   }
 
   /* ---------- 事件 ---------- */
   submitBtn.addEventListener('click', checkAnswer);
-  nextBtn.addEventListener('click', newQuestion);
-  input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); checkAnswer(); } });
+  nextBtn.addEventListener('click', goNext);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); } });
+  choicesEl.addEventListener('click', e => { const b = e.target.closest('.choice'); if (b && !b.disabled) chooseAnswer(b.dataset.v); });
   document.addEventListener('keydown', e => {
-    if(e.target === input || e.target === nextBtn || e.target === submitBtn) return;
-    if(e.target.closest && e.target.closest('summary')) return;
-    if(e.key === 'Enter' && answered && !needsCorrection && !nextBtn.hidden){ e.preventDefault(); newQuestion(); }
+    if (tab !== 'practice') return;
+    if (e.target.closest && (e.target.closest('summary') || e.target.closest('.tabs'))) return;
+    if (e.target === input || e.target === nextBtn || e.target === submitBtn) {
+      if (e.target !== input && e.key === 'Enter' && answered && !needsCorrection && !nextBtn.hidden) { e.preventDefault(); goNext(); }
+      return;
+    }
+    if (current && current.kind === 'choice' && !answered && /^[1-9]$/.test(e.key)) {
+      const b = choicesEl.querySelectorAll('.choice')[+e.key - 1]; if (b) { e.preventDefault(); chooseAnswer(b.dataset.v); }
+      return;
+    }
+    if (e.key === 'Enter' && answered && !needsCorrection && !nextBtn.hidden) { e.preventDefault(); goNext(); }
   });
-  ['modeChips','scopeChips'].forEach(id => {
-    $(id).addEventListener('click', e => {
-      const b = e.target.closest('.chip'); if(!b) return;
-      b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
-      newQuestion();
+
+  /* ================= 組合表 ================= */
+  let grid = null, gridChecked = false;
+  const shuffle = arr => arr.slice().sort(() => Math.random() - 0.5);
+  function newGrid() {
+    const P = C.pools(setOf()), sc = S.set.scopes;
+    let cats = P.t1.filter(c => !c.hydride || true);
+    if (sc.includes('t2')) cats = cats.concat(P.t2.filter(c => !c.pair));
+    if (sc.includes('poly')) cats = cats.concat(P.polyC);
+    let ans = P.an.filter(a => a.sym !== 'H');
+    if (sc.includes('poly')) ans = ans.concat(P.polyA.filter(a => a.sym !== 'O2'));
+    // 陽離子 3 個：至少 1 個 Type I，有 t2 就至少 1 個 Type II
+    const t1Pick = shuffle(cats.filter(c => c.type === 1)), t2Pick = shuffle(cats.filter(c => c.type === 2)), pPick = shuffle(cats.filter(c => c.type === 'poly'));
+    let chosen = [];
+    if (t1Pick.length) chosen.push(t1Pick.shift());
+    if (t2Pick.length) chosen.push(t2Pick.shift());
+    if (pPick.length && Math.random() < 0.6) chosen.push(pPick.shift());
+    const rest = shuffle(t1Pick.concat(t2Pick, pPick));
+    while (chosen.length < 3 && rest.length) chosen.push(rest.shift());
+    chosen = shuffle(chosen);
+    // 陰離子 4 個：有 poly 時至少 2 個多原子
+    const monoPick = shuffle(ans.filter(a => !a.poly)), polyPick = shuffle(ans.filter(a => a.poly));
+    let anChosen = [];
+    if (polyPick.length) { anChosen.push(polyPick.shift()); if (polyPick.length) anChosen.push(polyPick.shift()); }
+    const restA = shuffle(monoPick.concat(polyPick));
+    while (anChosen.length < 4 && restA.length) anChosen.push(restA.shift());
+    anChosen = shuffle(anChosen);
+    grid = { cats: chosen.map(C.catKey), ans: anChosen.map(a => a.sym) };
+    gridChecked = false;
+    renderGrid();
+  }
+  function renderGrid() {
+    if (!grid) return;
+    const mode = S.set.gridMode, isName = mode === 'name';
+    const cats = grid.cats.map(C.findCat), ans = grid.ans.map(C.findAn);
+    let html = '<thead><tr><th></th>' + ans.map(a => `<th class="an">${ionHTML(a.sym, a.c, -1)}<small>${esc(a.name)}</small></th>`).join('') + '</tr></thead><tbody>';
+    cats.forEach((c, i) => {
+      html += `<tr><th class="cat">${ionHTML(c.sym, c.c, 1)}<small>${esc(c.name)}</small></th>`;
+      ans.forEach((a, j) => {
+        html += `<td><div class="cell ${isName ? 'name' : ''}" data-i="${i}" data-j="${j}"><input id="g-${i}-${j}" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${isName ? '名稱' : '化學式'}" aria-label="${esc(c.name)} + ${esc(a.name)}"><div class="key"></div></div></td>`;
+      });
+      html += '</tr>';
     });
+    $('gridTable').innerHTML = html + '</tbody>';
+    $('gridResult').textContent = '填完按「檢查」';
+    $('gridTotal').textContent = S.grid.t ? `累計：${S.grid.c} / ${S.grid.t} 格正確（${Math.round(100 * S.grid.c / S.grid.t)}%）` : '';
+    document.querySelectorAll('#gridModeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.gm === mode)));
+    $('gridTable').querySelectorAll('input').forEach(inp => inp.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      const all = Array.from($('gridTable').querySelectorAll('input'));
+      const k = all.indexOf(inp);
+      if (k < all.length - 1) all[k + 1].focus(); else checkGrid();
+    }));
+  }
+  function cellQuestion(i, j) {
+    const r = S.set.gridMode === 'name' ? { b: 'formula2name', cat: grid.cats[i], an: grid.ans[j] } : { b: 'name2formula', cat: grid.cats[i], an: grid.ans[j] };
+    return C.build(r);
+  }
+  function checkGrid() {
+    if (!grid) return;
+    let c = 0, t = 0;
+    document.querySelectorAll('#gridTable .cell').forEach(cell => {
+      const i = +cell.dataset.i, j = +cell.dataset.j, q = cellQuestion(i, j), inp = cell.querySelector('input');
+      const ok = C.isMatch(q, inp.value, S.set.strict);
+      cell.classList.toggle('is-ok', ok); cell.classList.toggle('is-bad', !ok);
+      cell.querySelector('.key').innerHTML = ok ? '' : (S.set.gridMode === 'name' ? esc(q.display) : fHTML(q.display));
+      if (!ok && inp.value.trim()) wrongAdd(q);
+      t++; if (ok) c++;
+    });
+    if (!gridChecked) { S.grid.c += c; S.grid.t += t; gridChecked = true; save(); }
+    $('gridResult').innerHTML = `這組 <span class="big">${c} / ${t}</span> 格正確${c === t ? '，全對！' : '，紅色格子下方是正確答案'}`;
+    $('gridTotal').textContent = `累計：${S.grid.c} / ${S.grid.t} 格正確（${Math.round(100 * S.grid.c / S.grid.t)}%）`;
+    renderStats();
+  }
+  $('gridCheck').addEventListener('click', checkGrid);
+  $('gridNew').addEventListener('click', newGrid);
+  $('gridReveal').addEventListener('click', () => {
+    if (!grid) return;
+    document.querySelectorAll('#gridTable .cell').forEach(cell => {
+      const q = cellQuestion(+cell.dataset.i, +cell.dataset.j);
+      cell.querySelector('input').value = q.display;
+      cell.classList.remove('is-bad'); cell.classList.add('is-ok'); cell.querySelector('.key').innerHTML = '';
+    });
+    gridChecked = true;
+    $('gridResult').textContent = '已顯示答案（這組不計入統計）';
   });
-  $('reset').addEventListener('click', () => {
-    modeOrder.forEach(k => { stats[k].correct = 0; stats[k].total = 0; });
-    streak = 0; streakEl.textContent = '0'; qIndex = 0;
-    renderStats(); newQuestion();
-  });
+  $('gridModeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.set.gridMode = b.dataset.gm; save(); gridChecked = false; renderGrid(); });
 
-  buildRef();
+  /* ================= 對照表 ================= */
+  let refBuilt = false;
+  function buildRef() {
+    if (refBuilt) return;
+    refBuilt = true;
+    const P = C.pools({ ext: S.set.ext, adv: true });
+    const extTag = x => (x.src === 'ext' ? ' class="ext"' : '');
+    const tbl = (head, rows) => `<div class="ref-wrap"><table>${head ? '<tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr>' : ''}${rows}</table></div>`;
+    const t1 = P.t1All.map(x => `<tr${extTag(x)}><td>${ionHTML(x.sym, x.c, 1)}</td><td>${esc(x.name)}${x.alt ? ` <small style="color:var(--muted)">/ ${esc(x.alt)}</small>` : ''}</td></tr>`).join('');
+    const an = P.an.map(x => `<tr${extTag(x)}><td>${ionHTML(x.sym, x.c, -1)}</td><td><span class="rt">${esc(x.root)}</span>ide</td></tr>`).join('');
+    const t2 = P.t2.map(x => `<tr${extTag(x)}><td>${ionHTML(x.sym, x.c, 1)}</td><td>${esc(x.name)}</td><td>${x.old ? esc(x.old) : '—'}</td></tr>`).join('');
+    const prefixes = Object.keys(N.PREFIXES).filter(n => +n <= P.prefixMax).map(n => `<tr${N.PREFIX_SRC[n] === 'ext' && !S.set.ext ? ' hidden' : (N.PREFIX_SRC[n] === 'ext' ? ' class="ext"' : '')}><td>${n}</td><td>${N.PREFIXES[n]}-</td><td class="wrap">${/[ao]$/.test(N.PREFIXES[n]) ? '接 oxide → ' + N.PREFIXES[n].slice(0, -1) + 'oxide' : ''}</td></tr>`).join('');
+    const nonmetals = Object.entries(N.NONMETALS).map(([s, v]) => `<tr><td>${s}</td><td>${esc(v.name)}</td><td>${v.ide ? esc(v.ide) : '—'}</td></tr>`).join('');
+    const famName = { N: '含 N', S: '含 S', P: '含 P', C: '含 C', Cl: '含 Cl', Br: '含 Br（延伸）', I: '含 I（延伸）', O: '含 O、H', metal: '含過渡金屬' };
+    const famOrder = ['N', 'S', 'P', 'C', 'Cl', 'Br', 'I', 'O', 'metal'];
+    let poly = `<tr><th colspan="2">陽離子</th></tr>` + P.polyC.map(x => `<tr><td>${ionHTML(x.sym, x.c, 1)}</td><td>${esc(x.name)}</td></tr>`).join('');
+    famOrder.forEach(f => {
+      const items = P.polyA.filter(a => a.family === f);
+      if (!items.length) return;
+      poly += `<tr><th colspan="2">${famName[f]}</th></tr>` + items.map(x => `<tr${extTag(x)}><td>${ionHTML(x.sym, x.c, -1)}</td><td>${esc(x.name)}${x.alt ? ` <small style="color:var(--muted)">/ ${esc(x.alt.join('、'))}</small>` : ''}${x.altSym ? ` <small style="color:var(--muted)">（也寫成 ${fHTML(x.altSym[0])}⁻）</small>` : ''}</td></tr>`).join('');
+    });
+    const acidRow = a => { const ion = C.findAn(a.anion); return `<tr${extTag(a)}><td>${fHTML(N.acidFormula(ion))}</td><td>${ionHTML(ion.sym, ion.c, -1)} ${esc(ion.name)}</td><td>${esc(a.name)}</td></tr>`; };
+    const acidsNoO = P.acids.filter(a => { const ion = C.findAn(a.anion); return !ion.poly || ion.oxy === false; }).map(acidRow).join('');
+    const acidsO = P.acids.filter(a => { const ion = C.findAn(a.anion); return ion.poly && ion.oxy; }).map(acidRow).join('');
+    const common = N.COMMON_NAMES.map(c => `<tr><td>${fHTML(c.formula)}</td><td>${esc(c.common)}</td><td>${esc(c.name)}</td></tr>`).join('');
+    const look = N.LOOKALIKES.map(p => { const qa = C.build(C.resolveFormula(p.a)), qb = C.build(C.resolveFormula(p.b)); return `<tr><td>${fHTML(p.a)}</td><td>${esc(qa.display)}</td><td>${fHTML(p.b)}</td><td>${esc(qb.display)}</td><td class="wrap">${esc(p.why)}</td></tr>`; }).join('');
+
+    $('refRoot').innerHTML = `
+      <section class="panel" style="margin-top:0">
+        <div class="panel-head"><h2>命名流程（Figure 5.1、5.2、5.3）</h2></div>
+        <ol class="flow">
+          <li><b>是酸嗎？</b>（H 開頭、溶於水放出 H⁺）→ 看陰離子：不含氧 → <b>hydro-字根-ic acid</b>；-ate → <b>-ic acid</b>；-ite → <b>-ous acid</b>。</li>
+          <li><b>二元化合物嗎？</b> 是 → <b>有金屬嗎？</b> 沒有 → <b>Type III</b>，用字首（第一個元素不寫 mono-，接 oxide 省略 a/o）。</li>
+          <li>有金屬 → <b>金屬會形成幾種陽離子？</b> 一種 → <b>Type I</b>，直接念元素名稱；多種 → <b>Type II</b>，從陰離子反推電荷，寫羅馬數字。</li>
+          <li>不是二元 → <b>有多原子離子嗎？</b> 有 → 陽離子名稱 + 陰離子名稱，不加字首；金屬是 Type II 時一樣要加羅馬數字。NH₄⁺ 化合物也是離子化合物。</li>
+        </ol>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Table 5.1、5.2 單原子離子</h2></div>
+        <div class="ref-grid">
+          <div class="ref-block"><h3>Type I 陽離子</h3>${tbl(null, t1)}</div>
+          <div class="ref-block"><h3>單原子陰離子</h3>${tbl(null, an)}</div>
+          <div class="ref-block wide"><h3>Type II 陽離子 <small>羅馬數字系統 ／ 舊式名稱</small></h3>${tbl(['離子', '系統名稱', '舊式名稱'], t2)}</div>
+        </div>
+        <p class="ref-note">陰離子的藍色部分是字根，字根加 -ide 就是名稱。舊式名稱電荷高的用 -ic、低的用 -ous。Ag⁺、Zn²⁺ 是過渡金屬但只有一種電荷，不加羅馬數字（加了也不算錯）。Sn、Pb 是主族金屬但有兩種電荷，算 Type II。</p>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Table 5.3 字首與非金屬名稱（Type III）</h2></div>
+        <div class="ref-grid">
+          <div class="ref-block"><h3>字首</h3>${tbl(['個數', '字首', '省略母音'], prefixes)}</div>
+          <div class="ref-block"><h3>非金屬 <small>第一個元素用全名，第二個用 -ide</small></h3>${tbl(['元素', '全名', '-ide'], nonmetals)}</div>
+        </div>
+        <p class="ref-note">四條規則：第一個元素先念，用全名；第二個元素字根 + -ide；用字首寫個數；<b>第一個元素不寫 mono-</b>。接 oxide 時字首結尾的 a/o 省略（pentoxide、tetroxide），di-、tri- 不省略。H₂O 只叫 water，NH₃ 只叫 ammonia。元素是 phosphor<b>us</b>，不是 phosphorous。</p>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Table 5.4 多原子離子</h2></div>
+        <div class="ref-grid"><div class="ref-block wide">${tbl(null, poly)}</div></div>
+        <p class="ref-note">同一系列電荷相同，只差氧的個數：氧少 <b>-ite</b>、氧多 <b>-ate</b>；再少一個 <b>hypo-…-ite</b>、再多一個 <b>per-…-ate</b>。加一個 H⁺ 負電荷少 1，名稱前加 hydrogen。字尾 -ide 的多原子離子有三個：hydroxide、cyanide、peroxide。<br>口訣「<b>N</b>ick the <b>C</b>amel ate a <b>Cl</b>am for <b>S</b>upper in <b>P</b>hoenix」：每個字的子音數 = O 的個數，母音數 = 負電荷（Nick → NO₃⁻、Camel → CO₃²⁻、Clam → ClO₃⁻、Supper → SO₄²⁻、Phoenix → PO₄³⁻）。</p>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Table 5.5、5.6 酸</h2></div>
+        <div class="ref-grid">
+          <div class="ref-block wide"><h3>不含氧 <small>hydro- + 字根 + -ic acid</small></h3>${tbl(['化學式', '陰離子', '酸'], acidsNoO)}</div>
+          <div class="ref-block wide"><h3>含氧 <small>-ate → -ic acid；-ite → -ous acid</small></h3>${tbl(['化學式', '陰離子', '酸'], acidsO)}</div>
+        </div>
+        <p class="ref-note">H 的個數 = 陰離子電荷。S、P 用長字根：sulf<b>ur</b>ic、phosph<b>or</b>ic。HCl 純氣體叫 hydrogen chloride，溶在水裡才叫 hydrochloric acid。</p>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>相似式對比</h2></div>
+        <div class="ref-grid"><div class="ref-block wide">${tbl(['A', '名稱', 'B', '名稱', '差別'], look)}</div></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>俗名（5.1 節）</h2></div>
+        <div class="ref-grid"><div class="ref-block wide">${tbl(['化學式', '俗名', '系統名稱'], common)}</div></div>
+        <p class="ref-note">俗名看不出組成，所以才需要系統命名法。${S.set.ext ? '' : '勾選練習頁的「課本表格外的延伸」會多顯示延伸資料。'}</p>
+      </section>`;
+  }
+
+  /* ================= 啟動 ================= */
+  syncChips();
   renderStats();
-  newQuestion();
+  const h = location.hash.replace('#', '');
+  showTab(TABS.includes(h) ? h : 'practice', true);
+  newQuestion(true);
 
-  // 測試用
-  window.__ionic = { TYPE1, TYPE2, ANIONS, formulaOf, generators, getCurrent: () => current };
+  window.__ionic = { CORE: C, getCurrent: () => current, state: () => S, load: r => loadQuestion(C.build(r), false), loadPair: i => loadQuestion(C.buildPair(i), false) };
 })();
+
 </script>
-</body>
-</html>
+
+</body></html>
