@@ -62,7 +62,6 @@
   }
   if (fine) {
     $$('.spot').forEach(function (el) { trackPointer(el, false); });
-    $$('.fd-tile').forEach(function (el) { trackPointer(el, true); });
   }
 
   /* ── 游標跟隨光暈 ── */
