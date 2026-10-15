@@ -93,7 +93,7 @@
   --shadow-sm: 0 1px 0 rgba(20, 26, 46, .05);
   --shadow-card: 0 10px 30px -18px rgba(20, 26, 46, .28);
   --shadow-lift: 0 5px 15px rgba(20, 26, 46, .12);
-  --shadow-glow: 0 0 0 1px rgb(41 98 255 / .25), 0 8px 28px -6px rgb(41 98 255 / .45), 0 0 48px rgb(0 247 255 / .25);
+  --shadow-glow: 0 0 30px rgb(41 98 255 / .35), 0 0 60px rgb(0 247 255 / .22);  /* v1 的光暈，沒有邊框 */
   --edge-hi: inset 0 1px 0 rgb(255 255 255 / .7);
   --ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary);
 
@@ -140,7 +140,7 @@
     --shadow-sm: 0 1px 0 rgba(0, 0, 0, .3);
     --shadow-card: 0 10px 30px -18px rgba(0, 0, 0, .6);
     --shadow-lift: 0 5px 15px rgba(0, 0, 0, .4);
-    --shadow-glow: 0 0 0 1px rgb(91 130 255 / .35), 0 0 24px rgb(91 130 255 / .55), 0 0 64px rgb(0 247 255 / .28);
+    --shadow-glow: 0 0 30px rgb(91 130 255 / .4), 0 0 60px rgb(0 247 255 / .18);
     --edge-hi: inset 0 1px 0 rgb(255 255 255 / .06);
     --ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary);
     color-scheme: dark;
@@ -180,7 +180,7 @@
   --shadow-sm: 0 1px 0 rgba(0, 0, 0, .3);
   --shadow-card: 0 10px 30px -18px rgba(0, 0, 0, .6);
   --shadow-lift: 0 5px 15px rgba(0, 0, 0, .4);
-  --shadow-glow: 0 0 0 1px rgb(91 130 255 / .35), 0 0 24px rgb(91 130 255 / .55), 0 0 64px rgb(0 247 255 / .28);
+  --shadow-glow: 0 0 30px rgb(91 130 255 / .4), 0 0 60px rgb(0 247 255 / .18);
   --edge-hi: inset 0 1px 0 rgb(255 255 255 / .06);
   --ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary);
   color-scheme: dark;
@@ -401,7 +401,7 @@
   color: var(--on-grad);
   text-shadow: var(--on-grad-shadow);
   transform: translateY(-3px);
-  box-shadow: var(--shadow-glow), inset 0 0 0 1px color-mix(in srgb, var(--glow) 60%, transparent);
+  box-shadow: var(--shadow-glow);
 }
 
 /* 玻璃面板（bus / math 的浮動控制面板） */
