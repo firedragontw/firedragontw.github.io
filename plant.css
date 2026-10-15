@@ -96,6 +96,9 @@
 .fd-plant-btn:hover .sway { animation: fd-wiggle .6s ease-in-out; }
 @keyframes fd-wiggle { 25% { transform: rotate(-8deg); } 50% { transform: rotate(7deg); } 75% { transform: rotate(-4deg); } }
 
+/* 捲動長大時：盆栽輕輕跳一下 */
+.fd-plant.nudge .pot { animation: fd-squish .5s var(--ease-spring); transform-origin: 60px 146px; }
+
 /* 睡著：閉眼、垂頭、冒 z */
 .fd-plant .zzz { fill: var(--ink-2); font: 700 11px/1 var(--font-mono, monospace); opacity: 0; }
 .fd-plant.sleeping .eye { opacity: 0; }

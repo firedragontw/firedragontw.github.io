@@ -1,4 +1,5 @@
 /* 角落小盆栽：點一下澆水，澆兩次長大一階；開花後再點一下收成。
+   往下捲＝時間流逝，植物跟著長一點；捲到頁面最底就開花。
    進度存在 localStorage 的 fd-plant：{ water, harvest, mini }。 */
 (function () {
   'use strict';
@@ -6,6 +7,7 @@
   window.__fdPlant = true;
 
   var STAGES = ['一顆種子', '冒芽了', '長葉子了', '有花苞了', '開花了'];
+  var SOUNDS = ['咕嘟咕嘟 💧', '嘎嘰嘎嘰 💧', '呱啦呱啦 💧'];
   var PER_STAGE = 2;          // 澆幾次長一階
   var MAX = 4;                // 0 種子 … 4 開花
   var SLEEP_AFTER = 20000;    // 多久沒動就睡著（毫秒）
@@ -123,6 +125,7 @@
       setTimeout(function () {
         wrap.classList.remove('harvest');
         state.water = 0; save(); render();
+        scrollBase = scrollProgress();   // 收成後要從這裡再往下捲才會長
         busy = false;
       }, reduced ? 0 : 750);
       return;
@@ -136,7 +139,7 @@
       var next = stage();
       save(); render();
       if (next !== st) say(next === MAX ? '開花了！再點一下收成 🌸' : STAGES[next] + '！');
-      else say('咕嘟咕嘟 💧');
+      else say(SOUNDS[Math.floor(Math.random() * SOUNDS.length)]);
       busy = false;
     }, reduced ? 0 : 650);
     setTimeout(function () { wrap.classList.remove('watering'); }, 1400);
@@ -147,6 +150,33 @@
     state.mini = true; save(); render();
     btn.focus();
   });
+
+  /* 捲動＝時間流逝：往下捲到哪，植物至少長到哪；只會長大不會縮回去 */
+  function scrollProgress() {
+    var h = document.documentElement.scrollHeight - innerHeight;
+    return h > 0 ? Math.min(1, Math.max(0, scrollY / h)) : 0;
+  }
+  var scrollBase = 0, scrollT = 0;
+  function onScrollGrow() {
+    if (busy) return;
+    var p = scrollProgress();
+    if (p < .05) { scrollBase = 0; return; }          // 回到頂端就重新起算
+    if (scrollBase > .9) return;                        // 在底部收成的：要先捲回上面才會再長
+    var t = (p - scrollBase) / (1 - scrollBase);
+    // 一路捲最多長到花苞（7 滴），捲到底直接開花（8 滴）
+    var target = p > .985 ? MAX * PER_STAGE : Math.min(MAX * PER_STAGE - 1, Math.floor(t * (MAX * PER_STAGE - 1)));
+    if (target <= state.water) return;
+    var before = stage();
+    state.water = target; save(); render();
+    var after = stage();
+    if (after !== before && !state.mini) {
+      say(after === MAX ? '捲到底了，開花了！點我收成 🌸' : '時間過去了… ' + STAGES[after] + ' 🌱');
+      wrap.classList.add('nudge');
+      clearTimeout(scrollT);
+      scrollT = setTimeout(function () { wrap.classList.remove('nudge'); }, 700);
+    }
+  }
+  addEventListener('scroll', function () { requestAnimationFrame(onScrollGrow); }, { passive: true });
 
   render();
   if (isNew && !state.mini) setTimeout(function () { say('點我澆水 💧', 4500); }, 2500);
