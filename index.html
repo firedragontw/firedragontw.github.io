@@ -5,13 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>firedragontw</title>
 <meta name="description" content="firedragontw 的個人頁：社群連結、偷吃步用網站、學經歷與部落格。">
+<link rel="canonical" href="https://firedragontw.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="firedragontw">
+<meta property="og:description" content="firedragontw 的個人頁：社群連結、偷吃步用網站、學經歷與部落格。">
+<meta property="og:url" content="https://firedragontw.github.io/">
+<meta property="og:image" content="https://firedragontw.github.io/images/logo.png">
+<meta name="theme-color" content="#2962ff">
 <link rel="icon" href="/images/logo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700&display=swap">
 <link rel="stylesheet" href="/firedragon-ui.css">
 <link rel="stylesheet" href="/home.css">
-<script>try{var t=localStorage.getItem('fd-theme');if(t&&t!=='system')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('fd-theme');if(t&&t!=='system')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 </head>
 <body class="fd-base">
 
@@ -26,7 +33,7 @@
 
   <header class="top">
     <a class="brand" href="/">
-      <img src="/images/logo.webp" alt="" width="40" height="40">
+      <img src="/images/logo.png" alt="" width="40" height="40">
       <b data-scramble>firedragontw.github.io</b>
     </a>
     <div class="theme" role="group" aria-label="主題">
@@ -36,6 +43,7 @@
     </div>
   </header>
 
+  <main class="main">
   <section class="hero" id="top">
     <div class="hero-mark">
       <svg viewBox="0 0 168 168" aria-hidden="true">
@@ -43,7 +51,7 @@
         <circle class="ring r2" cx="84" cy="84" r="68"/>
         <g class="orbit"><circle class="dot" cx="84" cy="4" r="3.5"/></g>
       </svg>
-      <img src="/images/logo.webp" alt="firedragontw 的頭像插圖" width="112" height="112">
+      <picture><source srcset="/images/logo.png" media="(prefers-reduced-motion: reduce)"><img src="/images/logo.webp" alt="firedragontw 的頭像插圖" width="112" height="112"></picture>
     </div>
     <h1 class="hero-title">firedragontw</h1>
     <p class="hero-sub"><span class="txt">偷吃步用網站</span><span class="caret"></span></p>
@@ -53,20 +61,26 @@
     </div>
   </section>
 
-  <div class="marquee" aria-label="專案列表">
-    <div class="marquee-track">
-      <a class="uni" href="/sf">有效數字練習</a>
-      <a class="uni" href="/calculus">微積分知識地圖</a>
-      <a class="uni" href="/ionic">化學命名練習</a>
-      <a href="/yihsin">弱智猜數字神器</a>
-      <a href="/ptcg">寶可夢卡牌通靈</a>
-      <a href="/egc">每日精力計算器</a>
-      <a href="/learningcard">學習卡輔助神器</a>
-      <a href="/ai-card">AI學習卡</a>
-      <a href="/eng">U8急救</a>
-      <a href="/enyu">ENYU</a>
+  <nav class="quick" aria-label="快速入口">
+    <a class="q-feat" href="/ionic">
+      <span class="k">最新工具</span>
+      <b>化學命名練習</b>
+      <small>離子、化學式和名稱互換，附錯題本</small>
+      <span class="go" aria-hidden="true">→</span>
+    </a>
+    <a class="q-feat" href="/blog/" id="qPost">
+      <span class="k">最新文章</span>
+      <b>到部落格看文章</b>
+      <small>課堂作品、寫作練習，還有一些想記下來的事</small>
+      <span class="go" aria-hidden="true">→</span>
+    </a>
+    <div class="q-jump">
+      <a href="#projects">全部工具</a>
+      <a href="#blog">部落格</a>
+      <a href="#links">聯絡我</a>
+      <a href="#edu">學經歷</a>
     </div>
-  </div>
+  </nav>
 
   <section class="fd-card beam spot reveal" id="links">
     <div class="sec-head">
@@ -78,17 +92,18 @@
         <span class="meta"><b data-scramble>Instagram</b><span>@yihsin725</span></span>
         <span class="tail tail-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="shaft" d="M6 18 18 6"/><path class="head" d="M8 6h10v10"/></svg></span>
       </a>
-      <a class="link" href="#" id="discordLink">
+      <button class="link" type="button" id="discordLink" aria-describedby="discordHint">
         <span class="ic"><img src="/images/icons/discord.svg" alt="" width="36" height="36"></span>
-        <span class="meta"><b data-scramble>Discord</b><span>yihsin725</span></span>
-        <span class="tail tail-copy" id="discordTail" role="img" aria-label="複製帳號"><svg viewBox="0 0 24 24"><g class="i-copy"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></g><path class="i-check" d="m5 12.5 4.5 4.5L19 7"/></svg></span>
-      </a>
+        <span class="meta"><b data-scramble>Discord</b><span>yihsin725 <span class="hint" id="discordHint">· 點一下複製帳號</span></span></span>
+        <span class="tail tail-copy" id="discordTail" aria-hidden="true"><svg viewBox="0 0 24 24"><g class="i-copy"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></g><path class="i-check" d="m5 12.5 4.5 4.5L19 7"/></svg></span>
+      </button>
       <a class="link" href="mailto:s1152041@mail.ncyu.edu.tw">
         <span class="ic"><img src="/images/icons/gmail.svg" alt="" width="36" height="36"></span>
         <span class="meta"><b data-scramble>Email</b><span>s1152041@mail.ncyu.edu.tw</span></span>
         <span class="tail tail-mail" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="flap" d="m3.8 7.5 8.2 6 8.2-6"/></svg></span>
       </a>
     </div>
+    <p class="toast" id="toast" role="status" aria-live="polite"></p>
   </section>
 
   <section class="fd-card beam spot reveal" id="projects">
@@ -99,22 +114,22 @@
     <div class="group">
       <div class="group-head"><span class="fd-badge">大學專案</span><small>3 個</small></div>
       <div class="tiles">
-        <a class="fd-tile" href="/sf">有效數字練習</a>
-        <a class="fd-tile" href="/calculus">微積分知識地圖</a>
-        <a class="fd-tile" href="/ionic">化學命名練習</a>
+        <a class="fd-tile" href="/sf"><b>有效數字練習</b><small>判斷位數、四捨五入、加減乘除取位</small></a>
+        <a class="fd-tile" href="/calculus"><b>微積分知識地圖</b><small>極限 → 連續 → 微分，點卡片看重點和練習</small></a>
+        <a class="fd-tile" href="/ionic"><b>化學命名練習</b><small>離子、化學式和名稱互換，附錯題本</small></a>
       </div>
     </div>
 
     <div class="group">
       <div class="group-head"><span class="fd-badge fd-neutral">高中專案</span><small>7 個</small></div>
       <div class="tiles">
-        <a class="fd-tile" href="/yihsin">弱智猜數字神器</a>
-        <a class="fd-tile" href="/ptcg">寶可夢卡牌通靈</a>
-        <a class="fd-tile" href="/egc">每日精力計算器</a>
-        <a class="fd-tile" href="/learningcard">學習卡輔助神器</a>
-        <a class="fd-tile" href="/ai-card">AI學習卡</a>
-        <a class="fd-tile" href="/eng">U8急救</a>
-        <a class="fd-tile" href="/enyu">ENYU</a>
+        <a class="fd-tile" href="/yihsin"><b>弱智猜數字神器</b><small>心裡想一個 1–10 的數字，讓它猜猜看</small></a>
+        <a class="fd-tile" href="/ptcg"><b>寶可夢卡牌通靈</b><small>洗一副牌，看今天抽到什麼</small></a>
+        <a class="fd-tile" href="/egc"><b>每日精力計算器</b><small>用睡眠、咖啡和課堂數算今天還剩多少精力</small></a>
+        <a class="fd-tile" href="/learningcard"><b>學習卡輔助神器</b><small>貼上 JSON 問答，自動變成翻面學習卡</small></a>
+        <a class="fd-tile" href="/ai-card"><b>AI學習卡</b><small>用 AI 幫你生成學習卡</small></a>
+        <a class="fd-tile" href="/eng"><b>高中英文填字練習</b><small>看中文拼出英文單字・U8 範圍</small></a>
+        <a class="fd-tile" href="/enyu"><b>高中英文填字練習</b><small>看中文拼出英文單字・ENYU 範圍</small></a>
       </div>
     </div>
   </section>
@@ -144,8 +159,10 @@
       <div><p class="eyebrow">Blog</p><h2>部落格</h2></div>
       <a class="fd-btn fd-link" href="/blog/">全部文章 →</a>
     </div>
-    <div class="posts" id="posts"></div>
+    <div class="posts" id="posts"><a class="post" href="/blog/"><b>到部落格看全部文章 →</b></a></div>
   </section>
+
+  </main>
 
   <footer class="foot">
     <a href="https://github.com/firedragontw/firedragontw.github.io" target="_blank" rel="noopener">firedragontw.github.io</a>
