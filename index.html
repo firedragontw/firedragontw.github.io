@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700&display=swap">
 <link rel="stylesheet" href="/firedragon-ui.css">
 <link rel="stylesheet" href="/home.css">
-<script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('fd-theme');if(t&&t!=='system')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<script>(function(r){r.classList.add('js');var a='pink';try{var t=localStorage.getItem('fd-theme');if(t&&t!=='system')r.setAttribute('data-theme',t);a=localStorage.getItem('fd-accent')||'pink';}catch(e){}if(a==='pink')r.setAttribute('data-accent','pink');})(document.documentElement);</script>
 </head>
 <body class="fd-base">
 
@@ -36,10 +36,16 @@
       <img src="/images/logo.png" alt="" width="40" height="40">
       <b data-scramble>firedragontw.github.io</b>
     </a>
-    <div class="theme" role="group" aria-label="主題">
+    <div class="ctrl">
+    <div class="accent" role="group" aria-label="配色">
+      <button class="fd-pill" type="button" data-set-accent="pink" aria-pressed="true"><i class="dot"></i>粉</button>
+      <button class="fd-pill" type="button" data-set-accent="blue" aria-pressed="false"><i class="dot"></i>藍</button>
+    </div>
+    <div class="theme" role="group" aria-label="亮暗">
       <button class="fd-pill" type="button" data-set-theme="system" aria-pressed="true">自動</button>
       <button class="fd-pill" type="button" data-set-theme="light" aria-pressed="false">亮</button>
       <button class="fd-pill" type="button" data-set-theme="dark" aria-pressed="false">暗</button>
+    </div>
     </div>
   </header>
 

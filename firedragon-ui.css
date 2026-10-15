@@ -188,6 +188,81 @@
 
 :root[data-theme="light"] { color-scheme: light; }
 
+/* ---------- 1b. 配色：少女粉（<html data-accent="pink">） ----------
+   跟藍色同一套 token，只換顏色：腮紅底、梅子色字、桃粉主色、粉到薰衣草的光。
+   亮暗一樣分三段宣告；結構與元件完全不用改。 */
+:root[data-accent="pink"] {
+  --bg: #fff4f8;
+  --surface: #ffffff;
+  --surface-2: #ffe6f0;
+  --surface-3: #ffd6e6;
+  --line: #f8cfe0;
+  --line-strong: #eeaac7;
+  --line-control: #bd7398;
+  --ink: #3d1530;
+  --ink-2: #7a3f63;
+  --ink-3: #8f5577;
+  --primary: #d6327a;
+  --primary-hover: #bf2669;
+  --primary-soft: #ffe3ef;
+  --primary-ink: #b01a5e;
+  --on-primary: #ffffff;
+  --glow: #ff8fca;
+  --glow-2: #c9a0ff;
+  --beam-3: #c9a0ff;
+  --on-grad-shadow: 0 1px 2px rgb(90 10 50 / .35);
+  --shadow-glow: 0 0 30px rgb(214 50 122 / .32), 0 0 60px rgb(255 143 202 / .32);
+  --readout-dim: #b07a98;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-accent="pink"]:not([data-theme="light"]) {
+    --bg: #160a14;
+    --surface: #22101f;
+    --surface-2: #2e1629;
+    --surface-3: #3a1d34;
+    --line: #4a2542;
+    --line-strong: #64345a;
+    --line-control: #8a5a7f;
+    --ink: #ffeef7;
+    --ink-2: #e2b9d0;
+    --ink-3: #b98aa8;
+    --primary: #ff7ab6;
+    --primary-hover: #ff97c6;
+    --primary-soft: #3d1631;
+    --primary-ink: #ffb3d6;
+    --on-primary: #2a0617;
+    --glow: #ffa6d6;
+    --glow-2: #b98cff;
+    --beam-3: #b98cff;
+    --readout-bg: #1c0b18;
+    --readout-dim: #a77a98;
+    --shadow-glow: 0 0 30px rgb(255 122 182 / .4), 0 0 60px rgb(255 166 214 / .2);
+  }
+}
+:root[data-accent="pink"][data-theme="dark"] {
+  --bg: #160a14;
+  --surface: #22101f;
+  --surface-2: #2e1629;
+  --surface-3: #3a1d34;
+  --line: #4a2542;
+  --line-strong: #64345a;
+  --line-control: #8a5a7f;
+  --ink: #ffeef7;
+  --ink-2: #e2b9d0;
+  --ink-3: #b98aa8;
+  --primary: #ff7ab6;
+  --primary-hover: #ff97c6;
+  --primary-soft: #3d1631;
+  --primary-ink: #ffb3d6;
+  --on-primary: #2a0617;
+  --glow: #ffa6d6;
+  --glow-2: #b98cff;
+  --beam-3: #b98cff;
+  --readout-bg: #1c0b18;
+  --readout-dim: #a77a98;
+  --shadow-glow: 0 0 30px rgb(255 122 182 / .4), 0 0 60px rgb(255 166 214 / .2);
+}
+
 /* ---------- 2. 頁面情緒（mood）：只換主色，結構不動 ---------- */
 [class*="fd-mood-"] {
   --primary-soft: color-mix(in srgb, var(--primary) 14%, var(--surface));

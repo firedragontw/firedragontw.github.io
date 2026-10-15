@@ -44,8 +44,14 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 .brand img { width: 40px; height: 40px; display: block; filter: drop-shadow(0 4px 10px color-mix(in srgb, var(--primary) 35%, transparent)); transition: transform var(--dur-3) var(--ease-spring); }
 .brand:hover img { transform: rotate(-8deg) scale(1.12); }
 .brand b { font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; letter-spacing: .02em; }
-.theme { display: flex; gap: 6px; }
-.theme .fd-pill { min-height: 40px; padding: 0 12px; font-size: 12.5px; white-space: nowrap; }
+.ctrl { display: flex; align-items: center; gap: 12px; }
+.theme, .accent { display: flex; gap: 6px; }
+.theme .fd-pill, .accent .fd-pill { min-height: 40px; padding: 0 12px; font-size: 12.5px; white-space: nowrap; }
+.accent .fd-pill { gap: 6px; }
+.accent .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; box-shadow: 0 0 0 1.5px rgb(255 255 255 / .7); }
+.accent [data-set-accent="pink"] .dot { background: linear-gradient(135deg, #ff7ab6, #c9a0ff); }
+.accent [data-set-accent="blue"] .dot { background: linear-gradient(135deg, #2962ff, #00f7ff); }
+@media (max-width: 380px) { .ctrl { gap: 6px; } .theme .fd-pill, .accent .fd-pill { padding: 0 10px; } }
 .main { display: flex; flex-direction: column; gap: var(--space-5); }
 
 /* ───────── Hero ───────── */
@@ -80,13 +86,16 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 }
 .btn-glow::before {
   content: ""; position: absolute; inset: -2px; z-index: -2; border-radius: inherit;
-  background: conic-gradient(from var(--beam-a), var(--primary), var(--glow), #a24bff, var(--primary));
+  background: conic-gradient(from var(--beam-a), var(--primary), var(--glow), var(--beam-3, #a24bff), var(--primary));
   animation: beam 3.5s linear infinite;
 }
 .btn-glow::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--surface); transition: background var(--dur-3) var(--ease); }
 .btn-glow:hover, .btn-glow:focus-visible { box-shadow: var(--shadow-glow); }
 .btn-glow:hover::after { background: color-mix(in srgb, var(--surface) 82%, var(--primary)); }
 .btn-glow.alt::after { background: transparent; backdrop-filter: blur(10px); }
+/* 粉色暗色模式：漸層很淺，字改用深色才讀得到 */
+@media (prefers-color-scheme: dark) { :root[data-accent="pink"]:not([data-theme="light"]) .btn-glow.alt { color: var(--on-primary); } }
+:root[data-accent="pink"][data-theme="dark"] .btn-glow.alt { color: var(--on-primary); }
 .btn-glow .arrow { transition: transform var(--dur-3) var(--ease-spring); }
 .btn-glow:hover .arrow { transform: translateX(4px); }
 @keyframes beam { to { --beam-a: 360deg; } }
@@ -242,8 +251,8 @@ button.link { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .marquee { margin: 0 calc(var(--space-3) * -1); }
   .link { gap: 14px; }
 }
-@media (max-width: 400px) {
-  /* 窄螢幕：頂部只留 logo，網站名稱大標題已經有了 */
+@media (max-width: 600px) {
+  /* 窄螢幕：頂部只留 logo，讓配色和亮暗按鈕放得下 */
   .brand b { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 @media (hover: none) { .cursor-glow { display: none; } }

@@ -23,6 +23,20 @@
   if (saved !== 'system') applyTheme(saved);
   themeBtns.forEach(function (b) { b.addEventListener('click', function () { applyTheme(b.getAttribute('data-set-theme')); }); });
 
+  /* ── 配色：粉（預設）／藍 ── */
+  var accentBtns = $$('[data-set-accent]');
+  function applyAccent(a) {
+    if (a === 'pink') root.setAttribute('data-accent', 'pink'); else root.removeAttribute('data-accent');
+    accentBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-accent') === a)); });
+    try { localStorage.setItem('fd-accent', a); } catch (e) {}
+  }
+  var savedAccent = 'pink';
+  try { savedAccent = localStorage.getItem('fd-accent') || 'pink'; } catch (e) {}
+  accentBtns.forEach(function (b) {
+    b.setAttribute('aria-pressed', String(b.getAttribute('data-set-accent') === savedAccent));
+    b.addEventListener('click', function () { applyAccent(b.getAttribute('data-set-accent')); });
+  });
+
   /* ── 文字亂碼還原（reactbits Scrambled Text 風格） ── */
   var GLYPHS = 'abcdefghijklmnopqrstuvwxyz0123456789<>/_-+*#';
   function scramble(el) {
