@@ -1,0 +1,123 @@
+/* ==========================================================================
+   角落小盆栽：點一下澆水，種子 → 冒芽 → 長葉 → 花苞 → 開花 → 收成
+   花色跟著 --primary / --glow（藍粉開關會一起變）
+   ========================================================================== */
+.fd-plant {
+  position: fixed; right: 16px; bottom: 12px; z-index: 40;
+  width: 96px; height: 120px;
+  transform-origin: right bottom;
+  transition: transform var(--dur-4) var(--ease-spring), opacity var(--dur-3) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.fd-plant-btn {
+  display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: pointer;
+  border-radius: 24px;
+}
+.fd-plant-btn:focus-visible { outline: none; box-shadow: var(--ring); }
+.fd-plant svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+/* 收起來：縮成小小一盆、半透明，點一下再放大 */
+.fd-plant.mini { transform: scale(.5); opacity: .8; }
+.fd-plant.mini:hover { opacity: 1; }
+.fd-plant.mini .fd-plant-min { display: none; }
+.fd-plant-min {
+  position: absolute; top: calc(60% - 30px); left: 0; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center; padding: 0; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
+  font: 600 14px/1 var(--font-sans, system-ui); box-shadow: var(--shadow-lift);
+  opacity: 0; transform: scale(.6); transition: opacity var(--dur-2) var(--ease), transform var(--dur-3) var(--ease-spring);
+}
+.fd-plant:hover .fd-plant-min, .fd-plant:focus-within .fd-plant-min { opacity: 1; transform: none; }
+@media (hover: none) { .fd-plant-min { opacity: .85; transform: none; } }
+
+/* 對話泡泡 */
+.fd-plant-bubble {
+  position: absolute; right: 8px; bottom: calc(100% - 6px); width: max-content; max-width: 200px;
+  padding: 7px 12px; border-radius: 14px 14px 4px 14px;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+  box-shadow: var(--shadow-glow); font-size: 13px; font-weight: 700; line-height: 1.4;
+  opacity: 0; transform: translateY(6px) scale(.9); transform-origin: bottom right; pointer-events: none;
+  transition: opacity var(--dur-3) var(--ease), transform var(--dur-3) var(--ease-spring);
+}
+.fd-plant-bubble.show { opacity: 1; transform: none; }
+
+/* ── 花盆 ── */
+.fd-plant .pot-rim { fill: #e07a52; }
+.fd-plant .pot-body { fill: #f29a71; }
+.fd-plant .pot-shine { fill: #fff; opacity: .28; }
+.fd-plant .soil { fill: #6b3f2a; }
+.fd-plant .eye { fill: #4a2416; }
+.fd-plant .eye-closed { fill: none; stroke: #4a2416; stroke-width: 2; stroke-linecap: round; opacity: 0; }
+.fd-plant .blush { fill: #ff7f9e; opacity: .55; }
+.fd-plant .mouth { fill: none; stroke: #4a2416; stroke-width: 1.8; stroke-linecap: round; }
+.fd-plant .eyes { transform-box: fill-box; transform-origin: center; animation: fd-blink 5s infinite; }
+@keyframes fd-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+
+/* ── 植物 ── */
+.fd-plant .lean { transform-origin: 60px 93px; transform: rotate(var(--lean, 0deg)); transition: transform .5s var(--ease); }
+.fd-plant .sway { transform-origin: 60px 93px; animation: fd-sway 4s ease-in-out infinite; }
+@keyframes fd-sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+.fd-plant .stem { fill: none; stroke: #43a047; stroke-width: 3.6; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset .8s var(--ease); }
+.fd-plant.g1 .stem { stroke-dashoffset: 80; }
+.fd-plant.g2 .stem { stroke-dashoffset: 48; }
+.fd-plant.g3 .stem { stroke-dashoffset: 0; }
+.fd-plant .leaf { fill: #66bb6a; }
+.fd-plant .leaf-vein { fill: none; stroke: #388e3c; stroke-width: 1; stroke-linecap: round; }
+.fd-plant .seed { fill: #b9814f; transform-box: fill-box; transform-origin: center bottom; transition: transform .5s var(--ease-spring), opacity .3s; }
+.fd-plant .s1, .fd-plant .s2, .fd-plant .bud, .fd-plant .flower {
+  transform-box: fill-box; transform: scale(0); transition: transform .6s var(--ease-spring) .25s;
+}
+.fd-plant .s1.l { transform-origin: right bottom; } .fd-plant .s1.r { transform-origin: left bottom; }
+.fd-plant .s2.l { transform-origin: right center; } .fd-plant .s2.r { transform-origin: left center; }
+.fd-plant .bud, .fd-plant .flower { transform-origin: center bottom; }
+.fd-plant.g1 .seed { transform: scale(0); opacity: 0; }
+.fd-plant.g1 .s1, .fd-plant.g2 .s2 { transform: none; }
+.fd-plant.g3:not(.g4) .bud { transform: none; }
+.fd-plant.g4 .flower { transform: none; transition-delay: .1s; }
+.fd-plant .bud-body { fill: var(--primary); }
+.fd-plant .sepal { fill: #43a047; }
+.fd-plant .petal { fill: var(--primary); }
+.fd-plant .petal.alt { fill: color-mix(in srgb, var(--primary) 55%, var(--glow)); }
+.fd-plant .flower-center { fill: #ffd54f; }
+.fd-plant .flower-face { fill: #5a3a10; }
+.fd-plant.g4 .flower-spin { transform-box: fill-box; transform-origin: center; animation: fd-petals 9s linear infinite; }
+@keyframes fd-petals { to { transform: rotate(360deg); } }
+
+/* 澆水：三顆水滴落進盆裡 */
+.fd-plant .drop { fill: #4fc3f7; opacity: 0; }
+.fd-plant.watering .drop { animation: fd-drop .7s var(--ease) forwards; }
+.fd-plant.watering .drop:nth-child(2) { animation-delay: .1s; }
+.fd-plant.watering .drop:nth-child(3) { animation-delay: .2s; }
+@keyframes fd-drop { 0% { opacity: 0; transform: translateY(-14px); } 20% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; transform: translateY(58px); } }
+.fd-plant.watering .pot { animation: fd-squish .5s var(--ease-spring) .55s; transform-origin: 60px 146px; }
+@keyframes fd-squish { 40% { transform: scale(1.08, .92); } 70% { transform: scale(.96, 1.04); } }
+
+/* 滑過：抖一下 */
+.fd-plant-btn:hover .sway { animation: fd-wiggle .6s ease-in-out; }
+@keyframes fd-wiggle { 25% { transform: rotate(-8deg); } 50% { transform: rotate(7deg); } 75% { transform: rotate(-4deg); } }
+
+/* 睡著：閉眼、垂頭、冒 z */
+.fd-plant .zzz { fill: var(--ink-2); font: 700 11px/1 var(--font-mono, monospace); opacity: 0; }
+.fd-plant.sleeping .eye { opacity: 0; }
+.fd-plant.sleeping .eyes { animation: none; }
+.fd-plant.sleeping .eye-closed { opacity: 1; }
+.fd-plant.sleeping .sway { animation: fd-doze 3.2s ease-in-out infinite; }
+@keyframes fd-doze { 0%, 100% { transform: rotate(9deg); } 50% { transform: rotate(6deg); } }
+.fd-plant.sleeping .zzz { animation: fd-z 2.4s ease-in-out infinite; }
+.fd-plant.sleeping .zzz:nth-of-type(2) { animation-delay: .8s; }
+.fd-plant.sleeping .zzz:nth-of-type(3) { animation-delay: 1.6s; }
+@keyframes fd-z { 0% { opacity: 0; transform: translate(0, 4px); } 30% { opacity: .9; } 100% { opacity: 0; transform: translate(10px, -16px); } }
+
+/* 收成：花飛走 */
+.fd-plant.harvest .flower { animation: fd-pick .7s var(--ease) forwards; }
+@keyframes fd-pick { to { transform: translateY(-40px) scale(1.4); opacity: 0; } }
+
+@media (max-width: 480px) {
+  .fd-plant { width: 72px; height: 90px; right: 8px; bottom: 8px; }
+  .fd-plant-bubble { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fd-plant *, .fd-plant { animation: none !important; transition-duration: 0s !important; transition-delay: 0s !important; }
+  .fd-plant.sleeping .zzz { opacity: .8; }
+}
+@media print { .fd-plant { display: none; } }
