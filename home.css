@@ -11,11 +11,12 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 }
 .aurora i:nth-child(1) { width: 46vmax; height: 46vmax; left: -14vmax; top: -18vmax; background: var(--primary); animation: drift1 22s ease-in-out infinite; }
 .aurora i:nth-child(2) { width: 40vmax; height: 40vmax; right: -14vmax; top: 10vmax; background: var(--glow); opacity: .32; animation: drift2 28s ease-in-out infinite; }
-.aurora i:nth-child(3) { width: 36vmax; height: 36vmax; left: 20vw; bottom: -20vmax; background: #a24bff; opacity: .3; animation: drift3 26s ease-in-out infinite; }
+.aurora i:nth-child(3) { width: 36vmax; height: 36vmax; left: 20vw; bottom: -20vmax; background: var(--glow-2); opacity: .3; animation: drift3 26s ease-in-out infinite; }
 @keyframes drift1 { 50% { transform: translate(14vw, 12vh) scale(1.15); } }
 @keyframes drift2 { 50% { transform: translate(-16vw, 10vh) scale(.9); } }
 @keyframes drift3 { 50% { transform: translate(12vw, -14vh) scale(1.2); } }
-:root:not([data-theme="dark"]) .aurora i { opacity: .22; }
+:root[data-theme="light"] .aurora i { opacity: .22; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .aurora i { opacity: .22; } }
 .grid {
   position: absolute; inset: 0;
   background-image:
@@ -78,11 +79,11 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 }
 .btn-glow::before {
   content: ""; position: absolute; inset: -2px; z-index: -2; border-radius: inherit;
-  background: conic-gradient(from var(--beam-a), var(--primary), var(--glow), #a24bff, var(--primary));
+  background: conic-gradient(from var(--beam-a), var(--primary), var(--glow), var(--glow-2), var(--primary));
   animation: beam 3.5s linear infinite;
 }
 .btn-glow::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--surface); transition: background var(--dur-3) var(--ease); }
-.btn-glow:hover { box-shadow: var(--shadow-glow); }
+.btn-glow:hover, .btn-glow:focus-visible { box-shadow: var(--shadow-glow); }
 .btn-glow:hover::after { background: color-mix(in srgb, var(--surface) 82%, var(--primary)); }
 .btn-glow.alt::after { background: transparent; backdrop-filter: blur(10px); }
 .btn-glow .arrow { transition: transform var(--dur-3) var(--ease-spring); }
@@ -131,7 +132,7 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
   background: var(--surface-2); color: var(--ink); border-radius: var(--radius-lg); text-decoration: none; overflow: hidden;
   transition: background var(--dur-3) var(--ease), color var(--dur-3) var(--ease), transform var(--dur-3) var(--ease-spring), box-shadow var(--dur-3) var(--ease);
 }
-.link:hover { background: linear-gradient(90deg, var(--primary), var(--glow)); color: #fff; transform: translateY(-3px); box-shadow: var(--shadow-glow); }
+.link:hover, .link:focus-visible { background: var(--grad-fill); box-shadow: var(--shadow-glow), inset 0 0 0 1px color-mix(in srgb, var(--glow) 60%, transparent); color: var(--on-grad); transform: translateY(-3px); }
 .link .ic { position: relative; width: 40px; height: 40px; flex: none; display: grid; place-items: center; transition: transform var(--dur-3) var(--ease-spring); }
 .link:hover .ic { transform: scale(1.15) rotate(-6deg); }
 .link:hover .ic img { filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 6px rgba(255,255,255,.95)) drop-shadow(0 0 16px rgba(255,255,255,.7)); }

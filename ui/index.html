@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="firedragontw.github.io 的共用設計系統：token、元件、情緒與霓虹特效。">
+<link rel="icon" href="/images/logo.png" type="image/png">
+<title>FireDragon UI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700&display=swap">
+<link rel="stylesheet" href="/firedragon-ui.css">
+<script>try{var t=localStorage.getItem('fd-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<style>
+  /* 版面：左側固定目錄＋右側單欄文件；手機時目錄收成頂部的折疊列。顏色全部來自 firedragon-ui.css 的 token。 */
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { background: var(--bg); color: var(--ink); }
+  .ds {
+    min-height: 100vh;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0 96px;
+    background:
+      radial-gradient(60vmax 36vmax at 10% -6%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 70%),
+      radial-gradient(44vmax 30vmax at 100% 0%, color-mix(in srgb, var(--glow) 9%, transparent), transparent 70%),
+      var(--bg);
+  }
+  .ds-shell { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 228px minmax(0, 1fr); gap: 56px; }
+  .ds-main { min-width: 0; max-width: 860px; display: flex; flex-direction: column; gap: 96px; padding-top: 40px; }
+
+  /* 目錄 */
+  .ds-rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; padding-top: 32px; }
+  .ds-rail > details > summary { display: none; }
+  .ds-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); margin-bottom: 20px; }
+  .ds-brand svg { width: 30px; height: 30px; flex: none; }
+  .ds-brand b { font-family: var(--font-display); font-size: 18px; line-height: 1.1; }
+  .ds-brand small { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); font-weight: 500; margin-top: 2px; }
+  .ds-controls { display: flex; flex-direction: column; gap: 12px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: color-mix(in srgb, var(--surface) 80%, transparent); margin-bottom: 20px; }
+  .ds-ctl-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; display: block; }
+  .ds-seg { display: flex; gap: 4px; padding: 3px; border-radius: var(--radius-pill); background: var(--surface-2); }
+  .ds-seg button { flex: 1; min-height: 32px; border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--ink-2); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .ds-seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm), var(--edge-hi); }
+  .ds-controls .fd-select { min-height: 38px; padding-block: 6px; font-size: 14px; }
+  .ds-toc { display: flex; flex-direction: column; gap: 14px; }
+  .ds-toc p { margin: 0 0 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .ds-toc a { display: block; padding: 5px 10px; border-left: 2px solid var(--line); color: var(--ink-2); text-decoration: none; font-size: 14px; }
+  .ds-toc a:hover { color: var(--ink); border-left-color: var(--line-strong); }
+  .ds-toc a[aria-current="true"] { color: var(--primary-ink); border-left-color: var(--primary); font-weight: 700; }
+
+  /* 區塊 */
+  .ds-sec { display: flex; flex-direction: column; gap: 22px; scroll-margin-top: 24px; }
+  .ds-sec > header { display: flex; flex-direction: column; gap: 6px; }
+  .ds-eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--primary-ink); font-weight: 600; margin: 0; }
+  .ds-lede { color: var(--ink-2); max-width: 62ch; font-size: 16.5px; line-height: 1.75; }
+  .ds-p { color: var(--ink-2); max-width: 62ch; line-height: 1.75; }
+  .ds-p b, .ds-lede b { color: var(--ink); }
+  .ds code, .ds-p code, .ds-lede code { font-family: var(--font-mono); font-size: .88em; background: var(--surface-2); padding: 1px 6px; border-radius: var(--radius-xs); color: var(--ink); }
+  .ds-h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 900; letter-spacing: .02em; color: var(--ink); margin: 10px 0 0; scroll-margin-top: 24px; }
+
+  /* Hero */
+  .ds-hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 40px; align-items: center; padding-top: 24px; }
+  .ds-hero h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.12; letter-spacing: -.005em; }
+  .ds-hero h1 .char { display: inline-block; }
+  .ds-hero .ds-lede { margin-top: 18px; }
+  .ds-hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .ds-flame { width: 46px; height: 46px; margin-bottom: 18px; overflow: visible; }
+  .ds-flame path { stroke: var(--primary); stroke-width: .7; stroke-dasharray: 60; stroke-dashoffset: 0; animation: ds-draw 1.4s var(--ease) both; }
+  @keyframes ds-draw { from { stroke-dashoffset: 60; fill-opacity: 0; } to { stroke-dashoffset: 0; fill-opacity: 1; } }
+  .ds-specimen { display: flex; flex-direction: column; gap: 14px; transition: background var(--dur-3) var(--ease); }
+  .ds-specimen-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .ds-specimen .fd-readout { font-size: 26px; min-height: 0; padding: 16px 18px 18px; }
+  .ds-specimen-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .ds-dots { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .ds-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line-strong); cursor: pointer; padding: 0; background: var(--dot); transition: transform var(--dur-2) var(--ease-spring), box-shadow var(--dur-2) var(--ease); }
+  .ds-dot:hover { transform: scale(1.12); }
+  .ds-dot[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+  .ds-replay { margin-left: auto; }
+
+  /* 快速開始 */
+  .ds-code-wrap { position: relative; }
+  pre.ds-code { margin: 0; background: var(--readout-bg); color: var(--readout-ink); font-family: var(--font-mono); font-size: 13px; line-height: 1.7; padding: 18px 20px; border-radius: var(--radius-lg); overflow-x: auto; }
+  pre.ds-code .c { color: var(--readout-dim); }
+  .ds-code-wrap .fd-btn { position: absolute; top: 10px; right: 10px; }
+  .ds-rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
+  .ds-rules li { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); font-size: 14px; line-height: 1.6; color: var(--ink-2); }
+  .ds-rules li b { color: var(--ink); }
+  .ds-rules li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 7px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--glow); }
+
+  /* 色票 */
+  .ds-swatch-group { display: flex; flex-direction: column; gap: 10px; }
+  .ds-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .ds-swatch { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); cursor: pointer; text-align: left; padding: 0; font: inherit; color: inherit; transition: transform var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease); }
+  .ds-swatch:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+  .ds-swatch i { display: block; height: 54px; border-bottom: 1px solid var(--line); }
+  .ds-swatch div { padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 3px; }
+  .ds-swatch b { font-family: var(--font-mono); font-size: 12px; font-weight: 600; }
+  .ds-swatch small { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+  .ds-swatch em { font-style: normal; font-size: 12px; color: var(--ink-2); }
+  .ds-cr { align-self: flex-start; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: var(--radius-xs); background: var(--surface-2); color: var(--ink-2); }
+  .ds-cr.pass { background: var(--ok-soft); color: var(--ok-ink); }
+  .ds-cr.fail { background: var(--bad-soft); color: var(--bad-ink); }
+
+  /* 字體、間距 */
+  .ds-specimen-type { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 20px; align-items: start; padding: 20px 22px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+  .ds-specimen-type .k { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); line-height: 1.7; }
+  .ds-specimen-type .k b { display: block; color: var(--ink); font-size: 13px; }
+  .ds-t-display { font-family: var(--font-display); font-weight: 700; font-size: 32px; line-height: 1.25; }
+  .ds-t-display small { display: block; font-size: 19px; color: var(--ink-2); font-weight: 600; margin-top: 4px; }
+  .ds-t-ui { font-size: 16px; line-height: 1.75; }
+  .ds-t-mono { font-family: var(--font-mono); font-size: 21px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .ds-tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+  table.ds-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .ds-table th { text-align: left; font-family: var(--font-mono); font-weight: 600; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); padding: 11px 14px; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
+  .ds-table td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+  .ds-table tr:last-child td { border-bottom: 0; }
+  .ds-table td:first-child { color: var(--ink); font-weight: 500; }
+  .ds-table .mono { font-family: var(--font-mono); font-size: 12.5px; }
+  .ds-space-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+  .ds-spaces { display: flex; flex-direction: column; gap: 8px; }
+  .ds-space { display: grid; grid-template-columns: 104px 1fr; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
+  .ds-space i { display: block; height: 12px; background: var(--grad-fill); border-radius: 3px; }
+  .ds-radii { display: flex; flex-wrap: wrap; gap: 16px; align-content: start; }
+  .ds-radius { display: flex; flex-direction: column; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-2); }
+  .ds-radius i { display: block; width: 76px; height: 52px; background: var(--primary-soft); border: 2px solid var(--primary); }
+
+  /* 光與動 */
+  .ds-shadows { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 22px; padding: 8px 0; }
+  .ds-shadow { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); height: 92px; display: flex; align-items: flex-end; padding: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
+  .ds-curves { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .ds-curve { display: flex; gap: 14px; align-items: center; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+  .ds-curve svg { width: 96px; height: 96px; flex: none; }
+  .ds-curve .g { stroke: var(--line); stroke-width: 1; fill: none; }
+  .ds-curve .c { stroke: var(--primary); stroke-width: 2.5; fill: none; stroke-linecap: round; }
+  .ds-curve .d { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 3 3; fill: none; }
+  .ds-curve b { display: block; font-size: 14px; }
+  .ds-curve code { display: block; margin: 4px 0 6px; font-size: 11px; }
+  .ds-curve p { font-size: 13px; color: var(--ink-2); }
+  .ds-durs { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+  .ds-dur { padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .ds-dur b { display: block; font-family: var(--font-mono); font-size: 18px; }
+  .ds-dur span { font-size: 12.5px; color: var(--ink-2); }
+  .ds-anim-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .ds-anim-box { display: inline-flex; align-items: center; justify-content: center; min-width: 96px; height: 44px; padding: 0 14px; border-radius: var(--radius); background: var(--primary-soft); color: var(--primary-ink); font-family: var(--font-mono); font-weight: 600; font-size: 13px; }
+
+  /* 元件規格卡 */
+  .ds-specs { display: flex; flex-direction: column; gap: 18px; }
+  .ds-spec { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; }
+  .ds-spec-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 18px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .ds-spec-head h4 { margin: 0; font-size: 15px; font-family: var(--font-ui); font-weight: 800; }
+  .ds-spec-head span { font-size: 12px; color: var(--ink-3); }
+  .ds-spec-head .ds-spec-title { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .ds-demo { padding: 22px 18px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; background: var(--bg); }
+  .ds-demo.col { flex-direction: column; align-items: stretch; }
+  .ds-demo.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); align-items: start; }
+  .ds-note { padding: 10px 18px 14px; font-size: 13px; color: var(--ink-2); border-top: 1px solid var(--line); line-height: 1.65; }
+  .ds-field { display: flex; flex-direction: column; min-width: 0; }
+  .ds-row { display: flex; gap: 10px; width: 100%; flex-wrap: wrap; }
+  .ds-row > .fd-input { flex: 1 1 180px; min-width: 0; }
+  .ds-checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; grid-column: 1 / -1; }
+  .ds-scene { border-radius: var(--radius-lg); padding: 24px; display: flex; justify-content: center;
+    background: radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--primary) 45%, transparent), transparent 55%),
+                radial-gradient(circle at 85% 80%, color-mix(in srgb, var(--glow-2) 45%, transparent), transparent 55%), var(--surface-3); }
+  .ds-glass-card { width: min(300px, 100%); display: flex; flex-direction: column; gap: 10px; }
+  .ds-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; width: 100%; }
+
+  /* 特效 */
+  .ds-fx { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .ds-fx .fd-card { display: flex; flex-direction: column; gap: 8px; min-height: 150px; }
+  .ds-fx .fd-card h4 { margin: 0; font-size: 16px; font-family: var(--font-display); }
+  .ds-fx .fd-card p { font-size: 13.5px; color: var(--ink-2); line-height: 1.65; }
+
+  /* 情緒 */
+  .ds-moods { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .ds-mood { display: flex; flex-direction: column; gap: 12px; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius-xl); background: var(--surface); }
+  .ds-mood-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .ds-mood-head b { font-family: var(--font-display); font-size: 18px; }
+  .ds-mood small { font-size: 12.5px; color: var(--ink-2); }
+  .ds-mood .fd-tile { min-height: 48px; font-size: 14px; }
+  .ds-mood-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  /* 附錄 */
+  details.ds-appendix { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+  details.ds-appendix > summary { cursor: pointer; padding: 14px 18px; font-weight: 800; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  details.ds-appendix > summary::-webkit-details-marker { display: none; }
+  details.ds-appendix > summary::after { content: "展開"; font-size: 13px; color: var(--primary-ink); font-weight: 700; }
+  details.ds-appendix[open] > summary::after { content: "收合"; }
+  details.ds-appendix > div { padding: 0 18px 18px; display: flex; flex-direction: column; gap: 16px; }
+  .ds-status-ok { color: var(--ok-ink); background: var(--ok-soft); }
+  .ds-changes { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; color: var(--ink-2); font-size: 14px; line-height: 1.65; }
+
+  .ds-toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 16px); background: var(--readout-bg); color: var(--readout-ink); font-family: var(--font-mono); font-size: 13px; padding: 10px 16px; border-radius: var(--radius-pill); opacity: 0; pointer-events: none; transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease); z-index: 60; box-shadow: var(--shadow-lift); }
+  .ds-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* 手機 */
+  @media (max-width: 960px) {
+    .ds-shell { grid-template-columns: 1fr; gap: 0; }
+    .ds-main { gap: 72px; padding-top: 24px; }
+    .ds-rail { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; padding-top: 0;
+      margin: 0 calc(max(16px, env(safe-area-inset-left, 0px)) * -1) 0 calc(max(16px, env(safe-area-inset-right, 0px)) * -1);
+      padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+      background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .ds-rail > details > summary { display: flex; align-items: center; gap: 10px; min-height: 52px; cursor: pointer; list-style: none; font-weight: 800; }
+    .ds-rail > details > summary::-webkit-details-marker { display: none; }
+    .ds-rail > details > summary svg { width: 24px; height: 24px; flex: none; }
+    .ds-rail > details > summary .ds-now { color: var(--ink-2); font-weight: 500; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+    .ds-rail > details > summary .ds-open { font-size: 13px; color: var(--primary-ink); font-weight: 700; }
+    .ds-rail > details[open] > summary .ds-open::after { content: "（收合）"; }
+    .ds-rail-body { max-height: 70vh; overflow-y: auto; padding-bottom: 16px; }
+    .ds-rail .ds-brand { display: none; }
+    .ds-hero { grid-template-columns: 1fr; gap: 28px; }
+    .ds-sec, .ds-h3 { scroll-margin-top: 64px; }
+  }
+  @media (max-width: 600px) {
+    .ds-specimen-type { grid-template-columns: 1fr; gap: 10px; }
+    .ds-space-grid { grid-template-columns: 1fr; }
+    .ds-track thead { display: none; }
+    .ds-track tr { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+    .ds-track td { padding: 0; border: 0; }
+    .ds-track td:nth-child(2) { grid-column: 1 / -1; order: 3; }
+    .ds-track td[data-l]::before { content: attr(data-l) "："; color: var(--ink-3); font-size: 12px; }
+  }
+</style>
+
+</head>
+<body>
+<div class="ds fd-base" id="ds">
+<div class="ds-shell">
+
+  <aside class="ds-rail" aria-label="目錄與設定">
+    <details id="railDetails" open>
+      <summary>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="var(--primary)" d="M12 1.5c.6 4.2 5.5 6.4 5.5 11.5a5.5 5.5 0 0 1-11 0c0-2.1 1-3.4 2.1-4.6-.1 2.2.9 3.6 2.2 3.6 1.2-3.4-1.3-6.6 1.2-10.5z"/><path fill="var(--glow)" opacity=".85" d="M12 11c.4 2 2.6 3 2.6 5.4a2.6 2.6 0 0 1-5.2 0c0-1 .5-1.7 1-2.2 0 1 .4 1.7 1 1.7.6-1.6-.6-3.1.6-4.9z"/></svg>
+        <span>FireDragon UI</span><span class="ds-now" id="nowLabel">· 開頭</span><span class="ds-open">目錄</span>
+      </summary>
+      <div class="ds-rail-body">
+        <a class="ds-brand" href="#top">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="var(--primary)" d="M12 1.5c.6 4.2 5.5 6.4 5.5 11.5a5.5 5.5 0 0 1-11 0c0-2.1 1-3.4 2.1-4.6-.1 2.2.9 3.6 2.2 3.6 1.2-3.4-1.3-6.6 1.2-10.5z"/><path fill="var(--glow)" opacity=".85" d="M12 11c.4 2 2.6 3 2.6 5.4a2.6 2.6 0 0 1-5.2 0c0-1 .5-1.7 1-2.2 0 1 .4 1.7 1 1.7.6-1.6-.6-3.1.6-4.9z"/></svg>
+          <span><b>FireDragon UI</b><small>v2 · 2026-10-15</small></span>
+        </a>
+        <div class="ds-controls">
+          <div>
+            <span class="ds-ctl-label" id="themeLabel">主題</span>
+            <div class="ds-seg" role="group" aria-labelledby="themeLabel">
+              <button type="button" data-set-theme="system" aria-pressed="true">自動</button>
+              <button type="button" data-set-theme="light" aria-pressed="false">亮</button>
+              <button type="button" data-set-theme="dark" aria-pressed="false">暗</button>
+            </div>
+          </div>
+          <div>
+            <label class="ds-ctl-label" for="moodSelect">整頁情緒</label>
+            <select class="fd-select" id="moodSelect">
+              <option value="neon">霓虹 neon</option>
+              <option value="sakura">櫻粉 sakura</option>
+              <option value="violet">紫羅蘭 violet</option>
+              <option value="board">黑板 board</option>
+              <option value="apple">蘋果藍 apple</option>
+              <option value="ember">橘焰 ember</option>
+            </select>
+          </div>
+        </div>
+        <nav class="ds-toc" aria-label="章節">
+          <div><p>開始</p><a href="#top">一套結構，多種情緒</a><a href="#start">快速開始</a></div>
+          <div><p>基礎</p><a href="#color">色彩</a><a href="#type">字體</a><a href="#space">間距與圓角</a><a href="#motion">光與動</a></div>
+          <div><p>元件</p><a href="#components">元件</a><a href="#effects">霓虹特效</a><a href="#moods">情緒</a></div>
+          <div><p>附錄</p><a href="#status">頁面現況與更新紀錄</a></div>
+        </nav>
+      </div>
+    </details>
+  </aside>
+
+  <main class="ds-main">
+
+    <!-- ============ HERO ============ -->
+    <section class="ds-sec ds-hero" id="top" data-label="開頭">
+      <div>
+        <svg class="ds-flame" viewBox="0 0 24 24" aria-hidden="true"><path fill="var(--primary)" d="M12 1.5c.6 4.2 5.5 6.4 5.5 11.5a5.5 5.5 0 0 1-11 0c0-2.1 1-3.4 2.1-4.6-.1 2.2.9 3.6 2.2 3.6 1.2-3.4-1.3-6.6 1.2-10.5z"/><path fill="var(--glow)" opacity=".85" d="M12 11c.4 2 2.6 3 2.6 5.4a2.6 2.6 0 0 1-5.2 0c0-1 .5-1.7 1-2.2 0 1 .4 1.7 1 1.7.6-1.6-.6-3.1.6-4.9z"/></svg>
+        <p class="ds-eyebrow">firedragontw.github.io · 設計系統 v2</p>
+        <h1 id="heroTitle">一套結構，多種情緒。</h1>
+        <p class="ds-lede">網站共用的一份樣式表：一組 token、一組元件、六種情緒。頁面加一個 class 就能換色，亮暗兩種主題都已經對過對比度。首頁和部落格已經接上，其他小工具會一頁一頁搬過來。</p>
+        <div class="ds-hero-meta">
+          <span class="fd-badge">firedragon-ui.css</span>
+          <span class="fd-badge fd-neutral">純 CSS，不用建置</span>
+          <span class="fd-badge fd-ok">WCAG AA</span>
+        </div>
+      </div>
+      <div class="fd-card fd-beam ds-specimen" id="specimen">
+        <div class="ds-specimen-head">
+          <span class="fd-badge" id="specimenMood">霓虹 neon</span>
+          <span class="fd-faint" style="font-size:12.5px;font-weight:600">情緒範例</span>
+        </div>
+        <div class="fd-readout">0.00<span class="fd-dim">3</span>40 <span class="fd-dim">→ 3 位</span></div>
+        <a class="fd-tile" href="#components">有效數字練習</a>
+        <div class="fd-progress fd-shine"><i style="width:68%"></i></div>
+        <div class="ds-specimen-row">
+          <button class="fd-btn" type="button">送出</button>
+          <a class="fd-btn-neon" href="#effects">看特效 →</a>
+        </div>
+        <div class="ds-specimen-row">
+          <div class="ds-dots" role="group" aria-label="切換整頁情緒">
+            <button class="ds-dot" type="button" data-mood="neon" aria-label="霓虹" aria-pressed="true" style="--dot:#2962ff"></button>
+            <button class="ds-dot" type="button" data-mood="sakura" aria-label="櫻粉" aria-pressed="false" style="--dot:#d43a73"></button>
+            <button class="ds-dot" type="button" data-mood="violet" aria-label="紫羅蘭" aria-pressed="false" style="--dot:#6c5ce7"></button>
+            <button class="ds-dot" type="button" data-mood="board" aria-label="黑板" aria-pressed="false" style="--dot:#2f5b52"></button>
+            <button class="ds-dot" type="button" data-mood="apple" aria-label="蘋果藍" aria-pressed="false" style="--dot:#0071e3"></button>
+            <button class="ds-dot" type="button" data-mood="ember" aria-label="橘焰" aria-pressed="false" style="--dot:#d9480f"></button>
+          </div>
+          <button class="fd-btn fd-link fd-sm ds-replay" type="button" id="replay">重播</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ QUICK START ============ -->
+    <section class="ds-sec" id="start" data-label="快速開始">
+      <header>
+        <p class="ds-eyebrow">快速開始</p>
+        <h2>新頁面從這段開始</h2>
+      </header>
+      <p class="ds-lede">把這段貼進新頁面就有底色、字體、亮暗模式和 focus 樣式。想換色就把 <code>fd-mood-neon</code> 換成別的情緒。</p>
+      <div class="ds-code-wrap">
+<pre class="ds-code" id="starter"><span class="c">&lt;!-- head --&gt;</span>
+&lt;link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&amp;family=Noto+Sans+TC:wght@400;500;700;900&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap"&gt;
+&lt;link rel="stylesheet" href="/firedragon-ui.css"&gt;
+<span class="c">&lt;!-- 先套用記住的主題，避免暗色模式閃一下 --&gt;</span>
+&lt;script&gt;try{var t=localStorage.getItem('fd-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}&lt;/script&gt;
+
+<span class="c">&lt;!-- body：結構不變，只換情緒 --&gt;</span>
+&lt;body class="fd-base fd-mood-neon"&gt;
+  &lt;section class="fd-card"&gt;
+    &lt;span class="fd-badge"&gt;判斷位數&lt;/span&gt;
+    &lt;div class="fd-readout"&gt;0.00340&lt;/div&gt;
+    &lt;input class="fd-input fd-mono" id="answer" placeholder="輸入答案"&gt;
+    &lt;button class="fd-btn"&gt;送出&lt;/button&gt;
+  &lt;/section&gt;
+&lt;/body&gt;</pre>
+        <button class="fd-btn fd-secondary fd-sm" type="button" data-copy="#starter">複製</button>
+      </div>
+      <h3 class="ds-h3">給 Claude 和代理人的規則</h3>
+      <ul class="ds-rules">
+        <li><span><b>只用 token。</b>顏色寫 <code>var(--primary)</code>，不寫 hex，換情緒和暗色才會跟著變。</span></li>
+        <li><span><b>情緒放在 body。</b>一頁一個 <code>.fd-mood-*</code>，不要在元件上各自加。</span></li>
+        <li><span><b>白字只放在 <code>--grad-fill</code> 或 <code>--primary</code> 上。</b>青色 <code>--glow</code> 只做光暈和邊緣。</span></li>
+        <li><span><b>可點的東西至少 44px 高</b>，而且要有 <code>:focus-visible</code> 樣式。</span></li>
+        <li><span><b>動畫都要尊重 <code>prefers-reduced-motion</code></b>，關掉時內容要完整可見。</span></li>
+        <li><span><b>不要全域改寫 <code>.fd-card</code>、<code>.fd-tile</code>。</b>要特效就加 <code>.fd-beam</code>、<code>.fd-glass</code> 這類修飾 class。</span></li>
+      </ul>
+    </section>
+
+    <!-- ============ COLOR ============ -->
+    <section class="ds-sec" id="color" data-label="色彩">
+      <header>
+        <p class="ds-eyebrow">色彩</p>
+        <h2>藍做動作，青只做光</h2>
+      </header>
+      <p class="ds-lede">色票直接讀目前頁面算出來的值，所以切換亮暗或情緒時會跟著變。右下角的標籤是這個顏色當文字放在 <code>--surface</code> 上的對比度。點一下複製 <code>var(--token)</code>。</p>
+      <div class="ds-swatch-group"><h3 class="ds-h3">底與面</h3><div class="ds-swatches" data-tokens="--bg:頁面底|--surface:卡片、輸入框|--surface-2:磁磚、定理框|--surface-3:場景底|--line:分隔線|--line-strong:hover 邊線|--line-control:輸入框邊線"></div></div>
+      <div class="ds-swatch-group"><h3 class="ds-h3">文字</h3><div class="ds-swatches" data-tokens="--ink:主文字|--ink-2:次文字|--ink-3:提示、標籤" data-text></div></div>
+      <div class="ds-swatch-group"><h3 class="ds-h3">主色與光</h3><div class="ds-swatches" data-tokens="--primary:動作、選中|--primary-hover:hover|--primary-soft:淡底|--primary-ink:淡底上的字|--glow:光暈、邊緣|--glow-2:第二光源" data-text></div></div>
+      <div class="ds-swatch-group"><h3 class="ds-h3">語意色</h3><div class="ds-swatches" data-tokens="--ok:答對|--ok-soft:答對底|--ok-ink:答對底上的字|--bad:答錯|--bad-soft:答錯底|--bad-ink:答錯底上的字|--warn:警示|--warn-soft:警示底|--warn-ink:警示底上的字"></div></div>
+      <div class="ds-swatch-group"><h3 class="ds-h3">讀數面板</h3><div class="ds-swatches" data-tokens="--readout-bg:面板底|--readout-ink:讀數文字|--readout-dim:讀數次要"></div></div>
+    </section>
+
+    <!-- ============ TYPE ============ -->
+    <section class="ds-sec" id="type" data-label="字體">
+      <header>
+        <p class="ds-eyebrow">字體</p>
+        <h2>三個角色</h2>
+      </header>
+      <p class="ds-lede">宋體標題帶一點講義感，黑體跑內文和介面，等寬字專門放數字讀數與 token。三個都從 Google Fonts 載入，並且有系統字體備援。</p>
+      <div class="ds-specimen-type">
+        <div class="k"><b>--font-display</b>Noto Serif TC 700<br>h1–h3、情緒名稱</div>
+        <div class="ds-t-display">微積分知識地圖<small>極限 → 連續 → 微分</small></div>
+      </div>
+      <div class="ds-specimen-type">
+        <div class="k"><b>--font-ui</b>Noto Sans TC 400–900<br>內文、按鈕、標籤</div>
+        <div class="ds-t-ui">加減乘除題目會先幫你把結果算好，你只需要判斷該取到哪一位。<b>精確數字</b>（用數的）請輸入「無限」。</div>
+      </div>
+      <div class="ds-specimen-type">
+        <div class="k"><b>--font-mono</b>IBM Plex Mono 500 / 600<br>讀數、統計、token</div>
+        <div class="ds-t-mono">Fe2O3 · 0.00340 × 1.2 = 4.1×10<sup>-3</sup></div>
+      </div>
+      <div class="ds-tablewrap">
+        <table class="ds-table">
+          <thead><tr><th>Token</th><th>大小</th><th>範例</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">--text-hero</td><td class="mono">40–84px</td><td style="font-family:var(--font-display);font-size:32px;font-weight:700;color:var(--ink)">firedragontw</td></tr>
+            <tr><td class="mono">--text-3xl</td><td class="mono">36px</td><td style="font-family:var(--font-display);font-size:30px;font-weight:700;color:var(--ink)">有效數字練習</td></tr>
+            <tr><td class="mono">--text-2xl</td><td class="mono">28px</td><td style="font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--ink)">各題型正確率</td></tr>
+            <tr><td class="mono">--text-xl</td><td class="mono">22px</td><td style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--ink)">夾擠定理</td></tr>
+            <tr><td class="mono">--text-lg</td><td class="mono">18px</td><td style="font-size:18px;font-weight:700;color:var(--ink)">往左數第 7 包，正面抽</td></tr>
+            <tr><td class="mono">--text-md</td><td class="mono">16px</td><td style="font-size:16px;color:var(--ink)">請在心中想一個 1 到 10 的數字</td></tr>
+            <tr><td class="mono">--text-sm</td><td class="mono">14px</td><td style="font-size:14px;color:var(--ink-2)">每堂課消耗 4 點精力</td></tr>
+            <tr><td class="mono">--text-xs</td><td class="mono">12.5px</td><td style="font-size:12.5px;color:var(--ink-3)">Enter 送出，再按一次到下一題</td></tr>
+            <tr><td class="mono">--text-2xs</td><td class="mono">11.5px</td><td style="font-size:11.5px;color:var(--ink-3);font-family:var(--font-mono);letter-spacing:.08em">EYEBROW · META</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ SPACE ============ -->
+    <section class="ds-sec" id="space" data-label="間距與圓角">
+      <header>
+        <p class="ds-eyebrow">間距與圓角</p>
+        <h2>4 pt 節奏，六種圓角</h2>
+      </header>
+      <p class="ds-lede">間距都落在 4 的倍數上。圓角分六級：標籤 4、小元件 6、輸入框 10、面板 14、卡片 20、藥丸 999。</p>
+      <div class="ds-space-grid">
+        <div class="ds-spaces">
+          <div class="ds-space">--space-1 · 4<i style="width:4px"></i></div>
+          <div class="ds-space">--space-2 · 8<i style="width:8px"></i></div>
+          <div class="ds-space">--space-3 · 12<i style="width:12px"></i></div>
+          <div class="ds-space">--space-4 · 16<i style="width:16px"></i></div>
+          <div class="ds-space">--space-5 · 20<i style="width:20px"></i></div>
+          <div class="ds-space">--space-6 · 24<i style="width:24px"></i></div>
+          <div class="ds-space">--space-8 · 32<i style="width:32px"></i></div>
+          <div class="ds-space">--space-10 · 40<i style="width:40px"></i></div>
+          <div class="ds-space">--space-12 · 48<i style="width:48px"></i></div>
+          <div class="ds-space">--space-16 · 64<i style="width:64px"></i></div>
+        </div>
+        <div class="ds-radii">
+          <div class="ds-radius"><i style="border-radius:4px"></i>--radius-xs · 4</div>
+          <div class="ds-radius"><i style="border-radius:6px"></i>--radius-sm · 6</div>
+          <div class="ds-radius"><i style="border-radius:10px"></i>--radius · 10</div>
+          <div class="ds-radius"><i style="border-radius:14px"></i>--radius-lg · 14</div>
+          <div class="ds-radius"><i style="border-radius:20px"></i>--radius-xl · 20</div>
+          <div class="ds-radius"><i style="border-radius:999px"></i>--radius-pill</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LIGHT & MOTION ============ -->
+    <section class="ds-sec" id="motion" data-label="光與動">
+      <header>
+        <p class="ds-eyebrow">光與動</p>
+        <h2>陰影說「這是物件」，光暈說「你正在碰它」</h2>
+      </header>
+      <p class="ds-lede">靜止的卡片只有淡陰影和一條頂部亮邊。霓虹光暈留給 hover 和 focus。focus 環是兩圈：一圈底色把它和元件隔開，一圈主色，在任何背景上都看得到。</p>
+      <div class="ds-shadows">
+        <div class="ds-shadow" style="box-shadow:var(--shadow-sm)">--shadow-sm</div>
+        <div class="ds-shadow" style="box-shadow:var(--edge-hi),var(--shadow-card)">--shadow-card</div>
+        <div class="ds-shadow" style="box-shadow:var(--shadow-lift)">--shadow-lift</div>
+        <div class="ds-shadow" style="box-shadow:var(--shadow-glow)">--shadow-glow</div>
+        <div class="ds-shadow" style="box-shadow:var(--ring)">--ring</div>
+      </div>
+      <div class="ds-curves">
+        <div class="ds-curve">
+          <svg viewBox="0 -30 120 150" aria-hidden="true"><line class="g" x1="10" y1="110" x2="110" y2="110"/><line class="g" x1="10" y1="110" x2="10" y2="10"/><line class="d" x1="10" y1="10" x2="110" y2="10"/><path class="c" d="M10,110 C30,30 30,10 110,10"/></svg>
+          <div><b>--ease</b><code>cubic-bezier(.2, .8, .2, 1)</code><p>預設。開關、hover、進度條、面板滑入。</p></div>
+        </div>
+        <div class="ds-curve">
+          <svg viewBox="0 -30 120 150" aria-hidden="true"><line class="g" x1="10" y1="110" x2="110" y2="110"/><line class="g" x1="10" y1="110" x2="10" y2="10"/><line class="d" x1="10" y1="10" x2="110" y2="10"/><path class="c" d="M10,110 C27.5,21.5 42,-17.5 110,10"/></svg>
+          <div><b>--ease-spring</b><code>cubic-bezier(.175, .885, .32, 1.275)</code><p>會過衝。磁磚浮起、答對 pop、翻轉卡。</p></div>
+        </div>
+      </div>
+      <div class="ds-durs">
+        <div class="ds-dur"><b>120ms</b><span>--dur-1 · 按下去</span></div>
+        <div class="ds-dur"><b>200ms</b><span>--dur-2 · 顏色、邊線</span></div>
+        <div class="ds-dur"><b>350ms</b><span>--dur-3 · 浮起、光暈</span></div>
+        <div class="ds-dur"><b>500ms</b><span>--dur-4 · 進度條</span></div>
+      </div>
+      <div class="ds-anim-row">
+        <span class="ds-anim-box" id="animTarget">fd-shake</span>
+        <button class="fd-btn fd-sm fd-secondary" type="button" data-anim="fd-anim-shake">答錯抖動</button>
+        <button class="fd-btn fd-sm fd-secondary" type="button" data-anim="fd-anim-pop">答對 pop</button>
+        <button class="fd-btn fd-sm fd-secondary" type="button" data-anim="fd-anim-bump">連對 bump</button>
+        <button class="fd-btn fd-sm fd-secondary" type="button" data-anim="fd-anim-fade-up">fade-up</button>
+      </div>
+      <p class="ds-p" id="reducedNote" hidden>你的系統開著「減少動態」，所以上面的按鈕不會動。這是預期行為：所有動畫在這個設定下都會關掉。</p>
+    </section>
+
+    <!-- ============ COMPONENTS ============ -->
+    <section class="ds-sec" id="components" data-label="元件">
+      <header>
+        <p class="ds-eyebrow">元件</p>
+        <h2>站上真的有的東西，各做一個標準版</h2>
+      </header>
+      <p class="ds-lede">每張規格卡右上角的「複製 HTML」會複製示範區的原始碼。全部只用 token 上色，切換亮暗或情緒都能直接用。</p>
+      <div class="ds-specs">
+
+        <h3 class="ds-h3" id="c-actions">動作</h3>
+        <div class="ds-spec">
+          <div class="ds-spec-head"><div class="ds-spec-title"><h4>按鈕</h4><span><code>.fd-btn</code> · <code>.fd-secondary</code> · <code>.fd-ghost</code> · <code>.fd-link</code> · <code>.fd-ok</code> · <code>.fd-bad</code></span></div><button class="fd-btn fd-link fd-sm" type="button" data-copy-html>複製 HTML</button></div>
+          <div class="ds-demo">
+            <button class="fd-btn fd-glow" type="button">開始分析</button>
+            <button class="fd-btn fd-secondary" type="button">下一題</button>
+            <button class="fd-btn fd-ghost" type="button">重設排列</button>
+            <button class="fd-btn fd-link" type="button">重設統計</button>
+            <button class="fd-btn" type="button" disabled>通靈中…</button>
+            <button class="fd-btn fd-ok" type="button">再練一次</button>
+            <button class="fd-btn fd-bad" type="button">清除紀錄</button>
+          </div>
+          <div class="ds-note">主按鈕有一層由上往下的亮面和主色投影。答對、答錯按鈕的文字色來自 <code>--on-ok</code> / <code>--on-bad</code>，暗色模式會換成深色字，對比才夠。</div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec-head"><div class="ds-spec-title"><h4>題型切換</h4><span><code>.fd-pill[aria-pressed]</code></span></div><button class="fd-btn fd-link fd-sm" type="button" data-copy-html>複製 HTML</button></div>
+          <div class="ds-demo" id="pillDemo">
+            <button class="fd-pill" type="button" aria-pressed="true">判斷位數</button>
+            <button class="fd-pill" type="button" aria-pressed="true">四捨五入</button>
+            <button class="fd-pill" type="button" aria-pressed="false">乘除運算</button>
+            <button class="fd-pill" type="button" aria-pressed="false">混合運算 <span class="fd-tag">佔 50%</span></button>
+          </div>
+          <div class="ds-note">狀態寫在 <code>aria-pressed</code>，樣式跟著屬性走。點看看。</div>
+        </div>
+
+        <h3 class="ds-h3" id="c-inputs">輸入</h3>
+        <div class="ds-spec">
+          <div class="ds-spec-head"><div class="ds-spec-title"><h4>輸入框、選單、勾選</h4><span><code>.fd-input</code> · <code>.fd-select</code> · <code>.fd-textarea</code> · <code>.fd-check</code></span></div><button class="fd-btn fd-link fd-sm" type="button" data-copy-html>複製 HTML</button></div>
+          <div class="ds-demo two">
+            <div class="ds-field"><label class="fd-label" for="in1">化學式</label><input class="fd-input fd-mono" id="in1" value="Fe2O3"><div class="fd-hint">數字直接打，例如 Fe2O3</div></div>
+            <div class="ds-field"><label class="fd-label" for="in2">睡眠時間（小時）</label><select class="fd-select" id="in2"><option>7</option><option selected>8</option><option>9</option></select></div>
+            <div class="ds-field"><label class="fd-label" for="in3">答對</label><input class="fd-input fd-mono fd-center fd-is-ok" id="in3" value="iron(III) oxide" readonly></div>
+            <div class="ds-field"><label class="fd-label" for="in4">答錯</label><input class="fd-input fd-mono fd-center fd-is-bad" id="in4" value="iron(II) oxide" readonly></div>
+            <div class="ds-checks">
+              <label class="fd-check"><input type="checkbox" id="ck1" checked> 喝咖啡 (+10)</label>
+              <label class="fd-check"><input type="checkbox" id="ck2"> 喝紅茶 (+5)</label>
+              <label class="fd-check"><input type="checkbox" id="ck3" checked> 早餐 (+5)</label>
+            </div>
+          </div>
+          <div class="ds-note">輸入框邊線改用 <code>--line-control</code>，對底色有 3:1，在白底上也找得到框在哪。</div>
+        </div>
+
+        <h3 class="ds-h3" id="c-feedback">回饋與讀數</h3>
+        <div class="ds-spec">
+          <div class="ds-spec-head"><div class="ds-spec-title"><h4>題目卡</h4><span><code>.fd-card</code> + <code>.fd-badge</code> + <code>.fd-readout</code> + <code>.fd-feedback</code></span></div><button class="fd-btn fd-link fd-sm" type="button" data-copy-html>複製 HTML</button></div>
+          <div class="ds-demo col">
+            <div class="fd-card fd-is-ok">
+              <div class="fd-card-head"><span class="fd-badge">四捨五入</span><span class="fd-faint" style="font-size:12.5px;font-weight:600">第 12 題</span></div>
+              <div class="fd-readout fd-ok">0.004<span class="fd-dim">0</span>82 <span class="fd-dim">→ 2 位</span></div>
+              <p style="margin:14px 2px 12px;font-weight:700">四捨五入到 2 位有效數字</p>
+              <div class="ds-row"><input class="fd-input fd-mono" id="in5" value="0.0041" readonly><button class="fd-btn" type="button">送出</button></div>
+              <div class="fd-feedback fd-ok fd-draw" style="margin-top:14px">
+                <div class="fd-feedback-title"><span class="fd-mark"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>答對了</div>
+                前導零不算，從 4 開始數兩位是 <span class="fd-ans">0.0041</span>，第三位 8 要進位。
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec-head"><div class="ds-spec-title"><h4>標籤、通知、答錯回饋</h4><span><code>.fd-badge</code> · <code>.fd-notice</code> · <code>.fd-feedback.fd-bad</code></span></div><button class="fd-btn fd-link fd-sm" type="button" data-copy-html>複製 HTML</button></div>
+          <div class="ds-demo two">
+            <div class="fd-feedback fd-bad">
+              <div class="fd-feedback-title"><span class="fd-mark"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span>答錯了</div>
+              正確拼寫是 <span class="fd-ans">thorough</span>。字尾 -ough 少了一個 h。
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div class="fd-notice">公車 307 即將進站，候車 80 人。</div>
+              <div class="fd-notice fd-warn">車上載客率 85%，站位擁擠。</div>
+              <div class="fd-notice fd-critical">已滿載，剩餘 23 人無法上車。</div>
+            </div>
+            <div class="ds-row">
+              <span class="fd-badge">Type I</span><span class="fd-badge fd-ok">答對</span><span class="fd-badge fd-bad">答錯</span><span class="fd-badge fd-warn">舊式名稱</span><span class="fd-badge fd-neutral">第 3 題</span>
+            </div>
+          </div>
+          <div class="ds-note">標籤文字改用 <code>--primary-ink</code>（比主色深一階），12.5px 的小字在淡底上也過 AA。</div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec-head"><div class="ds-spec-title"><h4>進度與統計</h4><span><code>.fd-progress</code> · <code>.fd-stats</code> · <code>.fd-streak</code></span></div><button class="fd-btn fd-link fd-sm" type="button" data-copy-html>複製 HTML</button></div>
+          <div class="ds-demo col">
+            <div><div class="fd-progress"><i style="width:62%"></i></div><div class="fd-progress-meta"><span>第 16 題 / 26</span><span>正確率 88%</span></div></div>
+            <div class="fd-progress fd-thick fd-shine"><i style="width:73%"></i></div>
+            <div class="fd-stats">
+              <div class="fd-stat"><div class="fd-n">16</div><div class="fd-l">目前單字</div></div>
+              <div class="fd-stat"><div class="fd-n">26</div><div class="fd-l">總共單字</div></div>
+              <div class="fd-stat"><div class="fd-n">14</div><div class="fd-l">答對數</div></div>
+              <div class="fd-stat"><div class="fd-n fd-hi">88%</div><div class="fd-l">正確率</div></div>
+            </div>
+            <div><span class="fd-streak">連對 <span class="fd-n">7</span></span></div>
+          </div>
+        </div>
+
+        <h3 class="ds-h3" id="c-practice">講義與練習物件</h3>
+        <div class="ds-spec">
+          <div class="ds-spec-head"><div class="ds-spec-title"><h4>定理框、註記、填空、選項卡</h4><span><code>.fd-thm</code> · <code>.fd-note</code> · <code>.fd-blank</code> · <code>.fd-chip</code> · <code>.fd-dropzone</code></span></div><button class="fd-btn fd-link fd-sm" type="button" data-copy-html>複製 HTML</button></div>
+          <div class="ds-demo col">
+            <div class="fd-thm"><b>定理</b>　若在 a 附近恆有 g(x) ≤ f(x) ≤ h(x)，且 lim g = lim h = L，則 lim f = L。</div>
+            <div class="fd-note">不能寫成「= sin(∞)」，極限符號不能直接代入無窮大。</div>
+            <p style="line-height:2.3;margin:0">對 <span class="fd-blank fd-filled">任意</span> ε &gt; 0，<span class="fd-blank fd-next" tabindex="0" role="button">　</span> δ &gt; 0，使得只要 <span class="fd-blank" tabindex="0" role="button">　</span>，就有 <span class="fd-blank fd-wrong">|f(x)−a| &lt; ε</span>。</p>
+            <div class="ds-row"><button class="fd-chip" type="button">存在</button><button class="fd-chip" type="button">0 &lt; |x−a| &lt; δ</button><button class="fd-chip fd-lifted" type="button">任意</button><button class="fd-chip" type="button">若且唯若</button></div>
+            <div class="fd-dropzone">把選項卡拖到這裡</div>
+            <div class="ds-row" style="justify-content:space-between;align-items:center"><span class="fd-faint" style="font-size:12.5px"><kbd>Enter</kbd> 送出，再按一次到下一題</span><span class="fd-dots"><i></i><i class="fd-active"></i><i></i><i></i></span></div>
+          </div>
+          <div class="ds-note">示範裡的空格和選項卡都可以用鍵盤 Tab 到。真正的頁面也要這樣做，不要只做成可以點的 span。</div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec-head"><div class="ds-spec-title"><h4>翻轉學習卡</h4><span><code>.fd-flip</code> · 點一下或按 Enter 翻面</span></div><button class="fd-btn fd-link fd-sm" type="button" data-copy-html>複製 HTML</button></div>
+          <div class="ds-demo">
+            <div class="fd-flip" role="button" tabindex="0" aria-pressed="false" aria-label="翻面：連續的定義">
+              <div class="fd-flip-inner"><div class="fd-flip-front">連續的定義是什麼？</div><div class="fd-flip-back">lim x→a f(x) = f(a)<br>三個條件缺一不可</div></div>
+            </div>
+            <div class="fd-flip" role="button" tabindex="0" aria-pressed="false" aria-label="翻面：tenant">
+              <div class="fd-flip-inner"><div class="fd-flip-front">tenant</div><div class="fd-flip-back">房客</div></div>
+            </div>
+          </div>
+          <div class="ds-note">有滑鼠時 hover 就會翻；手機上只靠點擊，不會卡在翻面狀態。背面改用 <code>--grad-fill</code>，白字可讀。</div>
+        </div>
+
+        <h3 class="ds-h3" id="c-containers">容器</h3>
+        <div class="ds-spec">
+          <div class="ds-spec-head"><div class="ds-spec-title"><h4>導覽磁磚與玻璃卡</h4><span><code>.fd-tile</code> · <code>.fd-card.fd-glass</code></span></div><button class="fd-btn fd-link fd-sm" type="button" data-copy-html>複製 HTML</button></div>
+          <div class="ds-demo col">
+            <div class="ds-tiles">
+              <a class="fd-tile" href="#c-containers">有效數字練習</a>
+              <a class="fd-tile" href="#c-containers">微積分知識地圖</a>
+              <a class="fd-tile" href="#c-containers">化學命名練習</a>
+            </div>
+            <div class="ds-scene">
+              <div class="fd-card fd-glass ds-glass-card">
+                <h3 style="font-size:16px">模擬設定</h3>
+                <div class="ds-field"><label class="fd-label" for="g1">候車人數</label><input class="fd-input" id="g1" value="80"></div>
+                <button class="fd-btn fd-block" type="button">開始模擬上車</button>
+              </div>
+            </div>
+          </div>
+          <div class="ds-note">磁磚 hover 的填色是藍到紫的 <code>--grad-fill</code>，青色只出現在外圈的光邊，白字才不會壓在亮青上。玻璃卡只用在背後有場景的地方。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EFFECTS ============ -->
+    <section class="ds-sec" id="effects" data-label="霓虹特效">
+      <header>
+        <p class="ds-eyebrow">霓虹特效</p>
+        <h2>網站的個性，放在少數幾個地方</h2>
+      </header>
+      <p class="ds-lede">這三個特效已經收進 <code>firedragon-ui.css</code>，加 class 就能用。一頁只挑一兩個重點用，其他地方保持安靜。</p>
+      <div class="ds-fx">
+        <div class="fd-card fd-beam">
+          <h4>流光邊框</h4>
+          <p>一道光沿著圓角邊緣繞圈，7 秒一圈。適合頁面上最重要的那張卡片。</p>
+          <code>.fd-card.fd-beam</code>
+        </div>
+        <div class="fd-card fd-spot" id="spotDemo">
+          <h4>聚光燈</h4>
+          <p>游標移到卡片上，光會跟著走。需要幾行 JS 把游標位置寫進 <code>--mx</code>、<code>--my</code>。手機上不會出現。</p>
+          <code>.fd-card.fd-spot</code>
+        </div>
+        <div class="fd-card" style="justify-content:space-between">
+          <h4>霓虹按鈕</h4>
+          <p>旋轉的漸層外框，hover 時亮起來。一頁最多放一兩顆。</p>
+          <div><a class="fd-btn-neon" href="#effects">看專案 →</a></div>
+        </div>
+      </div>
+      <h3 class="ds-h3">首頁專用的特效</h3>
+      <p class="ds-p">這些寫在 <code>home.css</code> / <code>home.js</code>，還沒收進共用樣式表。要用在別頁時，照這張表的條件做。</p>
+      <div class="ds-tablewrap">
+        <table class="ds-table">
+          <thead><tr><th>特效</th><th>做什麼</th><th>手機</th><th>減少動態</th></tr></thead>
+          <tbody>
+            <tr><td>極光背景</td><td>三團模糊的主色光在背景慢慢漂</td><td>照常顯示</td><td>停住不動</td></tr>
+            <tr><td>游標光暈</td><td>一團光跟著游標走</td><td>不顯示</td><td>不顯示</td></tr>
+            <tr><td>跑馬燈</td><td>專案名稱橫向無限捲動，滑過暫停</td><td>照常顯示</td><td>停住</td></tr>
+            <tr><td>文字亂碼還原</td><td>滑過連結名稱時先亂碼再變回來</td><td>不觸發</td><td>不觸發</td></tr>
+            <tr><td>磁吸按鈕</td><td>按鈕被游標吸過去，放開時彈回</td><td>不觸發</td><td>不觸發</td></tr>
+            <tr><td>3D 傾斜磁磚</td><td>磁磚跟著游標微微傾斜</td><td>不觸發</td><td>不傾斜</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ MOODS ============ -->
+    <section class="ds-sec" id="moods" data-label="情緒">
+      <header>
+        <p class="ds-eyebrow">情緒</p>
+        <h2>同一組元件，六種心情</h2>
+      </header>
+      <p class="ds-lede">每頁本來就想長得不一樣。在 body 加 <code>.fd-mood-*</code>，主色和光暈跟著換；淡底、focus 環和光暈用 <code>color-mix</code> 自動算出來。暗色模式下每種情緒都會自動提亮。左邊的「整頁情緒」可以讓整份文件換成那種情緒。</p>
+      <div class="ds-moods">
+        <div class="ds-mood fd-mood-neon"><div class="ds-mood-head"><b>霓虹</b><code>.fd-mood-neon</code></div><small>預設。首頁、部落格、egc、learningcard。</small><a class="fd-tile" href="#moods">學習卡輔助神器</a><div class="fd-progress"><i style="width:70%"></i></div><div class="ds-mood-row"><button class="fd-btn fd-sm" type="button">產生學習卡</button><span class="fd-badge">霓虹燈</span></div></div>
+        <div class="ds-mood fd-mood-sakura"><div class="ds-mood-head"><b>櫻粉</b><code>.fd-mood-sakura</code></div><small>yihsin、ptcg 兩個惡搞頁。</small><a class="fd-tile" href="#moods">寶可夢卡牌通靈</a><div class="fd-progress"><i style="width:55%"></i></div><div class="ds-mood-row"><button class="fd-btn fd-sm" type="button">開始通靈</button><span class="fd-badge">料率 67%</span></div></div>
+        <div class="ds-mood fd-mood-violet"><div class="ds-mood-head"><b>紫羅蘭</b><code>.fd-mood-violet</code></div><small>sf 與 eng 的紫色系。</small><a class="fd-tile" href="#moods">有效數字練習</a><div class="fd-progress"><i style="width:62%"></i></div><div class="ds-mood-row"><button class="fd-btn fd-sm" type="button">送出</button><span class="fd-badge">四捨五入</span></div></div>
+        <div class="ds-mood fd-mood-board"><div class="ds-mood-head"><b>黑板</b><code>.fd-mood-board</code></div><small>calculus 的墨綠與粉筆黃。</small><a class="fd-tile" href="#moods">微積分知識地圖</a><div class="fd-progress"><i style="width:40%"></i></div><div class="ds-mood-row"><button class="fd-btn fd-sm" type="button">回到黑板</button><span class="fd-badge">夾擠定理</span></div></div>
+        <div class="ds-mood fd-mood-apple"><div class="ds-mood-head"><b>蘋果藍</b><code>.fd-mood-apple</code></div><small>enyu、bus、math。</small><a class="fd-tile" href="#moods">Vocabulary Mastery</a><div class="fd-progress"><i style="width:82%"></i></div><div class="ds-mood-row"><button class="fd-btn fd-sm" type="button">Practice Again</button><span class="fd-badge">Accuracy</span></div></div>
+        <div class="ds-mood fd-mood-ember"><div class="ds-mood-head"><b>橘焰</b><code>.fd-mood-ember</code></div><small>新增。火龍的火；ionic 的暖色。</small><a class="fd-tile" href="#moods">化學命名練習</a><div class="fd-progress"><i style="width:48%"></i></div><div class="ds-mood-row"><button class="fd-btn fd-sm" type="button">下一題</button><span class="fd-badge">Type II</span></div></div>
+      </div>
+    </section>
+
+    <!-- ============ STATUS ============ -->
+    <section class="ds-sec" id="status" data-label="頁面現況">
+      <header>
+        <p class="ds-eyebrow">附錄</p>
+        <h2>頁面現況與更新紀錄</h2>
+      </header>
+      <details class="ds-appendix" open>
+        <summary>哪些頁面已經接上共用樣式表（3 / 15）</summary>
+        <div>
+          <div class="ds-tablewrap">
+            <table class="ds-table ds-track">
+              <thead><tr><th>頁面</th><th>檔案</th><th>分類</th><th>建議情緒</th><th>狀態</th></tr></thead>
+              <tbody>
+                <tr><td>首頁</td><td class="mono">index.html</td><td data-l="分類">入口</td><td data-l="情緒">neon</td><td><span class="fd-badge ds-status-ok">已接入</span></td></tr>
+                <tr><td>部落格列表</td><td class="mono">blog/index.html</td><td data-l="分類">部落格</td><td data-l="情緒">neon</td><td><span class="fd-badge ds-status-ok">已接入</span></td></tr>
+                <tr><td>不當光源，也可以照亮自己的人生</td><td class="mono">blog/not-a-light-source/</td><td data-l="分類">部落格</td><td data-l="情緒">neon</td><td><span class="fd-badge ds-status-ok">已接入</span></td></tr>
+                <tr><td>有效數字練習</td><td class="mono">sf.html</td><td data-l="分類">大學</td><td data-l="情緒">violet</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>微積分知識地圖</td><td class="mono">calculus.html</td><td data-l="分類">大學</td><td data-l="情緒">board</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>化學命名練習</td><td class="mono">ionic.html</td><td data-l="分類">大學</td><td data-l="情緒">ember</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>弱智猜數字神器</td><td class="mono">yihsin.html</td><td data-l="分類">高中</td><td data-l="情緒">sakura</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>寶可夢卡牌通靈</td><td class="mono">ptcg.html</td><td data-l="分類">高中</td><td data-l="情緒">sakura</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>每日精力計算器</td><td class="mono">egc.html</td><td data-l="分類">高中</td><td data-l="情緒">neon</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>學習卡輔助神器</td><td class="mono">learningcard.html</td><td data-l="分類">高中</td><td data-l="情緒">neon</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>AI學習卡</td><td class="mono">ai-card.html</td><td data-l="分類">高中</td><td data-l="情緒">（外嵌頁）</td><td><span class="fd-badge fd-neutral">不適用</span></td></tr>
+                <tr><td>U8急救</td><td class="mono">eng.html</td><td data-l="分類">高中</td><td data-l="情緒">violet</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>ENYU</td><td class="mono">enyu.html</td><td data-l="分類">高中</td><td data-l="情緒">apple</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>台北公車擁擠度模擬</td><td class="mono">bus.html</td><td data-l="分類">未連結</td><td data-l="情緒">apple</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+                <tr><td>Tangent Visualizer</td><td class="mono">math/</td><td data-l="分類">未連結</td><td data-l="情緒">apple</td><td><span class="fd-badge fd-neutral">未接入</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+      <details class="ds-appendix">
+        <summary>v2 改了什麼</summary>
+        <div>
+          <ol class="ds-changes">
+            <li>亮色的 <code>--ink-3</code> 加深，提示文字和標籤從 3.3:1 提高到 5:1 以上。</li>
+            <li>暗色底更深、卡片和底拉開層次，主色換回比較電的藍 <code>#5b82ff</code>。</li>
+            <li>新增 <code>--grad-fill</code>（藍到紫）：磁磚 hover、翻轉卡背面、首頁連結 hover 改用它，白字不再壓在亮青色上。</li>
+            <li>focus 環改成兩圈加一點光暈，鍵盤操作時一定看得到。</li>
+            <li>輸入框邊線、標籤文字、答對答錯按鈕的文字色都改成過 AA 的版本。</li>
+            <li>暗色模式下櫻粉、紫羅蘭會自動提亮；新增情緒「橘焰」。</li>
+            <li>新增選用特效：<code>.fd-beam</code>、<code>.fd-spot</code>、<code>.fd-btn-neon</code>、<code>.fd-card.fd-glass</code>。</li>
+            <li>修好首頁在「系統暗色」時極光被調暗的問題。</li>
+          </ol>
+        </div>
+      </details>
+    </section>
+
+  </main>
+</div>
+<div class="ds-toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script src="/vendor/anime.umd.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement, ds = document.getElementById('ds');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var MOODS = ['neon', 'sakura', 'violet', 'board', 'apple', 'ember'];
+  var MOOD_NAMES = { neon: '霓虹 neon', sakura: '櫻粉 sakura', violet: '紫羅蘭 violet', board: '黑板 board', apple: '蘋果藍 apple', ember: '橘焰 ember' };
+
+  /* 提示 */
+  var toast = $('#toast'), toastTimer;
+  function say(msg) { toast.textContent = msg; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1500); }
+  function copy(text, label) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say('已複製 ' + label); }, function () { say('無法複製，請手動選取：' + label); });
+    } else say('無法複製，請手動選取：' + label);
+  }
+
+  /* 主題 */
+  var themeBtns = $$('[data-set-theme]');
+  function applyTheme(t) {
+    if (t === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', t);
+    themeBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-theme') === t)); });
+    try { if (t === 'system') localStorage.removeItem('fd-theme'); else localStorage.setItem('fd-theme', t); } catch (e) {}
+    requestAnimationFrame(renderSwatches);
+  }
+  var cur = root.getAttribute('data-theme') || 'system';
+  themeBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-theme') === cur)); b.addEventListener('click', function () { applyTheme(b.getAttribute('data-set-theme')); }); });
+
+  /* 整頁情緒 */
+  var moodSelect = $('#moodSelect'), dots = $$('.ds-dot'), specimenMood = $('#specimenMood'), specimen = $('#specimen');
+  function clearMood(el) { MOODS.forEach(function (m) { el.classList.remove('fd-mood-' + m); }); }
+  function setPageMood(m) {
+    clearMood(ds); clearMood(specimen);
+    if (m !== 'neon') ds.classList.add('fd-mood-' + m);
+    moodSelect.value = m;
+    dots.forEach(function (d) { d.setAttribute('aria-pressed', String(d.getAttribute('data-mood') === m)); });
+    specimenMood.textContent = MOOD_NAMES[m];
+    requestAnimationFrame(renderSwatches);
+  }
+  moodSelect.addEventListener('change', function () { setPageMood(moodSelect.value); });
+  dots.forEach(function (d) { d.addEventListener('click', function () { stopCycle(); setPageMood(d.getAttribute('data-mood')); }); });
+
+  /* 色票：讀目前算出來的值 */
+  var probe = document.createElement('i'); probe.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden'; ds.appendChild(probe);
+  function resolve(token) { probe.style.backgroundColor = 'var(' + token + ')'; return getComputedStyle(probe).backgroundColor; }
+  function parse(rgb) { var m = rgb.match(/[\d.]+/g) || [0, 0, 0]; return [+m[0], +m[1], +m[2]]; }
+  function hex(c) { return '#' + c.map(function (v) { return ('0' + Math.round(v).toString(16)).slice(-2); }).join(''); }
+  function lum(c) { var a = c.map(function (v) { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * a[0] + .7152 * a[1] + .0722 * a[2]; }
+  function ratio(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); }
+  function renderSwatches() {
+    var surface = parse(resolve('--surface'));
+    $$('.ds-swatches').forEach(function (host) {
+      var isText = host.hasAttribute('data-text');
+      host.innerHTML = '';
+      host.getAttribute('data-tokens').split('|').forEach(function (pair) {
+        var p = pair.split(':'), token = p[0], use = p[1], c = parse(resolve(token)), r = ratio(c, surface);
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'ds-swatch';
+        b.setAttribute('aria-label', '複製 var(' + token + ')');
+        var cls = isText ? (r >= 4.5 ? 'pass' : 'fail') : '';
+        b.innerHTML = '<i style="background:var(' + token + ')"></i><div><b>' + token + '</b><small>' + hex(c) + '</small><em>' + use + '</em><span class="ds-cr ' + cls + '">' + r.toFixed(2) + ':1</span></div>';
+        b.addEventListener('click', function () { copy('var(' + token + ')', 'var(' + token + ')'); });
+        host.appendChild(b);
+      });
+    });
+  }
+  renderSwatches();
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { requestAnimationFrame(renderSwatches); });
+
+  /* 複製程式碼與 HTML */
+  $$('[data-copy]').forEach(function (b) { b.addEventListener('click', function () { copy($(b.getAttribute('data-copy')).textContent, '起手式'); }); });
+  $$('[data-copy-html]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var demo = b.closest('.ds-spec').querySelector('.ds-demo');
+      var html = demo.innerHTML.replace(/^\s*\n/gm, '').replace(/^ {12}/gm, '').trim();
+      copy(html, b.closest('.ds-spec').querySelector('h4').textContent + ' 的 HTML');
+    });
+  });
+
+  /* 藥丸、翻轉卡、動畫示範 */
+  $('#pillDemo').addEventListener('click', function (e) { var p = e.target.closest('.fd-pill'); if (p) p.setAttribute('aria-pressed', p.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); });
+  $$('.fd-flip').forEach(function (f) {
+    function flip() { f.classList.toggle('fd-flipped'); f.setAttribute('aria-pressed', String(f.classList.contains('fd-flipped'))); }
+    f.addEventListener('click', flip);
+    f.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+  });
+  var target = $('#animTarget');
+  $$('[data-anim]').forEach(function (b) {
+    b.addEventListener('click', function () { var cls = b.getAttribute('data-anim'); target.textContent = cls.replace('fd-anim-', 'fd-'); target.className = 'ds-anim-box'; void target.offsetWidth; target.classList.add(cls); });
+  });
+  if (reduced) $('#reducedNote').hidden = false;
+
+  /* 聚光燈 */
+  var spot = $('#spotDemo');
+  spot.addEventListener('pointermove', function (e) { var r = spot.getBoundingClientRect(); spot.style.setProperty('--mx', (e.clientX - r.left) + 'px'); spot.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
+
+  /* 目錄：桌機展開、手機折疊，捲動時標出目前章節 */
+  var rail = $('#railDetails'), mq = window.matchMedia('(min-width: 961px)');
+  function syncRail() { rail.open = mq.matches; }
+  syncRail(); mq.addEventListener('change', syncRail);
+  $$('.ds-toc a').forEach(function (a) { a.addEventListener('click', function () { if (!mq.matches) rail.open = false; }); });
+  var links = $$('.ds-toc a'), nowLabel = $('#nowLabel');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        links.forEach(function (a) { a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + en.target.id)); });
+        nowLabel.textContent = '· ' + en.target.getAttribute('data-label');
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    $$('.ds-sec').forEach(function (s) { io.observe(s); });
+  }
+
+  /* Hero：點火。標題逐字升起，再讓範例卡跑一輪六種情緒，停回霓虹。每個分頁只自動播一次。 */
+  var A = window.anime, cycleTimers = [];
+  function stopCycle() { cycleTimers.forEach(clearTimeout); cycleTimers = []; clearMood(specimen); }
+  function cycle() {
+    stopCycle();
+    var seq = ['sakura', 'violet', 'board', 'apple', 'ember', 'neon'];
+    seq.forEach(function (m, i) {
+      cycleTimers.push(setTimeout(function () {
+        clearMood(specimen);
+        if (m !== 'neon') specimen.classList.add('fd-mood-' + m);
+        specimenMood.textContent = MOOD_NAMES[m];
+      }, 700 + i * 620));
+    });
+  }
+  function ignite() {
+    if (reduced) return;
+    if (A && A.splitText && A.animate) {
+      var split = A.splitText('#heroTitle', { chars: true });
+      A.animate(split.chars, { translateY: ['0.8em', 0], opacity: [0, 1], duration: 900, delay: A.stagger(40), ease: 'outExpo' });
+      A.animate('#specimen', { translateY: [24, 0], opacity: [0, 1], duration: 1000, delay: 250, ease: 'outExpo' });
+    }
+    cycle();
+  }
+  var played = false;
+  try { played = sessionStorage.getItem('fd-ds-ignited') === '1'; sessionStorage.setItem('fd-ds-ignited', '1'); } catch (e) {}
+  if (!played) ignite();
+  $('#replay').addEventListener('click', function () { setPageMood('neon'); if (reduced) { say('減少動態已開啟，不播放動畫'); return; } cycle(); });
+})();
+</script>
+
+</body>
+</html>

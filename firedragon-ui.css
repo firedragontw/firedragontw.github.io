@@ -1,5 +1,5 @@
 /* ==========================================================================
-   FireDragon UI · firedragontw.github.io 設計系統
+   FireDragon UI v2 · firedragontw.github.io 設計系統
    一套結構，多種情緒。
    用法：<link rel="stylesheet" href="firedragon-ui.css">
    所有元件掛 .fd- 前綴；頁面情緒（mood）用 .fd-mood-* 蓋掉主色即可。
@@ -10,29 +10,37 @@
   color-scheme: light dark;
 
   /* 底與面 */
-  --bg: #f4f6fb;
+  --bg: #f3f5fc;
   --surface: #ffffff;
-  --surface-2: #eaeef7;
-  --line: #d8deee;
-  --line-strong: #b9c2dc;
+  --surface-2: #e9edfa;
+  --surface-3: #dde3f6;
+  --line: #d6dcef;
+  --line-strong: #b4bedb;
+  --line-control: #7f89ae;   /* 輸入框邊線：對底 3:1 */
 
   /* 文字 */
-  --ink: #141a2e;
-  --ink-2: #4b5370;
-  --ink-3: #7d86a3;
+  --ink: #0e1430;
+  --ink-2: #434c6e;
+  --ink-3: #5d6688;
 
   /* 主色（首頁的霓虹藍） */
   --primary: #2962ff;
-  --primary-hover: #1f51df;
-  --primary-soft: #e6ecff;
+  --primary-hover: #1a4be6;
+  --primary-soft: #e8eeff;
+  --primary-ink: #1e47e6;    /* 淡底上的主色文字 */
   --on-primary: #ffffff;
-  --glow: #00f7ff;               /* 只做光暈與漸層，不做文字 */
+  --glow: #00f7ff;               /* 只做光暈與邊緣，不做文字、不墊白字 */
+  --glow-2: #7c4dff;             /* 第二光源：紫 */
+  --grad-fill: linear-gradient(100deg, #2962ff, #6b3cff);  /* 白字可讀的漸層填色 */
+  --on-grad: #ffffff;
 
   /* 語意色 */
-  --ok: #1f9d6a;
+  --ok: #15835a;
+  --on-ok: #ffffff;
   --ok-soft: #dcf3e8;
   --ok-ink: #135f41;
-  --bad: #e0453f;
+  --bad: #d23a34;
+  --on-bad: #ffffff;
   --bad-soft: #fde3e1;
   --bad-ink: #8a2622;
   --warn: #d99a00;
@@ -50,15 +58,18 @@
   --font-mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
 
   /* 字級 */
-  --text-xs: 13px;
+  --text-2xs: 11.5px;
+  --text-xs: 12.5px;
   --text-sm: 14px;
   --text-md: 16px;
   --text-lg: 18px;
   --text-xl: 22px;
   --text-2xl: 28px;
   --text-3xl: 36px;
+  --text-hero: clamp(40px, 11vw, 84px);
 
   /* 圓角 */
+  --radius-xs: 4px;
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 14px;
@@ -81,8 +92,9 @@
   --shadow-sm: 0 1px 0 rgba(20, 26, 46, .05);
   --shadow-card: 0 10px 30px -18px rgba(20, 26, 46, .28);
   --shadow-lift: 0 5px 15px rgba(20, 26, 46, .12);
-  --shadow-glow: 0 0 30px rgba(41, 98, 255, .35), 0 0 60px rgba(0, 247, 255, .22);
-  --ring: 0 0 0 4px rgba(41, 98, 255, .18);
+  --shadow-glow: 0 0 0 1px rgb(41 98 255 / .25), 0 8px 28px -6px rgb(41 98 255 / .45), 0 0 48px rgb(0 247 255 / .25);
+  --edge-hi: inset 0 1px 0 rgb(255 255 255 / .7);
+  --ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary);
 
   /* 動態 */
   --ease: cubic-bezier(.2, .8, .2, 1);
@@ -95,22 +107,28 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0f1424;
-    --surface: #171d33;
-    --surface-2: #1f2742;
-    --line: #2c3556;
-    --line-strong: #3e4a70;
-    --ink: #e8ecf8;
-    --ink-2: #adb5d0;
-    --ink-3: #7f89a8;
-    --primary: #6b8cff;
-    --primary-hover: #88a3ff;
-    --primary-soft: #1e2c5a;
-    --on-primary: #0b1230;
+    --bg: #080b18;
+    --surface: #10162d;
+    --surface-2: #18203d;
+    --surface-3: #222b4d;
+    --line: #2a3460;
+    --line-strong: #3c4878;
+    --line-control: #5c6894;
+    --ink: #eef1ff;
+    --ink-2: #b4bcdc;
+    --ink-3: #8c95b9;
+    --primary: #5b82ff;
+    --primary-hover: #7a9aff;
+    --primary-soft: #1a2552;
+    --primary-ink: #9db4ff;
+    --glow-2: #9d7bff;
+    --on-primary: #050a1f;
     --ok: #4fd39a;
+    --on-ok: #04210f;
     --ok-soft: #153a2b;
     --ok-ink: #a9ecd0;
     --bad: #ff7b73;
+    --on-bad: #2a0606;
     --bad-soft: #48222a;
     --bad-ink: #ffc2be;
     --warn: #f3d46a;
@@ -121,28 +139,36 @@
     --shadow-sm: 0 1px 0 rgba(0, 0, 0, .3);
     --shadow-card: 0 10px 30px -18px rgba(0, 0, 0, .6);
     --shadow-lift: 0 5px 15px rgba(0, 0, 0, .4);
-    --shadow-glow: 0 0 30px rgba(107, 140, 255, .4), 0 0 60px rgba(0, 247, 255, .18);
-    --ring: 0 0 0 4px rgba(107, 140, 255, .28);
+    --shadow-glow: 0 0 0 1px rgb(91 130 255 / .35), 0 0 24px rgb(91 130 255 / .55), 0 0 64px rgb(0 247 255 / .28);
+    --edge-hi: inset 0 1px 0 rgb(255 255 255 / .06);
+    --ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary);
+    color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #0f1424;
-  --surface: #171d33;
-  --surface-2: #1f2742;
-  --line: #2c3556;
-  --line-strong: #3e4a70;
-  --ink: #e8ecf8;
-  --ink-2: #adb5d0;
-  --ink-3: #7f89a8;
-  --primary: #6b8cff;
-  --primary-hover: #88a3ff;
-  --primary-soft: #1e2c5a;
-  --on-primary: #0b1230;
+  --bg: #080b18;
+  --surface: #10162d;
+  --surface-2: #18203d;
+  --surface-3: #222b4d;
+  --line: #2a3460;
+  --line-strong: #3c4878;
+  --line-control: #5c6894;
+  --ink: #eef1ff;
+  --ink-2: #b4bcdc;
+  --ink-3: #8c95b9;
+  --primary: #5b82ff;
+  --primary-hover: #7a9aff;
+  --primary-soft: #1a2552;
+  --primary-ink: #9db4ff;
+  --glow-2: #9d7bff;
+  --on-primary: #050a1f;
   --ok: #4fd39a;
+  --on-ok: #04210f;
   --ok-soft: #153a2b;
   --ok-ink: #a9ecd0;
   --bad: #ff7b73;
+  --on-bad: #2a0606;
   --bad-soft: #48222a;
   --bad-ink: #ffc2be;
   --warn: #f3d46a;
@@ -153,29 +179,41 @@
   --shadow-sm: 0 1px 0 rgba(0, 0, 0, .3);
   --shadow-card: 0 10px 30px -18px rgba(0, 0, 0, .6);
   --shadow-lift: 0 5px 15px rgba(0, 0, 0, .4);
-  --shadow-glow: 0 0 30px rgba(107, 140, 255, .4), 0 0 60px rgba(0, 247, 255, .18);
-  --ring: 0 0 0 4px rgba(107, 140, 255, .28);
+  --shadow-glow: 0 0 0 1px rgb(91 130 255 / .35), 0 0 24px rgb(91 130 255 / .55), 0 0 64px rgb(0 247 255 / .28);
+  --edge-hi: inset 0 1px 0 rgb(255 255 255 / .06);
+  --ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary);
+  color-scheme: dark;
 }
+
+:root[data-theme="light"] { color-scheme: light; }
 
 /* ---------- 2. 頁面情緒（mood）：只換主色，結構不動 ---------- */
 [class*="fd-mood-"] {
   --primary-soft: color-mix(in srgb, var(--primary) 14%, var(--surface));
-  --ring: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent);
+  --primary-ink: color-mix(in oklab, var(--primary) 78%, var(--ink));
+  --ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary);
   --shadow-glow: 0 0 30px color-mix(in srgb, var(--primary) 40%, transparent),
                  0 0 60px color-mix(in srgb, var(--glow) 28%, transparent);
 }
 .fd-mood-neon    { --primary: #2962ff; --primary-hover: #1f51df; --glow: #00f7ff; --on-primary: #ffffff; }
-.fd-mood-sakura  { --primary: #e0457f; --primary-hover: #c9366c; --glow: #f8bbd0; --on-primary: #ffffff; }
+.fd-mood-sakura  { --primary: #d43a73; --primary-hover: #b92e62; --glow: #f8bbd0; --on-primary: #ffffff; }
 .fd-mood-violet  { --primary: #6c5ce7; --primary-hover: #5a4bd0; --glow: #a78bfa; --on-primary: #ffffff; }
 .fd-mood-board   { --primary: #2f5b52; --primary-hover: #24473f; --glow: #f3d46a; --on-primary: #ffffff; }
 .fd-mood-apple   { --primary: #0071e3; --primary-hover: #0062c4; --glow: #5ac8fa; --on-primary: #ffffff; }
+.fd-mood-ember   { --primary: #d9480f; --primary-hover: #b93c0b; --glow: #ffb347; --on-primary: #ffffff; }  /* 火龍：橘焰 */
 /* 深色底時，太深的主色要提亮才讀得到（跟主 token 一樣分三段宣告） */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .fd-mood-neon  { --primary: #6b8cff; --primary-hover: #88a3ff; --on-primary: #0b1230; }
+  :root:not([data-theme="light"]) .fd-mood-neon   { --primary: #5b82ff; --primary-hover: #7a9aff; --on-primary: #050a1f; }
+  :root:not([data-theme="light"]) .fd-mood-sakura { --primary: #ff6fa3; --primary-hover: #ff8db6; --on-primary: #2a0614; }
+  :root:not([data-theme="light"]) .fd-mood-violet { --primary: #a78bfa; --primary-hover: #bba4fb; --on-primary: #160b3a; }
+  :root:not([data-theme="light"]) .fd-mood-ember  { --primary: #ff8a4c; --primary-hover: #ffa06c; --on-primary: #2a0d00; }
   :root:not([data-theme="light"]) .fd-mood-board { --primary: #8fc7b4; --primary-hover: #a9d8c8; --on-primary: #10221d; }
   :root:not([data-theme="light"]) .fd-mood-apple { --primary: #4da3ff; --primary-hover: #6fb5ff; --on-primary: #06203a; }
 }
-:root[data-theme="dark"] .fd-mood-neon  { --primary: #6b8cff; --primary-hover: #88a3ff; --on-primary: #0b1230; }
+:root[data-theme="dark"] .fd-mood-neon   { --primary: #5b82ff; --primary-hover: #7a9aff; --on-primary: #050a1f; }
+:root[data-theme="dark"] .fd-mood-sakura { --primary: #ff6fa3; --primary-hover: #ff8db6; --on-primary: #2a0614; }
+:root[data-theme="dark"] .fd-mood-violet { --primary: #a78bfa; --primary-hover: #bba4fb; --on-primary: #160b3a; }
+:root[data-theme="dark"] .fd-mood-ember  { --primary: #ff8a4c; --primary-hover: #ffa06c; --on-primary: #2a0d00; }
 :root[data-theme="dark"] .fd-mood-board { --primary: #8fc7b4; --primary-hover: #a9d8c8; --on-primary: #10221d; }
 :root[data-theme="dark"] .fd-mood-apple { --primary: #4da3ff; --primary-hover: #6fb5ff; --on-primary: #06203a; }
 
@@ -204,7 +242,7 @@
 .fd-base h2 { font-size: var(--text-2xl); }
 .fd-base h3 { font-size: var(--text-xl); }
 .fd-base p { margin: 0; }
-.fd-base :focus-visible { outline: 3px solid color-mix(in srgb, var(--primary) 55%, transparent); outline-offset: 2px; }
+.fd-base :focus-visible { outline: none; box-shadow: var(--ring), 0 0 16px color-mix(in srgb, var(--glow) 45%, transparent); }
 .fd-base code, .fd-base kbd, .fd-mono { font-family: var(--font-mono); }
 .fd-muted { color: var(--ink-2); }
 .fd-faint { color: var(--ink-3); }
@@ -221,8 +259,9 @@
   padding: 0 var(--space-5);
   border: 1.5px solid transparent;
   border-radius: var(--radius-pill);
-  background: var(--primary);
+  background: linear-gradient(180deg, color-mix(in srgb, #fff 14%, var(--primary)), var(--primary));
   color: var(--on-primary);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .25), 0 6px 18px -8px var(--primary);
   font: inherit;
   font-size: 15px;
   font-weight: 700;
@@ -234,21 +273,21 @@
               border-color var(--dur-2) var(--ease), transform var(--dur-1) var(--ease),
               box-shadow var(--dur-3) var(--ease);
 }
-.fd-btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+.fd-btn:hover { background: linear-gradient(180deg, color-mix(in srgb, #fff 14%, var(--primary-hover)), var(--primary-hover)); transform: translateY(-1px); }
 .fd-btn:active { transform: scale(.97); }
 .fd-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 .fd-btn.fd-glow:hover { box-shadow: var(--shadow-glow); }
-.fd-btn.fd-secondary { background: var(--primary-soft); color: var(--primary); }
+.fd-btn.fd-secondary { background: var(--primary-soft); color: var(--primary-ink); box-shadow: none; }
 .fd-btn.fd-secondary:hover { background: color-mix(in srgb, var(--primary) 22%, var(--surface)); }
-.fd-btn.fd-ghost { background: transparent; border-color: var(--line-strong); color: var(--ink); }
+.fd-btn.fd-ghost { background: transparent; border-color: var(--line-strong); color: var(--ink); box-shadow: none; }
 .fd-btn.fd-ghost:hover { border-color: var(--primary); color: var(--primary); }
-.fd-btn.fd-link { background: none; color: var(--primary); min-height: 32px; padding: 0 var(--space-2); border-radius: var(--radius-sm); }
+.fd-btn.fd-link { background: none; box-shadow: none; color: var(--primary-ink); min-height: 32px; padding: 0 var(--space-2); border-radius: var(--radius-sm); }
 .fd-btn.fd-link:hover { background: var(--primary-soft); transform: none; }
 .fd-btn.fd-sm { min-height: 34px; padding: 0 var(--space-4); font-size: 13.5px; }
 .fd-btn.fd-lg { min-height: 52px; padding: 0 var(--space-8); font-size: 17px; }
 .fd-btn.fd-block { width: 100%; }
-.fd-btn.fd-ok { background: var(--ok); color: #fff; }
-.fd-btn.fd-bad { background: var(--bad); color: #fff; }
+.fd-btn.fd-ok { background: var(--ok); color: var(--on-ok); }
+.fd-btn.fd-bad { background: var(--bad); color: var(--on-bad); }
 
 /* 題型切換：aria-pressed 藥丸 */
 .fd-pill {
@@ -287,7 +326,7 @@
   width: 100%;
   min-height: 46px;
   padding: 11px 14px;
-  border: 1.5px solid var(--line);
+  border: 1.5px solid var(--line-control);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--ink);
@@ -296,7 +335,7 @@
   transition: border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), background var(--dur-2) var(--ease);
 }
 .fd-input::placeholder, .fd-textarea::placeholder { color: var(--ink-3); }
-.fd-input:hover, .fd-select:hover, .fd-textarea:hover { border-color: var(--line-strong); }
+.fd-input:hover, .fd-select:hover, .fd-textarea:hover { border-color: var(--ink-3); }
 .fd-input:focus, .fd-select:focus, .fd-textarea:focus { outline: none; border-color: var(--primary); box-shadow: var(--ring); }
 .fd-input:disabled, .fd-select:disabled, .fd-textarea:disabled { background: var(--surface-2); color: var(--ink-3); cursor: not-allowed; }
 .fd-input.fd-mono { font-family: var(--font-mono); font-size: 17px; }
@@ -328,10 +367,10 @@
 /* ---------- 6. 卡片、方塊 ---------- */
 .fd-card {
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--line) 80%, var(--primary));
   border-radius: var(--radius-xl);
   padding: var(--space-6);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--edge-hi), var(--shadow-card);
   transition: box-shadow var(--dur-3) var(--ease), transform var(--dur-3) var(--ease-spring);
 }
 .fd-card.fd-glow:hover { transform: translateY(-3px); box-shadow: var(--shadow-glow), var(--shadow-card); }
@@ -355,11 +394,11 @@
   transition: background var(--dur-3) var(--ease), color var(--dur-3) var(--ease),
               transform var(--dur-3) var(--ease-spring), box-shadow var(--dur-3) var(--ease);
 }
-.fd-tile:hover {
-  background: linear-gradient(90deg, var(--primary), var(--glow));
-  color: #fff;
+.fd-tile:hover, .fd-tile:focus-visible {
+  background: var(--grad-fill);
+  color: var(--on-grad);
   transform: translateY(-3px);
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-glow), inset 0 0 0 1px color-mix(in srgb, var(--glow) 60%, transparent);
 }
 
 /* 玻璃面板（bus / math 的浮動控制面板） */
@@ -421,7 +460,7 @@
   padding: 4px 10px;
   border-radius: var(--radius-sm);
   background: var(--primary-soft);
-  color: var(--primary);
+  color: var(--primary-ink);
   font-size: 12.5px;
   font-weight: 800;
   line-height: 1.4;
@@ -557,7 +596,8 @@
   transition: transform .6s var(--ease-spring);
   transform-style: preserve-3d;
 }
-.fd-flip:hover .fd-flip-inner, .fd-flip.fd-flipped .fd-flip-inner { transform: rotateY(180deg); }
+.fd-flip.fd-flipped .fd-flip-inner { transform: rotateY(180deg); }
+@media (hover: hover) { .fd-flip:hover .fd-flip-inner { transform: rotateY(180deg); } }
 .fd-flip-front, .fd-flip-back {
   position: absolute; inset: 0;
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
@@ -568,7 +608,41 @@
   font-weight: 600;
 }
 .fd-flip-front { background: var(--surface); border: 1px solid var(--line); color: var(--ink); }
-.fd-flip-back { background: linear-gradient(135deg, var(--primary), var(--glow)); color: #fff; transform: rotateY(180deg); }
+.fd-flip-back { background: var(--grad-fill); color: var(--on-grad); transform: rotateY(180deg); box-shadow: var(--shadow-glow); }
+
+/* ---------- 9b. 霓虹特效（選用） ---------- */
+/* 流光邊框：一道光沿著圓角邊緣繞圈。用在少數重點卡片。 */
+@property --fd-beam-a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.fd-beam { position: relative; }
+.fd-beam::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none;
+  background: conic-gradient(from var(--fd-beam-a), transparent 0 62%, var(--primary) 80%, var(--glow) 92%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); mask-composite: exclude;
+  animation: fd-beam 7s linear infinite;
+}
+/* 聚光燈：游標位置由 JS 寫進 --mx / --my。觸控裝置不會出現。 */
+.fd-spot { position: relative; --mx: 50%; --my: 50%; }
+.fd-spot::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: radial-gradient(320px circle at var(--mx) var(--my), color-mix(in srgb, var(--glow) 18%, transparent), transparent 62%);
+  transition: opacity var(--dur-3) var(--ease);
+}
+@media (hover: hover) { .fd-spot:hover::after { opacity: 1; } }
+/* 霓虹按鈕：旋轉漸層外框。一頁只放一兩顆。 */
+.fd-btn-neon {
+  position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: 48px; padding: 0 var(--space-6); border: 0; border-radius: var(--radius-pill); cursor: pointer;
+  background: transparent; color: var(--ink); font: inherit; font-size: 15px; font-weight: 700; text-decoration: none;
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-3) var(--ease);
+}
+.fd-btn-neon::before { content: ""; position: absolute; inset: -2px; z-index: -2; border-radius: inherit;
+  background: conic-gradient(from var(--fd-beam-a), var(--primary), var(--glow), var(--glow-2), var(--primary)); animation: fd-beam 3.5s linear infinite; }
+.fd-btn-neon::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--surface); transition: background var(--dur-3) var(--ease); }
+.fd-btn-neon:hover, .fd-btn-neon:focus-visible { box-shadow: var(--shadow-glow); transform: translateY(-1px); }
+.fd-btn-neon:hover::after { background: color-mix(in srgb, var(--surface) 84%, var(--primary)); }
+/* 玻璃卡片：只放在有背景（極光、照片）的頁面上，透明度不低於 72%。 */
+.fd-card.fd-glass { background: color-mix(in srgb, var(--surface) 76%, transparent); backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%); }
 
 /* ---------- 10. 動態 ---------- */
 @keyframes fd-shake {
@@ -583,6 +657,7 @@
 @keyframes fd-shine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 @keyframes fd-gradient { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
 @keyframes fd-fade-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fd-beam { to { --fd-beam-a: 360deg; } }
 .fd-anim-shake { animation: fd-shake .4s var(--ease); }
 .fd-anim-pop { animation: fd-pop .28s var(--ease-spring); }
 .fd-anim-bump { animation: fd-bump .35s var(--ease); }
@@ -590,4 +665,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .fd-base *, .fd-base *::before, .fd-base *::after { animation: none !important; transition: none !important; }
+  .fd-flip-inner { transition: none; }
 }
