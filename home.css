@@ -195,11 +195,8 @@ button.link { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
 .group + .group { margin-top: var(--space-5); }
 .group-head { display: flex; align-items: center; gap: 10px; margin-bottom: var(--space-3); }
 .group-head small { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; perspective: 900px; }
-.tiles .fd-tile { flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; text-align: left; min-height: 78px; padding: 14px 16px; }
-.fd-tile b { font-size: 15px; line-height: 1.35; }
-.fd-tile small { font-size: 12.5px; font-weight: 400; line-height: 1.45; color: var(--ink-2); transition: color var(--dur-3) var(--ease); }
-.fd-tile:hover small, .fd-tile:focus-visible small { color: color-mix(in srgb, var(--on-grad) 85%, transparent); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; perspective: 900px; }
+.tiles .fd-tile { padding-inline: 8px; text-wrap: balance; }
 .fd-tile { position: relative; min-height: 64px; overflow: hidden; transform-style: preserve-3d; --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 50%;
   transform: rotateX(var(--rx)) rotateY(var(--ry)); transition: transform .18s var(--ease), background var(--dur-3) var(--ease), color var(--dur-3) var(--ease), box-shadow var(--dur-3) var(--ease); }
 .fd-tile:hover { transform: rotateX(var(--rx)) rotateY(var(--ry)) translateY(-3px) scale(1.03); }
