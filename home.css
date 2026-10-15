@@ -112,15 +112,20 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 .q-feat:hover .k, .q-feat:hover small, .q-feat:hover .go, .q-feat:focus-visible .k, .q-feat:focus-visible small, .q-feat:focus-visible .go { color: color-mix(in srgb, var(--on-grad) 88%, transparent); }
 .q-feat:hover .go { transform: translateX(4px); }
 @keyframes qpulse { 50% { opacity: .35; } }
-.q-jump { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.q-jump a {
-  display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--radius-pill);
+/* 跑馬燈（reactbits Logo Loop 風格）：滑過或用鍵盤停在上面會暫停 */
+.marquee { overflow: hidden; margin: 0 calc(var(--space-4) * -1); padding: 6px 0; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.marquee-track { display: flex; gap: 12px; width: max-content; animation: marquee 38s linear infinite; }
+.marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
+.marquee a {
+  flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: var(--radius-pill);
   border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 88%, transparent);
   color: var(--ink-2); text-decoration: none; font-size: 13.5px; font-weight: 700; white-space: nowrap;
   transition: color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), transform var(--dur-3) var(--ease-spring);
 }
-.q-jump a::after { content: "↓"; margin-left: 6px; font-size: 12px; opacity: .6; }
-.q-jump a:hover, .q-jump a:focus-visible { color: var(--ink); border-color: var(--primary); transform: translateY(-2px); }
+.marquee a::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--glow); }
+.marquee a.uni::before { background: var(--glow); }
+.marquee a:hover, .marquee a:focus-visible { color: var(--ink); border-color: var(--primary); transform: translateY(-2px); }
+@keyframes marquee { to { transform: translateX(calc(-50% - 6px)); } }
 html { scroll-behavior: smooth; }
 section[id] { scroll-margin-top: 16px; }
 
@@ -236,13 +241,14 @@ button.link { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
 /* 只有 JS 在跑時才先藏起來，JS 掛掉或沒載入也看得到內容 */
 .js .reveal { opacity: 0; transform: translateY(24px); }
 .js .reveal.in, .no-js .reveal, .reduced .reveal { opacity: 1; transform: none; }
-@media print { .reveal { opacity: 1 !important; transform: none !important; } .bg, .cursor-glow, .progress-top { display: none; } }
+@media print { .reveal { opacity: 1 !important; transform: none !important; } .bg, .cursor-glow, .progress-top, .marquee { display: none; } }
 
 @media (max-width: 480px) {
   .page { padding: var(--space-3) var(--space-3) var(--space-12); }
   .fd-card { padding: var(--space-5); }
   .hero { padding-top: var(--space-6); }
   .quick { grid-template-columns: 1fr; }
+  .marquee { margin: 0 calc(var(--space-3) * -1); }
   .link { gap: 14px; }
 }
 @media (max-width: 400px) {
@@ -252,6 +258,8 @@ button.link { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
 @media (hover: none) { .cursor-glow { display: none; } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .aurora i, .hero-mark .ring, .hero-mark .orbit, .hero-title .char, .q-feat .k::before, .beam::before, .btn-glow::before, .timeline li.now::before, .empty .fd-dots i { animation: none !important; }
+  .marquee { overflow-x: auto; }
+  .marquee-track [aria-hidden="true"] { display: none; }
+  .aurora i, .hero-mark .ring, .hero-mark .orbit, .hero-title .char, .q-feat .k::before, .marquee-track, .beam::before, .btn-glow::before, .timeline li.now::before, .empty .fd-dots i { animation: none !important; }
   .js .reveal { opacity: 1; transform: none; }
 }

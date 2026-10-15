@@ -101,16 +101,26 @@
   }
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
+  /* ── 跑馬燈：複製一份做無縫循環；複製的只給眼睛看，報讀器跳過、Tab 不會停 ── */
+  var track = $('.marquee-track');
+  if (track) $$('a', track).forEach(function (a) {
+    var c = a.cloneNode(true);
+    c.setAttribute('aria-hidden', 'true');
+    c.setAttribute('tabindex', '-1');
+    track.appendChild(c);
+  });
+
   /* ── Hero 進場（anime.js） ── */
   var title = $('.hero-title');
   if (A && title && !reduced) {
     var split = A.splitText(title, { chars: true });
-    var tl = A.createTimeline({ defaults: { ease: 'outExpo' }, onComplete: function () { clean($$('.quick > *, .hero-sub')); } });
+    var tl = A.createTimeline({ defaults: { ease: 'outExpo' }, onComplete: function () { clean($$('.quick > *, .hero-sub, .marquee')); } });
     tl.add('.hero-mark', { scale: [0, 1], rotate: [-25, 0], opacity: [0, 1], duration: 1100, ease: 'outElastic(1, .6)' }, 0)
       .add(split.chars, { translateY: ['1.1em', 0], opacity: [0, 1], rotateX: [-70, 0], duration: 1000, delay: A.stagger(45) }, 200)
       .add('.hero-sub', { opacity: [0, 1], translateY: [14, 0], duration: 800 }, 700)
       .add('.hero-cta > *', { opacity: [0, 1], translateY: [18, 0], duration: 800, delay: A.stagger(120) }, 850)
-      .add('.quick > *', { opacity: [0, 1], translateY: [16, 0], duration: 800, delay: A.stagger(90) }, 1050);
+      .add('.quick > *', { opacity: [0, 1], translateY: [16, 0], duration: 800, delay: A.stagger(90) }, 1050)
+      .add('.marquee', { opacity: [0, 1], duration: 900 }, 1250);
     A.animate('.hero-mark img', { translateY: [-8, 8], rotate: [-2.5, 2.5], duration: 3200, alternate: true, loop: true, ease: 'inOutSine' });
     split.chars.forEach(function (ch, i) { ch.style.setProperty('--i', i); });
   }
