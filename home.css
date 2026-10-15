@@ -152,8 +152,8 @@ section[id] { scroll-margin-top: 16px; }
   transition: background var(--dur-3) var(--ease), color var(--dur-3) var(--ease), transform var(--dur-3) var(--ease-spring), box-shadow var(--dur-3) var(--ease);
 }
 button.link { width: 100%; border: 0; font: inherit; text-align: left; cursor: pointer; }
-.link .meta .hint { display: inline; color: var(--ink-3); }
-.link:hover .meta .hint, .link:focus-visible .meta .hint { color: inherit; }
+/* 提示文字只給螢幕報讀器，畫面上不顯示 */
+.link .meta .hint { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .link:hover, .link:focus-visible { background: var(--grad-fill); box-shadow: var(--shadow-glow), inset 0 0 0 1px color-mix(in srgb, var(--glow) 60%, transparent); color: var(--on-grad); transform: translateY(-3px); }
 .link .ic { position: relative; width: 40px; height: 40px; flex: none; display: grid; place-items: center; transition: transform var(--dur-3) var(--ease-spring); }
 .link:hover .ic { transform: scale(1.15) rotate(-6deg); }
