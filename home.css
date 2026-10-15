@@ -45,13 +45,36 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 .brand:hover img { transform: rotate(-8deg) scale(1.12); }
 .brand b { font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; letter-spacing: .02em; }
 .ctrl { display: flex; align-items: center; gap: 12px; }
-.theme, .accent { display: flex; gap: 6px; }
-.theme .fd-pill, .accent .fd-pill { min-height: 40px; padding: 0 12px; font-size: 12.5px; white-space: nowrap; }
-.accent .fd-pill { gap: 6px; }
-.accent .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; box-shadow: 0 0 0 1.5px rgb(255 255 255 / .7); }
-.accent [data-set-accent="pink"] .dot { background: linear-gradient(135deg, #ff7ab6, #c9a0ff); }
-.accent [data-set-accent="blue"] .dot { background: linear-gradient(135deg, #2962ff, #00f7ff); }
-@media (max-width: 380px) { .ctrl { gap: 6px; } .theme .fd-pill, .accent .fd-pill { padding: 0 10px; } }
+.theme { display: flex; gap: 6px; }
+.theme .fd-pill { min-height: 40px; padding: 0 12px; font-size: 12.5px; white-space: nowrap; }
+/* 配色開關（uiverse 風）：藍底水滴 ⇄ 粉底愛心 */
+.accent-switch {
+  position: relative; flex: none; width: 60px; height: 40px; padding: 0; border: 0; background: none; cursor: pointer; border-radius: var(--radius-pill);
+}
+.accent-switch::before {
+  content: ""; position: absolute; inset: 5px 0; border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, #2962ff, #00c8ff);
+  box-shadow: inset 0 1px 3px rgb(0 0 0 / .25), 0 0 14px rgb(41 98 255 / .35);
+  transition: background var(--dur-3) var(--ease), box-shadow var(--dur-3) var(--ease);
+}
+.accent-switch[aria-checked="true"]::before {
+  background: linear-gradient(90deg, #ff7ab6, #c9a0ff);
+  box-shadow: inset 0 1px 3px rgb(0 0 0 / .2), 0 0 14px rgb(255 122 182 / .45);
+}
+.accent-switch .knob {
+  position: absolute; top: 8px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff;
+  display: grid; place-items: center; box-shadow: 0 2px 6px rgb(0 0 0 / .25);
+  transition: transform var(--dur-4) var(--ease-spring);
+}
+.accent-switch[aria-checked="true"] .knob { transform: translateX(30px) rotate(360deg); }
+.accent-switch .knob svg { grid-area: 1 / 1; width: 14px; height: 14px; transition: opacity var(--dur-2) var(--ease), transform var(--dur-3) var(--ease-spring); }
+.accent-switch .i-blue { fill: #2962ff; }
+.accent-switch .i-pink { fill: #ff4f9a; opacity: 0; transform: scale(.4); }
+.accent-switch[aria-checked="true"] .i-blue { opacity: 0; transform: scale(.4); }
+.accent-switch[aria-checked="true"] .i-pink { opacity: 1; transform: none; }
+.accent-switch:hover .knob { box-shadow: 0 2px 10px rgb(0 0 0 / .3), 0 0 0 4px rgb(255 255 255 / .25); }
+.accent-switch:focus-visible { outline: none; box-shadow: var(--ring); }
+@media (max-width: 380px) { .ctrl { gap: 6px; } .theme .fd-pill { padding: 0 10px; } }
 .main { display: flex; flex-direction: column; gap: var(--space-5); }
 
 /* ───────── Hero ───────── */
@@ -251,8 +274,8 @@ button.link { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .marquee { margin: 0 calc(var(--space-3) * -1); }
   .link { gap: 14px; }
 }
-@media (max-width: 600px) {
-  /* 窄螢幕：頂部只留 logo，讓配色和亮暗按鈕放得下 */
+@media (max-width: 480px) {
+  /* 窄螢幕：頂部只留 logo，讓配色開關和亮暗按鈕放得下 */
   .brand b { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 @media (hover: none) { .cursor-glow { display: none; } }
