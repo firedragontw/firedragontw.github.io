@@ -61,8 +61,8 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .fd-base .hero-title {
-  margin: 0; font-family: var(--font-display); font-weight: 700; line-height: 1.05; letter-spacing: -.01em;
-  font-size: clamp(40px, 11vw, 84px); color: var(--ink);
+  margin: 0; font-family: var(--font-display); font-weight: 700; line-height: 1.25; letter-spacing: .04em;
+  font-size: clamp(26px, 6.4vw, 44px); color: var(--ink);
 }
 .hero-title .char { display: inline-block; will-change: transform, opacity; animation: charwave 5s ease-in-out infinite; animation-delay: calc(var(--i, 0) * .14s); }
 @keyframes charwave { 0%, 55%, 100% { color: var(--ink); text-shadow: none; } 25% { color: var(--primary); text-shadow: 0 0 28px color-mix(in srgb, var(--glow) 55%, transparent); } 40% { color: var(--glow); } }
