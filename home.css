@@ -71,10 +71,24 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; }
 @keyframes blink { 50% { opacity: 0; } }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
 
-/* 主視覺按鈕：用 FireDragon UI 原本的 fd-btn，只放大一點 */
-.hero-cta .fd-btn { min-height: 48px; padding: 0 26px; }
-.hero-cta .arrow { transition: transform var(--dur-3) var(--ease-spring); }
-.hero-cta .fd-btn:hover .arrow { transform: translateX(4px); }
+/* uiverse 風：旋轉漸層邊框按鈕（和線上版相同；看專案用 .alt 的漸層填滿，聯絡我用實心底） */
+.btn-glow {
+  position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 8px;
+  min-height: 48px; padding: 0 26px; border-radius: var(--radius-pill); border: 0; cursor: pointer;
+  background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; font-size: 15px; text-decoration: none;
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-3) var(--ease);
+}
+.btn-glow::before {
+  content: ""; position: absolute; inset: -2px; z-index: -2; border-radius: inherit;
+  background: conic-gradient(from var(--beam-a), var(--primary), var(--glow), #a24bff, var(--primary));
+  animation: beam 3.5s linear infinite;
+}
+.btn-glow::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--surface); transition: background var(--dur-3) var(--ease); }
+.btn-glow:hover, .btn-glow:focus-visible { box-shadow: var(--shadow-glow); }
+.btn-glow:hover::after { background: color-mix(in srgb, var(--surface) 82%, var(--primary)); }
+.btn-glow.alt::after { background: transparent; backdrop-filter: blur(10px); }
+.btn-glow .arrow { transition: transform var(--dur-3) var(--ease-spring); }
+.btn-glow:hover .arrow { transform: translateX(4px); }
 @keyframes beam { to { --beam-a: 360deg; } }
 
 /* ───────── 快速入口：最新工具／最新文章＋跳區塊 ───────── */
@@ -237,6 +251,6 @@ button.link { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   html { scroll-behavior: auto; }
   .marquee { overflow-x: auto; }
   .marquee-track [aria-hidden="true"] { display: none; }
-  .aurora i, .hero-mark .ring, .hero-mark .orbit, .hero-title .char, .q-feat .k::before, .marquee-track, .beam::before, .timeline li.now::before, .empty .fd-dots i { animation: none !important; }
+  .aurora i, .hero-mark .ring, .hero-mark .orbit, .hero-title .char, .q-feat .k::before, .marquee-track, .beam::before, .btn-glow::before, .timeline li.now::before, .empty .fd-dots i { animation: none !important; }
   .js .reveal { opacity: 1; transform: none; }
 }
