@@ -31,8 +31,9 @@
   --on-primary: #ffffff;
   --glow: #00f7ff;               /* 只做光暈與邊緣，不做文字、不墊白字 */
   --glow-2: #7c4dff;             /* 第二光源：紫 */
-  --grad-fill: linear-gradient(100deg, #2962ff, #6b3cff);  /* 白字可讀的漸層填色 */
+  --grad-fill: linear-gradient(90deg, var(--primary), var(--glow));  /* 主色到光暈的漸層填色（跟著情緒變） */
   --on-grad: #ffffff;
+  --on-grad-shadow: 0 1px 2px rgb(5 10 40 / .35);  /* 白字壓在亮青那端時靠它撐可讀性 */
 
   /* 語意色 */
   --ok: #15835a;
@@ -192,6 +193,7 @@
   --primary-soft: color-mix(in srgb, var(--primary) 14%, var(--surface));
   --primary-ink: color-mix(in oklab, var(--primary) 78%, var(--ink));
   --ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary);
+  --grad-fill: linear-gradient(90deg, var(--primary), var(--glow));
   --shadow-glow: 0 0 30px color-mix(in srgb, var(--primary) 40%, transparent),
                  0 0 60px color-mix(in srgb, var(--glow) 28%, transparent);
 }
@@ -397,6 +399,7 @@
 .fd-tile:hover, .fd-tile:focus-visible {
   background: var(--grad-fill);
   color: var(--on-grad);
+  text-shadow: var(--on-grad-shadow);
   transform: translateY(-3px);
   box-shadow: var(--shadow-glow), inset 0 0 0 1px color-mix(in srgb, var(--glow) 60%, transparent);
 }
@@ -608,7 +611,7 @@
   font-weight: 600;
 }
 .fd-flip-front { background: var(--surface); border: 1px solid var(--line); color: var(--ink); }
-.fd-flip-back { background: var(--grad-fill); color: var(--on-grad); transform: rotateY(180deg); box-shadow: var(--shadow-glow); }
+.fd-flip-back { background: var(--grad-fill); color: var(--on-grad); text-shadow: var(--on-grad-shadow); transform: rotateY(180deg); box-shadow: var(--shadow-glow); }
 
 /* ---------- 9b. 霓虹特效（選用） ---------- */
 /* 流光邊框：一道光沿著圓角邊緣繞圈。用在少數重點卡片。 */

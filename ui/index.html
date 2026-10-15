@@ -339,7 +339,7 @@
       <ul class="ds-rules">
         <li><span><b>只用 token。</b>顏色寫 <code>var(--primary)</code>，不寫 hex，換情緒和暗色才會跟著變。</span></li>
         <li><span><b>情緒放在 body。</b>一頁一個 <code>.fd-mood-*</code>，不要在元件上各自加。</span></li>
-        <li><span><b>白字只放在 <code>--grad-fill</code> 或 <code>--primary</code> 上。</b>青色 <code>--glow</code> 只做光暈和邊緣。</span></li>
+        <li><span><b>白字只放在 <code>--grad-fill</code> 或 <code>--primary</code> 上。</b>壓在漸層上時加 <code>text-shadow: var(--on-grad-shadow)</code>，亮青那端才讀得到。</span></li>
         <li><span><b>可點的東西至少 44px 高</b>，而且要有 <code>:focus-visible</code> 樣式。</span></li>
         <li><span><b>動畫都要尊重 <code>prefers-reduced-motion</code></b>，關掉時內容要完整可見。</span></li>
         <li><span><b>不要全域改寫 <code>.fd-card</code>、<code>.fd-tile</code>。</b>要特效就加 <code>.fd-beam</code>、<code>.fd-glass</code> 這類修飾 class。</span></li>
@@ -591,7 +591,7 @@
               <div class="fd-flip-inner"><div class="fd-flip-front">tenant</div><div class="fd-flip-back">房客</div></div>
             </div>
           </div>
-          <div class="ds-note">有滑鼠時 hover 就會翻；手機上只靠點擊，不會卡在翻面狀態。背面改用 <code>--grad-fill</code>，白字可讀。</div>
+          <div class="ds-note">有滑鼠時 hover 就會翻；手機上只靠點擊，不會卡在翻面狀態。背面用 <code>--grad-fill</code>，白字加一點陰影。</div>
         </div>
 
         <h3 class="ds-h3" id="c-containers">容器</h3>
@@ -611,7 +611,7 @@
               </div>
             </div>
           </div>
-          <div class="ds-note">磁磚 hover 的填色是藍到紫的 <code>--grad-fill</code>，青色只出現在外圈的光邊，白字才不會壓在亮青上。玻璃卡只用在背後有場景的地方。</div>
+          <div class="ds-note">磁磚 hover 的填色是主色到青色的 <code>--grad-fill</code>（和 v1 一樣），白字加一點陰影維持可讀。玻璃卡只用在背後有場景的地方。</div>
         </div>
       </div>
     </section>
@@ -713,7 +713,7 @@
           <ol class="ds-changes">
             <li>亮色的 <code>--ink-3</code> 加深，提示文字和標籤從 3.3:1 提高到 5:1 以上。</li>
             <li>暗色底更深、卡片和底拉開層次，主色換回比較電的藍 <code>#5b82ff</code>。</li>
-            <li>新增 <code>--grad-fill</code>（藍到紫）：磁磚 hover、翻轉卡背面、首頁連結 hover 改用它，白字不再壓在亮青色上。</li>
+            <li>新增 <code>--grad-fill</code>（主色到青色，保留 v1 的藍色漸層）：磁磚 hover、翻轉卡背面、首頁連結 hover 共用它；新增 <code>--on-grad-shadow</code> 讓白字在亮青那端也看得到。</li>
             <li>focus 環改成兩圈加一點光暈，鍵盤操作時一定看得到。</li>
             <li>輸入框邊線、標籤文字、答對答錯按鈕的文字色都改成過 AA 的版本。</li>
             <li>暗色模式下櫻粉、紫羅蘭會自動提亮；新增情緒「橘焰」。</li>
