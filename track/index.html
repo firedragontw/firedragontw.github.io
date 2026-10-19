@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>軌道式模組化農業原型 · firedragontw</title>
+<meta name="description" content="高中畢業專題：一台沿著高架軌道來回跑、在停點自動澆水的小車。軌道像捷運一樣可以一直延伸，主體成本 1,080 元。附可以玩的互動模擬器。">
+<link rel="canonical" href="https://firedragontw.github.io/track/">
+<meta property="og:title" content="軌道式模組化多功能農業原型">
+<meta property="og:description" content="像捷運一樣可以一直延伸的自動澆水軌道車，主體成本 1,080 元。">
+<meta property="og:image" content="https://firedragontw.github.io/track/img/cart-on-track.webp">
+<link rel="icon" href="/images/logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700&display=swap">
+<link rel="stylesheet" href="/firedragon-ui.css">
+<link rel="stylesheet" href="/track/track.css">
+<script>(function(r){var a='blue';try{var t=localStorage.getItem('fd-theme');if(t&&t!=='system')r.setAttribute('data-theme',t);a=localStorage.getItem('fd-accent')||'blue';}catch(e){}if(a==='pink')r.setAttribute('data-accent','pink');})(document.documentElement);</script>
+</head>
+<body class="fd-base">
+
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="/">
+      <img src="/images/logo.png" alt="" width="34" height="34">
+      <b>firedragontw.github.io</b>
+    </a>
+    <nav class="top-nav" aria-label="本頁">
+      <a href="#sim">模擬器</a>
+      <a href="#why">為什麼</a>
+      <a href="#how">怎麼做</a>
+      <a href="#result">成果</a>
+    </nav>
+  </header>
+
+  <!-- ───────── 封面 ───────── -->
+  <section class="hero">
+    <p class="eyebrow">高中畢業專題 · 實作型</p>
+    <h1>軌道式模組化<br>多功能農業原型</h1>
+    <p class="en">Track-Based Modular Agriculture Prototype</p>
+    <p class="lead">一台沿著高架軌道來回跑的小車，到了停點就自動澆水。軌道像捷運一樣可以一直接下去，功能模組也可以換。整台主體只花了 <b>1,080 元</b>。</p>
+    <p class="byline">作品與文｜以心　指導老師｜謝博文 老師　臺北市數位實驗高中 · 2025.11</p>
+    <ul class="stats">
+      <li><b>NT$1,080</b><span>主體成本<small>目標 2,000 以內</small></span></li>
+      <li><b>≈ NT$195</b><span>每公尺軌道<small>雷切 145 ＋ 3D 列印 50</small></span></li>
+      <li><b>95%+</b><span>停點觸發成功率<small>初期只有 60%</small></span></li>
+      <li><b>±7.5 mm</b><span>移動誤差<small>目標 ±10 mm</small></span></li>
+    </ul>
+  </section>
+
+  <!-- ───────── 模擬器 ───────── -->
+  <section class="card sim" id="sim" aria-labelledby="sim-h">
+    <div class="sec-head">
+      <p class="eyebrow">Interactive</p>
+      <h2 id="sim-h">按下 RESET，看它跑一趟</h2>
+      <p class="sec-lead">照著實體原型的程式邏輯做的模擬：從綠色起點出發，在黃色中繼站停車澆水，碰到紅色終點就倒退，回到起點結束。你可以接長軌道、增減中繼站，或把我後來加上的修正關掉，看看它會怎麼出錯。</p>
+    </div>
+
+    <div class="states" aria-label="目前狀態">
+      <span class="st" data-st="idle">等待起點</span>
+      <span class="st" data-st="fwd">前進中</span>
+      <span class="st" data-st="back">後退中</span>
+      <span class="st" data-st="done">任務完成</span>
+      <span class="sub" id="subState"></span>
+    </div>
+
+    <div class="scene-wrap">
+      <svg class="scene" id="scene" role="img" aria-label="軌道車模擬畫面"></svg>
+    </div>
+    <p class="scene-hint">點軌道上的一段可以新增或拿掉那段的中繼站。</p>
+
+    <div class="controls">
+      <div class="row">
+        <button class="fd-btn fd-glow reset" type="button" id="btnReset">▶ RESET 開始任務</button>
+        <button class="fd-btn fd-ghost" type="button" id="btnStop">■ 停止</button>
+        <span class="divider" aria-hidden="true"></span>
+        <button class="fd-btn fd-secondary fd-sm" type="button" id="btnAdd">＋ 接一段軌道</button>
+        <button class="fd-btn fd-secondary fd-sm" type="button" id="btnRemove">－ 拆一段</button>
+      </div>
+      <div class="row toggles">
+        <label class="tg"><input type="checkbox" id="optBlind" checked><span>盲跑 1.5 秒</span></label>
+        <label class="tg"><input type="checkbox" id="optCheck" checked><span>可疑二次確認</span></label>
+        <label class="tg"><input type="checkbox" id="optSamples" checked><span>取樣 3 次（關掉＝5 次）</span></label>
+        <label class="tg bad"><input type="checkbox" id="optNoise"><span>光線干擾</span></label>
+        <label class="tg"><input type="checkbox" id="optFast"><span>×2 快轉</span></label>
+      </div>
+      <div class="row">
+        <label class="speed">車速 <input type="range" id="speed" min="80" max="320" step="10" value="150"> <output id="speedOut">150 mm/s</output></label>
+      </div>
+    </div>
+
+    <div class="panels">
+      <div class="serial">
+        <div class="serial-head"><span>Serial Monitor</span><span>9600 baud</span></div>
+        <pre id="log" aria-live="off"></pre>
+      </div>
+      <div class="score">
+        <p class="score-k">這一趟</p>
+        <p class="verdict" id="verdict" role="status" aria-live="polite">還沒開始</p>
+        <dl>
+          <div><dt>已跑</dt><dd id="runs">0</dd></div>
+          <div><dt>成功</dt><dd id="oks">0</dd></div>
+          <div><dt>成功率</dt><dd id="rate">–</dd></div>
+        </dl>
+        <p class="tip">試試看：打開「光線干擾」、關掉「可疑二次確認」連跑幾趟；或把車速拉到最快、取樣改成 5 次。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 為什麼 ───────── -->
+  <section class="card" id="why" aria-labelledby="why-h">
+    <div class="sec-head">
+      <p class="eyebrow">Why</p>
+      <h2 id="why-h">問題是什麼？</h2>
+    </div>
+    <div class="big-num">
+      <b>67<small>歲</small></b>
+      <p>110 年底台灣農業工作者的平均年齡。自營農牧業者裡，超過一半已經 65 歲以上。<span class="src">監察院（2022）</span></p>
+    </div>
+    <p>都市裡也有越來越多退休的人和上班族想在陽台種點東西，卻常被體力、時間和技術門檻卡住。我把可能的使用者分成兩類：</p>
+    <div class="grid2">
+      <div class="who">
+        <span class="emoji" aria-hidden="true">👵</span>
+        <h3>退休的銀髮族</h3>
+        <p>有時間照顧植物，但長時間彎腰、蹲著很吃力，也不太放心操作複雜的電子設備。需要能減輕身體負擔、用最直覺方式操作的輔助。</p>
+      </div>
+      <div class="who">
+        <span class="emoji" aria-hidden="true">🏙️</span>
+        <h3>都市種植者</h3>
+        <p>多半在陽台、小溫室這種小空間種，工作時間不固定，預算也有限。一套便宜、能自己動手裝、會自動做一部分工作的系統，比大型農機實際得多。</p>
+      </div>
+    </div>
+
+    <h3 class="h3">為什麼不直接用 FarmBot？</h3>
+    <p>FarmBot 是很有名的開源農業機器人，能自動播種、澆水、除草。第一次看到它的影片時我非常震撼，但看了它的 CAD 圖和物料清單後開始懷疑：多軸、高精度的結構，光零件和馬達就要數千美元，連看懂組裝說明都是挑戰，真的能被一般農民或學生用嗎？</p>
+    <div class="vs">
+      <div class="vs-col">
+        <p class="vs-k">FarmBot</p>
+        <ul><li>三軸龍門結構、高精度</li><li>零件與馬達要數千美元</li><li>需要大片平整空間與技術背景</li></ul>
+      </div>
+      <div class="vs-mid" aria-hidden="true">→</div>
+      <div class="vs-col me">
+        <p class="vs-k">這個原型</p>
+        <ul><li>單軸軌道，像纜車一樣沿固定路線走</li><li>主體 1,080 元，軌道每公尺約 195 元</li><li>雷切木板＋3D 列印，誰都能照步驟重做</li></ul>
+      </div>
+    </div>
+
+    <h3 class="h3">把範圍收小，才做得出來</h3>
+    <div class="grid3">
+      <div class="mini"><b>只做平地</b><p>山坡地要加平衡、防滑、角度調整，成本會從兩千多直接跳到八千以上。目標使用者本來就在陽台和小溫室，所以明確只做平地。</p></div>
+      <div class="mini"><b>軌道離地 60–80 cm</b><p>高架設計方便觀察植物，銀髮族也不用彎腰。</p></div>
+      <div class="mini"><b>先從家庭園藝開始</b><p>陽台只有幾坪，卻包含澆水、感測、定點作業、模組更換這些核心問題，一週內就能看到結果。先種番茄、九層塔、薄荷。</p></div>
+    </div>
+  </section>
+
+  <!-- ───────── 怎麼做 ───────── -->
+  <section class="card" id="how" aria-labelledby="how-h">
+    <div class="sec-head">
+      <p class="eyebrow">How</p>
+      <h2 id="how-h">它是怎麼組成的</h2>
+      <p class="sec-lead">整套系統是「可以一直接下去的軌道」加上「可以換功能的小車」。每個部分都改過好幾版。</p>
+    </div>
+
+    <article class="part">
+      <div class="part-txt">
+        <span class="fd-badge">軌道</span>
+        <h3>像捷運一樣，可以一直接下去</h3>
+        <p>主體用雷射切割木板，平整、尺寸精準又快；形狀複雜的接頭用 3D 列印。每段軌道前端多延伸一截結構，後端挖掉一截讓下一段插進來，再從中間打孔用卡榫靠重力卡住，就能無限延伸，也做出了彎道。</p>
+        <p>跟老師討論後把軌道改寬：滑輪越小越要精密的工藝、越貴，寬一點就能買便宜的大滑輪。</p>
+      </div>
+      <div class="part-img two">
+        <figure><img src="/track/img/track-rails.webp" alt="雷射切割木板做成的直線軌道，兩段互相接在一起" loading="lazy" width="506" height="900"><figcaption>雷切木板軌道</figcaption></figure>
+        <figure><img src="/track/img/track-curve-cad.webp" alt="彎道軌道的 3D 模型，前後端有可以互相插入的接頭" loading="lazy" width="900" height="596"><figcaption>彎道的 3D 列印模型</figcaption></figure>
+      </div>
+    </article>
+
+    <article class="part">
+      <div class="part-txt">
+        <span class="fd-badge">車體</span>
+        <h3>從 4 個滑輪改成 8 個</h3>
+        <p>初版用 4 個滑輪夾住軌道兩側，但加速、減速和馬達啟停的瞬間擋不住慣性，車體會前後晃，甚至卡在軌道上。改成前後各 4 個接觸點後平穩很多，來回測試都沒再脫軌。</p>
+        <p>另外做了一組像瑞士國旗形狀的 3 mm 墊片，換不同孔位就能微調夾持鬆緊，解決木板厚度誤差造成的過緊或過鬆。</p>
+      </div>
+      <div class="part-img"><figure><img src="/track/img/cart-on-track.webp" alt="木頭車體夾在軌道上的側面照片" loading="lazy" width="506" height="900"><figcaption>車體夾在軌道上</figcaption></figure></div>
+    </article>
+
+    <article class="part">
+      <div class="part-txt">
+        <span class="fd-badge">驅動</span>
+        <h3>齒條卡死，改用輪子直接走</h3>
+        <p>原本想沿著軌道邊的齒條用齒輪帶動，但齒輪咬合要很精準，雷切的公差一大就不順甚至卡死。最後改成 TT 馬達直接帶橡膠輪子在軌道上走，用 L9110S 雙路驅動模組控制左右兩顆馬達的正轉、反轉、停止和轉速，結構更簡單也更好換。</p>
+      </div>
+      <div class="part-img"><figure><img src="/track/img/cart-motor.webp" alt="車體側面的黃色 TT 馬達和橡膠輪" loading="lazy" width="506" height="900"><figcaption>TT 馬達＋橡膠輪</figcaption></figure></div>
+    </article>
+
+    <div class="grid2">
+      <div class="mini tall">
+        <span class="fd-badge">感測</span>
+        <b>用顏色認停點</b>
+        <p>TCS3200 顏色感測器讀軌道上的貼紙，用最近鄰居演算法比對 RGB：綠色是起點、黃色是中繼站、紅色是終點。同一張貼紙在不同光線下會有兩種讀值，所以每個顏色都存了好幾組參考值。</p>
+      </div>
+      <div class="mini tall">
+        <span class="fd-badge">澆水</span>
+        <b>噴霧器壓不動，改抽水馬達</b>
+        <p>原本想用伺服馬達壓噴霧器，但小伺服馬達力矩不夠、久了會過熱。改成抽水馬達泡在車載水箱裡，用繼電器（D12 腳位）開關；程式裡的 <code>PUMP_RUN_MS</code> 一個數字就決定每次澆多少水。</p>
+      </div>
+    </div>
+
+    <h3 class="h3">程式：四個狀態的狀態機</h3>
+    <ol class="flow">
+      <li><b>等待起點</b>系統啟動，感測器持續偵測，等到綠色起點貼紙。</li>
+      <li><b>前進中</b>先盲跑 1.5 秒離開貼紙；途中看到黃色中繼站就停車確認，確認後停 3 秒澆水，再盲跑離開。</li>
+      <li><b>後退中</b>看到紅色終點就停車並轉成後退，回程略過所有中繼站。</li>
+      <li><b>任務完成</b>回到綠色起點停車。按 Arduino 的 RESET 鍵就能再跑一次。</li>
+    </ol>
+  </section>
+
+  <!-- ───────── 卡關 ───────── -->
+  <section class="card" id="bugs" aria-labelledby="bugs-h">
+    <div class="sec-head">
+      <p class="eyebrow">Debug</p>
+      <h2 id="bugs-h">停點成功率從 60% 到 95%</h2>
+      <p class="sec-lead">初期實測時，車子十次只有六次會停在對的地方。追查下去是一連串小問題疊在一起。這幾個修正在上面的模擬器都可以開關。</p>
+    </div>
+    <div class="fixes">
+      <div class="fix"><span class="n">1</span><div><b>LED 太亮</b><p>TCS3200 內建的白色 LED 全亮時反光太強，各顏色讀值都很接近。把 LED 接到 PWM 腳位（D3），用 <code>analogWrite()</code> 調暗到顏色差異最明顯的亮度。</p></div></div>
+      <div class="fix"><span class="n">2</span><div><b>貼紙對比不夠</b><p>原本的點點貼紙顏色太暗又太接近，差距比感測器本身的抖動還小。改用飽和度高的便利貼，並為每個顏色存多組 RGB 參考值。</p></div></div>
+      <div class="fix"><span class="n">3</span><div><b>車太快，感測器來不及讀</b><p>每次讀值要一點時間，車太快貼紙就一閃而過。取樣從 5 次降到 3 次，並把車速調慢。<span class="try">模擬器：取樣改 5 次、車速拉滿</span></p></div></div>
+      <div class="fix"><span class="n">4</span><div><b>可疑就先停下來</b><p>只要讀到疑似停點就先停車再讀一次，確認了才動作，誤判大幅減少。<span class="try">模擬器：開「光線干擾」、關「可疑二次確認」</span></p></div></div>
+      <div class="fix"><span class="n">5</span><div><b>剛離開貼紙又觸發</b><p>從起點出發時感測器還壓在起點貼紙上，馬上又讀到「起點」，系統以為任務已經完成。每次離開停點先盲跑 1.5 秒不偵測就解決了。<span class="try">模擬器：關掉「盲跑 1.5 秒」</span></p></div></div>
+      <div class="fix"><span class="n">6</span><div><b>偶發的離譜讀值</b><p>TCS3200 偶爾會讀出像 R=1436 這種明顯不對的數字，加了單次讀值上限，超過就直接丟掉。</p></div></div>
+    </div>
+  </section>
+
+  <!-- ───────── 成果 ───────── -->
+  <section class="card" id="result" aria-labelledby="result-h">
+    <div class="sec-head">
+      <p class="eyebrow">Result</p>
+      <h2 id="result-h">測試結果</h2>
+    </div>
+    <div class="results">
+      <div class="res"><p class="k">移動誤差</p><p class="v">±7.5 mm</p><p class="t">目標 ±10 mm ✓</p><p class="d">誤差主要來自顏色感測約 1 ms 的延遲，換算成車子大約 0.7–0.8 公分。</p></div>
+      <div class="res"><p class="k">停點觸發成功率</p><p class="v">95%+</p><p class="t">目標 95% ✓</p><p class="d">初期只有 60%。換場地時燈光不同，需要重新設定參數。</p></div>
+      <div class="res"><p class="k">澆水量誤差</p><p class="v">幾乎沒有</p><p class="t">目標 ±20% ✓</p><p class="d">抽水馬達出水很穩定，控制好運轉時間就不會有誤差。</p></div>
+      <div class="res"><p class="k">模組化結構</p><p class="v">可無限延伸</p><p class="t">含彎道 ✓</p><p class="d">靠 3D 列印小零件和卡榫，軌道可以一直接下去。</p></div>
+    </div>
+
+    <h3 class="h3">成本拆解</h3>
+    <div class="cost" id="cost">
+      <div class="bar" style="--w:29.6"><span>TCS3200 顏色感測器</span><b>320</b></div>
+      <div class="bar" style="--w:18.5"><span>TT 馬達 ×2</span><b>200</b></div>
+      <div class="bar" style="--w:18.5"><span>電源供應</span><b>200</b></div>
+      <div class="bar" style="--w:9.3"><span>噴水模組</span><b>100</b></div>
+      <div class="bar" style="--w:9.3"><span>Arduino Uno</span><b>100</b></div>
+      <div class="bar" style="--w:9.3"><span>滑輪</span><b>100</b></div>
+      <div class="bar" style="--w:5.6"><span>車體雷切</span><b>60</b></div>
+      <p class="total">主體合計 <b>NT$1,080</b>，目標是 2,000 以內。軌道每公尺：雷切木頭約 145 元＋3D 列印約 50 元。</p>
+    </div>
+  </section>
+
+  <!-- ───────── 未來 ───────── -->
+  <section class="card" id="next" aria-labelledby="next-h">
+    <div class="sec-head">
+      <p class="eyebrow">Next</p>
+      <h2 id="next-h">接下來還能做的</h2>
+    </div>
+    <div class="grid2">
+      <div class="mini"><b>📡 改用 RFID / NFC 認停點</b><p>顏色感測在戶外自然光下不穩，標籤完全不受光線影響。</p></div>
+      <div class="mini"><b>↪️ 真的會轉彎的車</b><p>彎道軌道已經做出來，但現在的車體只能手推過彎，需要重新設計轉向和接合方式。</p></div>
+      <div class="mini"><b>📱 遠端監控與排程</b><p>加 Wi-Fi 模組（如 ESP8266）和手機 App，設定好就不用管，不用再手動按 RESET。</p></div>
+      <div class="mini"><b>💧 看土壤決定要不要澆</b><p>到中繼站先量土壤濕度，再決定澆不澆、澆多久，從固定動作變成真正的智慧澆水。</p></div>
+    </div>
+    <blockquote class="quote">解決世界中的問題，不需要最昂貴的工具，也不需要最複雜的技術。重要的是清楚知道問題是什麼、使用者是誰、資源有多少，然後在這些限制之內，找到真正能用的解法。</blockquote>
+  </section>
+
+  <footer class="foot">
+    <details>
+      <summary>參考資料</summary>
+      <ul>
+        <li>監察院（2022）。我國農業缺工嚴重，農業部應提出因應對策以健全農業發展［新聞稿］。</li>
+        <li>行政院農業部（2024）。農業統計年報 2024。</li>
+        <li>FarmBot, Inc. (n.d.). Open source. <a href="https://farm.bot/pages/open-source" rel="noopener" target="_blank">farm.bot</a></li>
+        <li>TAOS (2009). TCS3200, TCS3210 programmable color light-to-frequency converter (Data sheet).</li>
+      </ul>
+    </details>
+    <a class="fd-btn fd-link" href="/">← 回首頁</a>
+  </footer>
+</div>
+
+<script src="/track/track.js"></script>
+</body>
+</html>
