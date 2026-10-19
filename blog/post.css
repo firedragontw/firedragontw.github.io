@@ -57,6 +57,7 @@ body { margin: 0; min-height: 100vh; }
 /* 照片 */
 .photo { margin: 2.2em auto; max-width: 420px; }
 .photo.wide { max-width: 560px; }
+.photo.narrow { max-width: 280px; }
 .photo img { display: block; width: 100%; height: auto; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); }
 
 /* 習作卡片 */
@@ -73,8 +74,32 @@ body { margin: 0; min-height: 100vh; }
 
 .end { margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
 
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
-.reveal.in { opacity: 1; transform: none; }
+/* 只有 JS 在跑才先藏起來，JS 沒載入內容也看得到 */
+.js .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.js .reveal.in { opacity: 1; transform: none; }
+@media print { .js .reveal { opacity: 1; transform: none; } }
+
+/* 互動頁入口卡 */
+.play { display: flex; align-items: center; gap: 16px; margin: 1.8em 0; padding: var(--space-5); border-radius: var(--radius-xl); text-decoration: none; color: var(--ink);
+  background: linear-gradient(120deg, var(--primary-soft), color-mix(in srgb, var(--glow) 14%, var(--surface)));
+  border: 1px solid color-mix(in srgb, var(--primary) 35%, var(--line)); transition: transform var(--dur-3) var(--ease-spring), box-shadow var(--dur-3) var(--ease); }
+.play:hover, .play:focus-visible { transform: translateY(-3px); box-shadow: var(--shadow-glow); }
+.play .ic { flex: none; width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-size: 26px; background: var(--surface); box-shadow: var(--shadow-card); }
+.play b { display: block; font-size: 17px; }
+.play span { display: block; font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+.play .go { margin-left: auto; font-size: 22px; color: var(--primary-ink); }
+
+/* 小數據卡 */
+.facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 1.6em 0; }
+.facts div { background: var(--surface-2); border-radius: var(--radius-lg); padding: 12px 14px; line-height: 1.5; }
+.facts b { display: block; font-family: var(--font-mono); font-size: 20px; color: var(--primary-ink); }
+.facts span { font-size: 13.5px; color: var(--ink-2); }
+
+/* 兩張並排的照片 */
+.photo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 2em 0; align-items: end; }
+.photo-row figure { margin: 0; }
+.photo-row img { display: block; width: 100%; height: auto; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); }
+.photo figcaption, .photo-row figcaption { font-size: 13px; color: var(--ink-3); text-align: center; margin-top: 6px; line-height: 1.6; }
 
 @media (max-width: 480px) {
   .wrap { padding: var(--space-3) var(--space-3) var(--space-12); }
@@ -82,4 +107,4 @@ body { margin: 0; min-height: 100vh; }
   .prose .lead { font-size: 17px; }
   .brand b { display: none; }
 }
-@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+@media (prefers-reduced-motion: reduce) { .js .reveal { opacity: 1; transform: none; transition: none; } }
